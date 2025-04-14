@@ -1,0 +1,72 @@
+# General OS and Editor junk
+.DS_Store
+.Thumbs.db
+ehthumbs.db
+desktop.ini
+_$*
+._*
+.Spotlight-V100
+.Trashes
+*.log
+*.bak
+*.swp
+*.swo
+.fuse_hidden*
+.directory
+_MTN
+.svn
+.cvsignore
+.bzr
+_darcs
+.hg
+.gitattributes
+.gitignore
+.gitmodules
+.gitkeep
+
+# Node.js and npm
+node_modules
+package-lock.json
+npm-debug.log*
+yarn-error.log*
+yarn.lock
+
+# Parcel
+.parcel-cache
+dist
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Supabase
+.env # If you have local environment variables for Supabase (be VERY careful not to commit real keys)
+
+# Build output (if you build your React app)
+build/
+
+# Dependencies (if you use a different package manager)
+# bower_components/
+#jspm_packages/
+
+# Temporary files
+tmp/
+temp/
+
+# Logs
+logs/
+
+# Optional: Ignore compiled JS files if you have a build process
+# *.js.map
+# *.min.js
+
+# Optional: Ignore documentation build output
+# docs/_build/
+
+# Optional: Ignore coverage reports
+# coverage/
+
+# More aggressive VS Code ignore (if you prefer)
+# **/.history/
+# **/.sourcemaps/
+# **/.tsbuildinfo
