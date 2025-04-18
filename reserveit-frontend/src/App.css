@@ -1,8 +1,12 @@
+/* General fonts */
+body, input, select, textarea, button {
+  font-family: 'Poppins', sans-serif;
+}
+
 /* Container styles */
 .login-container {
   display: flex;
   min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
 }
 
 /* Left panel */
@@ -41,6 +45,7 @@
   font-size: 15px;
 }
 
+/* Role selection */
 .role-buttons {
   display: flex;
   gap: 20px;
@@ -97,7 +102,6 @@
   text-align: center;
 }
 
-
 /* Submit button */
 .login-button {
   margin-top: 10px;
@@ -131,6 +135,7 @@
   height: auto;
 }
 
+/* Dashboard */
 .dashboard-container {
   padding: 20px;
   background-color: #f3f3f3;
@@ -174,11 +179,10 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  min-width: fit-content;
-  min-height: fit-content;
   z-index: 20;
 }
 
+/* Reservation Form */
 .reservation-form-container {
   max-width: 1140px;
   margin: 1rem auto;
@@ -188,7 +192,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   height: 90vh;
   overflow-y: auto;
-  font-family: 'Poppins', sans-serif;
 }
 
 .form-header {
@@ -225,6 +228,9 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  position: relative;     /* Needed for TimePicker */
+  overflow: visible;      /* Prevents clipping */
+  z-index: 1;
 }
 
 .form-group label {
@@ -240,14 +246,15 @@
   border-radius: 0.75rem;
   border: 1px solid #ccc;
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
 }
 
+/* Textarea resizing */
 textarea {
   resize: vertical;
   min-height: 80px;
 }
 
+/* Buttons */
 .form-buttons {
   display: flex;
   justify-content: flex-end;
@@ -327,83 +334,9 @@ textarea {
   animation: fadeInOut 2s ease-in-out;
 }
 
-
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateY(20px); }
   20% { opacity: 1; transform: translateY(0); }
   80% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(20px); }
-}
-
-.records-container {
-  padding: 2rem;
-  background-color: #f4f4f4;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.records-box {
-  background-color: white;
-  border-radius: 16px;
-  border: 1px solid #ccc;
-  padding: 2rem;
-  width: 90%;
-  max-width: 1000px;
-}
-
-.records-title {
-  background-color: #d1dfbb;
-  padding: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-}
-
-.records-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.records-table th,
-.records-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #ccc;
-  font-weight: 500;
-}
-
-.status-pill {
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  display: inline-block;
-}
-
-.view-details-btn {
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  background: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.back-button-wrapper {
-  text-align: right;
-  margin-top: 2rem;
-}
-
-.back-btn {
-  padding: 0.6rem 1.5rem;
-  background-color: #d9d9d9;
-  color: black;
-  border: none;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
 }

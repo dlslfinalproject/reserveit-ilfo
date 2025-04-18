@@ -1,12 +1,63 @@
 // src/pages/ReservationForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import TimePicker from 'react-time-picker';
-import 'react-time-picker/dist/TimePicker.css';
+// Removed react-time-picker
 import './App.css';
 import { useReservation } from './ReservationContext';
+
+// NEW: MUI TimePicker
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+
+// Improved Time Picker Component using MUI
+const CustomTimePicker = ({ label, value, onChange }) => {
+  return (
+    <div className="form-group">
+      <label>{label}</label>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <TimePicker
+          value={value}
+          onChange={(newValue) => onChange(newValue)}
+          renderInput={(params) => (
+            <TextField
+            {...params}
+            fullWidth
+            size="small"
+            error={!value}
+            sx={{
+              backgroundColor: '#fff',
+              borderRadius: '4px',
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: value ? '#ccc' : '#d32f2f', // Use red only if value is empty
+                },
+              },
+            }}
+          />
+          )}
+          PopperProps={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 10],
+                },
+              },
+            ],
+            sx: {
+              zIndex: 1300, // High enough to appear above modals
+            },
+          }}
+        />
+      </LocalizationProvider>
+    </div>
+  );
+};
+
 
 const ReservationForm = () => {
   const navigate = useNavigate();
@@ -31,7 +82,7 @@ const ReservationForm = () => {
   const isOtherSelected = formData.natureOfActivity === 'Others: Please specify';
 
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleCancel = () => {
@@ -41,17 +92,23 @@ const ReservationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const activity = isOtherSelected ? formData.customActivity : formData.natureOfActivity;
+
     const requiredFields = [
-      'whoReserved', 'numberOfParticipants', 'nameOfProgram', 'date', 'startTime', 'endTime'
+      'whoReserved',
+      'numberOfParticipants',
+      'nameOfProgram',
+      'date',
+      'startTime',
+      'endTime',
     ];
 
-    const hasEmpty = requiredFields.some(field => !formData[field]) || !activity;
+    const hasEmpty = requiredFields.some((field) => !formData[field]) || !activity;
     if (hasEmpty) {
       alert('Please fill out all required fields.');
       return;
     }
 
-    setFormData(prev => ({ ...prev, natureOfActivity: activity })); // replace with custom if needed
+    setFormData((prev) => ({ ...prev, natureOfActivity: activity }));
     setShowModal(true);
   };
 
@@ -83,17 +140,28 @@ const ReservationForm = () => {
           <div className="form-left">
             <div className="form-group">
               <label>Who Reserved</label>
-              <input type="text" value={formData.whoReserved} onChange={e => handleChange('whoReserved', e.target.value)} />
+              <input
+                type="text"
+                value={formData.whoReserved}
+                onChange={(e) => handleChange('whoReserved', e.target.value)}
+              />
             </div>
 
             <div className="form-group">
               <label>Name of Program</label>
-              <input type="text" value={formData.nameOfProgram} onChange={e => handleChange('nameOfProgram', e.target.value)} />
+              <input
+                type="text"
+                value={formData.nameOfProgram}
+                onChange={(e) => handleChange('nameOfProgram', e.target.value)}
+              />
             </div>
 
             <div className="form-group">
               <label>Nature of Activity</label>
-              <select value={formData.natureOfActivity} onChange={e => handleChange('natureOfActivity', e.target.value)}>
+              <select
+                value={formData.natureOfActivity}
+                onChange={(e) => handleChange('natureOfActivity', e.target.value)}
+              >
                 <option value="">Select activity</option>
                 <option>Assembly</option>
                 <option>Lasallian Formation</option>
@@ -113,26 +181,37 @@ const ReservationForm = () => {
                   type="text"
                   placeholder="Please specify"
                   value={formData.customActivity}
-                  onChange={e => handleChange('customActivity', e.target.value)}
+                  onChange={(e) => handleChange('customActivity', e.target.value)}
                 />
               )}
             </div>
 
             <div className="form-group">
               <label>Notes (Optional)</label>
-              <textarea value={formData.notes} onChange={e => handleChange('notes', e.target.value)} />
+              <textarea
+                value={formData.notes}
+                onChange={(e) => handleChange('notes', e.target.value)}
+              />
             </div>
 
             <div className="form-group">
               <label>Link of CSAO Approved POA (If Applicable)</label>
-              <input type="text" value={formData.poaLink} onChange={e => handleChange('poaLink', e.target.value)} />
+              <input
+                type="text"
+                value={formData.poaLink}
+                onChange={(e) => handleChange('poaLink', e.target.value)}
+              />
             </div>
           </div>
 
           <div className="form-right">
             <div className="form-group">
               <label>Number of Participants</label>
-              <input type="number" value={formData.numberOfParticipants} onChange={e => handleChange('numberOfParticipants', e.target.value)} />
+              <input
+                type="number"
+                value={formData.numberOfParticipants}
+                onChange={(e) => handleChange('numberOfParticipants', e.target.value)}
+              />
             </div>
 
             <div className="form-group">
@@ -141,33 +220,47 @@ const ReservationForm = () => {
                 selected={formData.date}
                 onChange={(date) => handleChange('date', date)}
                 dateFormat="MMMM d, yyyy"
-                placeholderText="Select date"
+                customInput={
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                      backgroundColor: '#fff',
+                    }}
+                  >
+                    <span>{formData.date ? formData.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''}</span>
+                    <span role="button" aria-label="Pick date">📅</span>
+                  </div>
+                }
               />
             </div>
 
-            <div className="form-group">
-              <label>Start Time</label>
-              <TimePicker
-                value={formData.startTime}
-                onChange={(value) => handleChange('startTime', value)}
-                disableClock
-              />
-            </div>
+            <CustomTimePicker
+              label="Start Time"
+              value={formData.startTime}
+              onChange={(val) => handleChange('startTime', val)}
+            />
 
-            <div className="form-group">
-              <label>End Time</label>
-              <TimePicker
-                value={formData.endTime}
-                onChange={(value) => handleChange('endTime', value)}
-                disableClock
-              />
-            </div>
+            <CustomTimePicker
+              label="End Time"
+              value={formData.endTime}
+              onChange={(val) => handleChange('endTime', val)}
+            />
           </div>
         </div>
 
         <div className="form-buttons">
-          <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
-          <button type="submit" className="submit-button">SUBMIT</button>
+          <button type="button" className="cancel-button" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button type="submit" className="submit-button">
+            SUBMIT
+          </button>
         </div>
       </form>
 
@@ -176,18 +269,18 @@ const ReservationForm = () => {
           <div className="modal-content">
             <p>Do you want to submit this form?</p>
             <div className="modal-buttons">
-              <button style={{ backgroundColor: '#969696' }} onClick={() => setShowModal(false)}>No</button>
-              <button style={{ backgroundColor: '#D1DFBB' }} onClick={confirmSubmit}>Yes</button>
+              <button style={{ backgroundColor: '#969696' }} onClick={() => setShowModal(false)}>
+                No
+              </button>
+              <button style={{ backgroundColor: '#D1DFBB' }} onClick={confirmSubmit}>
+                Yes
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {popupMessage && (
-        <div className="popup-success">
-          {popupMessage}
-        </div>
-      )}
+      {popupMessage && <div className="popup-success">{popupMessage}</div>}
     </div>
   );
 };
