@@ -1,0 +1,94 @@
+.reservation-card {
+    width: 85%;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  .badge.pending {
+    background-color: #dba875;
+  }
+  
+  .tab-bar {
+    margin-top: 1.5rem;
+    display: flex;
+    background-color: #e0e0e0;
+    border-radius: 25px;
+    overflow: hidden;
+  }
+  
+  .tab-button {
+    flex: 1;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .tab-button.active {
+    background-color: #d4e9c3;
+  }
+  
+  .tab-body {
+    margin-top: 1.5rem;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    row-gap: 1rem;
+    column-gap: 1rem;
+  }
+  
+  .field-label {
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .field-value {
+    background-color: #f7f7f7;
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    color: #333;
+  }
+  
+  .poa-section .field-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .link-box {
+    background-color: #eef2f3;
+    padding: 0.6rem;
+    border-radius: 5px;
+    word-break: break-all;
+  }
+  
+  .note-box {
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    border-radius: 5px;
+    white-space: pre-wrap;
+  }
+  

@@ -5,6 +5,7 @@ import Dashboard from './Dashboard';
 import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
+import ReservationDetails from './ReservationDetails'; // ✅ Add this line
 
 function App() {
   const [email, setEmail] = useState('');
@@ -38,19 +39,20 @@ function App() {
             loggedIn
               ? <Navigate to="/dashboard" />
               : <LoginPage
-                email={email}
-                setEmail={setEmail}
-                password={password}
-                setPassword={setPassword}
-                role={role}
-                setRole={setRole}
-                handleSubmit={handleSubmit}
-              />
+                  email={email}
+                  setEmail={setEmail}
+                  password={password}
+                  setPassword={setPassword}
+                  role={role}
+                  setRole={setRole}
+                  handleSubmit={handleSubmit}
+                />
           }
         />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/new-reservation" element={<ReservationForm />} />
         <Route path="/user-records" element={<UserRecords />} />
+        <Route path="/reservation/:id" element={<ReservationDetails />} /> {/* ✅ Add this line */}
       </Routes>
     </Router>
   );

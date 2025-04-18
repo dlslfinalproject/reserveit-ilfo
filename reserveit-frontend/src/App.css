@@ -413,3 +413,213 @@ textarea {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* Reservation Details */
+.reservation-details-container {
+  padding: 2rem;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.details-box {
+  background-color: white;
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.details-box h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4a652e;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.details-box p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.details-box a {
+  color: #4a652e;
+  text-decoration: underline;
+}
+
+.details-box a:hover {
+  color: #3a5223;
+}
+
+.details-box .back-btn {
+  margin-top: 2rem;
+  background-color: #d9d9d9;
+  color: black;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+}
+
+.details-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.details-box {
+  width: 100%;
+  max-width: 700px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-pill {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: white;
+}
+
+.status-pill.pending {
+  background-color: #d9a75f;
+}
+
+.status-pill.approved {
+  background-color: #91c788;
+}
+
+.progress-bar {
+  background-color: #eee;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 1rem 0;
+  height: 30px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #fff;
+  transition: width 0.4s ease;
+}
+
+.progress-fill.pending {
+  width: 40%;
+  background-color: #d9a75f;
+}
+
+.progress-fill.approved {
+  width: 100%;
+  background-color: #91c788;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.poa-link a {
+  word-break: break-all;
+  color: #3366cc;
+  text-decoration: underline;
+}
+
+.back-btn {
+  margin-top: 2rem;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  background-color: #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #aaa;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.label {
+  font-weight: bold;
+  color: #444;
+}
+
+.status-pill {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.status-pill.approved {
+  background-color: #3A5B22;
+  color: white;
+}
+
+.status-pill.rejected {
+  background-color: #B7410E;
+  color: white;
+}
+
+.status-pill.pending {
+  background-color: #D69E5E;
+  color: white;
+}
+
+.poa-link {
+  color: #4a652e;
+  text-decoration: underline;
+}
+
+.poa-link:hover {
+  color: #3a5223;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
