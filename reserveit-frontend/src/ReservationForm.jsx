@@ -6,9 +6,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import TimePicker from 'react-time-picker';
 import 'react-time-picker/dist/TimePicker.css';
 import './App.css';
+import { useReservation } from './ReservationContext';
 
 const ReservationForm = () => {
   const navigate = useNavigate();
+  const { addReservation } = useReservation();
 
   const [formData, setFormData] = useState({
     whoReserved: '',
@@ -54,6 +56,17 @@ const ReservationForm = () => {
   };
 
   const confirmSubmit = () => {
+    const activity = isOtherSelected ? formData.customActivity : formData.natureOfActivity;
+
+    const newReservation = {
+      activity,
+      date: formData.date?.toLocaleDateString(),
+      venue: '',
+      status: 'Pending'
+    };
+
+    addReservation(newReservation); // ✅ save to context
+
     setShowModal(false);
     setPopupMessage('ReserveIT!');
     setTimeout(() => {

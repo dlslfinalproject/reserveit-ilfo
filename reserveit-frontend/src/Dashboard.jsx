@@ -28,7 +28,10 @@ const Dashboard = () => {
             <FaPlus /> Reservation
           </button>
 
-          <button className="dashboard-button"><FaListAlt /> Records</button>
+          <button className="dashboard-button" onClick={() => navigate('/user-records')}>
+            <FaListAlt /> Records
+          </button>
+
           <button className="dashboard-button"><FaEnvelope /> Gmail</button>
 
           <div className="profile-dropdown">
