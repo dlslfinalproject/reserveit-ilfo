@@ -389,7 +389,7 @@ textarea {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #ccc;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .status-pill {
