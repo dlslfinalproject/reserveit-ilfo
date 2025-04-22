@@ -1,30 +1,33 @@
 // ReservationDetails.jsx
 import React, { useState } from 'react';
 import './App.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ReservationDetails = () => {
   const [activeTab, setActiveTab] = useState('details');
   const navigate = useNavigate();
+  const location = useLocation();
+  const reservation = location.state?.reservation || {};
 
-  // Placeholder structure only for fields, no default values
-  const placeholder = {
-    whoReserved: '',
-    programName: '',
-    activityNature: '',
-    participants: '',
-    date: '',
-    time: '',
-    poaLink: '',
-    notes: ''
-  };
+  console.log('Loaded reservation:', reservation);
+
+  if (!Object.keys(reservation).length) {
+    return (
+      <div className="reservation-card">
+        <p>No reservation data found.</p>
+        <button className="back-btn" onClick={() => navigate('/user-records')}>Back</button>
+      </div>
+    );
+  }
 
   return (
     <div className="reservation-card">
       <div className="reservation-header-row">
         <h2>Reservation Details</h2>
         <div className="reservation-header-right">
-          <span className="reservation-badge reservation-pending">Pending Application</span>
+          <span className={`reservation-badge reservation-${reservation.status?.toLowerCase()}`}>
+            {reservation.status || 'Pending'}
+          </span>
           <button className="reservation-close-button" onClick={() => navigate('/user-records')}>
             ×
           </button>
@@ -50,30 +53,32 @@ const ReservationDetails = () => {
         {activeTab === 'details' ? (
           <div className="reservation-details-grid">
             <div className="reservation-field-label">Who Reserved:</div>
-            <div className="reservation-field-value">{placeholder.whoReserved}</div>
+            <div className="reservation-field-value">{reservation.whoReserved}</div>
 
             <div className="reservation-field-label">Name of Program:</div>
-            <div className="reservation-field-value">{placeholder.programName}</div>
+            <div className="reservation-field-value">{reservation.nameOfProgram}</div>
 
             <div className="reservation-field-label">Nature of Activity:</div>
-            <div className="reservation-field-value">{placeholder.activityNature}</div>
+            <div className="reservation-field-value">{reservation.natureOfActivity}</div>
 
             <div className="reservation-field-label">Number of Participants:</div>
-            <div className="reservation-field-value">{placeholder.participants}</div>
+            <div className="reservation-field-value">{reservation.numberOfParticipants}</div>
 
             <div className="reservation-field-label">Date:</div>
-            <div className="reservation-field-value">{placeholder.date}</div>
+            <div className="reservation-field-value">{reservation.date}</div>
 
             <div className="reservation-field-label">Time:</div>
-            <div className="reservation-field-value">{placeholder.time}</div>
+            <div className="reservation-field-value">
+              {reservation.time?.start} – {reservation.time?.end}
+            </div>
           </div>
         ) : (
           <div className="reservation-poa-section">
             <div className="reservation-field-label">Program of Activities (Link):</div>
-            <div className="reservation-link-box">{placeholder.poaLink}</div>
+            <div className="reservation-link-box">{reservation.poaLink}</div>
 
             <div className="reservation-field-label" style={{ marginTop: '1rem' }}>Notes:</div>
-            <div className="reservation-note-box">{placeholder.notes}</div>
+            <div className="reservation-note-box">{reservation.notes}</div>
           </div>
         )}
       </div>

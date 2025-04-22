@@ -5,7 +5,7 @@ import Dashboard from './Dashboard';
 import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
-import ReservationDetails from './ReservationDetails'; // ✅ Add this line
+import ReservationDetails from './ReservationDetails';
 
 function App() {
   const [email, setEmail] = useState('');
@@ -52,7 +52,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/new-reservation" element={<ReservationForm />} />
         <Route path="/user-records" element={<UserRecords />} />
-        <Route path="/reservation/:id" element={<ReservationDetails />} /> {/* ✅ Add this line */}
+        <Route path="/reservation/:id" element={<ReservationDetails />} />
       </Routes>
     </Router>
   );

@@ -116,11 +116,20 @@ const ReservationForm = () => {
     const activity = isOtherSelected ? formData.customActivity : formData.natureOfActivity;
 
     const newReservation = {
-      activity,
+      whoReserved: formData.whoReserved,
+      nameOfProgram: formData.nameOfProgram,
+      natureOfActivity: activity,
+      numberOfParticipants: formData.numberOfParticipants,
       date: formData.date?.toLocaleDateString(),
-      venue: '',
+      time: {
+        start: formData.startTime?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        end: formData.endTime?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      },
+      notes: formData.notes,
+      poaLink: formData.poaLink,
+      venue: '', // if you’re adding venue later
       status: 'Pending'
-    };
+    };    
 
     addReservation(newReservation); // ✅ save to context
 
