@@ -52,7 +52,7 @@ const UserRecords = () => {
                 <td>
                   <button
                     className="view-details-btn"
-                    onClick={() => navigate(`/reservation/${reservation.id}`)}
+                    onClick={() => navigate(`/reservation/${reservation.id}`, { state: { reservation } })}
                   >
                     View Details
                   </button>
@@ -74,5 +74,7 @@ const UserRecords = () => {
     </div>
   );
 };
+
+
 
 export default UserRecords;
