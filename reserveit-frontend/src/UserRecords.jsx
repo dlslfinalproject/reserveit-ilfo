@@ -40,7 +40,7 @@ const UserRecords = () => {
               <tr key={reservation.id}>
                 <td>{reservation.venue || '—'}</td>
                 <td>{reservation.date}</td>
-                <td>{reservation.activity}</td>
+                <td>{reservation.natureOfActivity || '—'}</td>
                 <td>
                   <span
                     className="status-pill"
