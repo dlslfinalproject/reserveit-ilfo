@@ -51,6 +51,7 @@ const Dashboard = () => {
             {showProfile && (
               <div className="profile-menu">
                 <p>user@dlsl.edu.ph</p>
+                <button onClick={() => navigate('/settings')}>Settings</button> {/* <-- NEW SETTINGS BUTTON */}
                 <button onClick={handleLogout}>Log Out</button>
               </div>
             )}
