@@ -1,0 +1,141 @@
+.settings-container {
+    width: 100%;
+    height: 100vh; /* FULL screen height */
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* NO scrolling horizontally */
+  }
+  
+  .settings-card {
+    background: #ffffff;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1000px;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* NO overflow */
+  }
+  
+  .settings-title {
+    font-size: 28px;
+    font-weight: bold;
+    background-color: #d4e3c2;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .edit-facilities-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+    text-align: center;
+  }
+  
+  .facility-list {
+    flex: 1;
+    overflow-y: auto; /* Only vertical scroll inside this list if too many facilities */
+    overflow-x: hidden; /* NEVER scroll sideways */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .facility-input {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box; /* Prevent horizontal scroll */
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .back-button, .add-button, .save-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 30%;
+    min-width: 120px;
+  }
+  
+  .back-button {
+    background-color: #d3d3d3;
+    color: black;
+  }
+  
+  .add-button {
+    background-color: #d1a05f;
+    color: white;
+  }
+  
+  .save-button {
+    background-color: #45612f;
+    color: white;
+  }
+  
+  /* Popup Styles */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+  }
+  
+  .popup-input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    font-size: 16px;
+  }
+  
+  .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .cancel-button, .confirm-add-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background-color: #d3d3d3;
+  }
+  
+  .confirm-add-button {
+    background-color: #45612f;
+    color: white;
+  }
+  

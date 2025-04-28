@@ -6,6 +6,7 @@ import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
 import ReservationDetails from './ReservationDetails';
+import Settings from './Settings'; // <-- ADD this import
 
 function App() {
   const [email, setEmail] = useState('');
@@ -53,6 +54,7 @@ function App() {
         <Route path="/new-reservation" element={<ReservationForm />} />
         <Route path="/user-records" element={<UserRecords />} />
         <Route path="/reservation/:id" element={<ReservationDetails />} />
+        <Route path="/settings" element={<Settings />} /> {/* <-- ADD THIS ROUTE */}
       </Routes>
     </Router>
   );
