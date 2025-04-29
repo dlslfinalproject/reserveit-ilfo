@@ -58,20 +58,24 @@
   
   .button-group {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: auto; 
+    padding-top: 20px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
   }
   
+  
   .back-button, .add-button, .save-button {
-    padding: 12px 24px;
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    width: 30%;
-    min-width: 120px;
+    width: auto;
+    min-width: 100px;
   }
   
   .back-button {
