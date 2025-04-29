@@ -26,7 +26,9 @@ const Settings = () => {
   return (
     <div className="settings-container">
       <div className="settings-card">
-        <h2 className="settings-title">SETTINGS</h2>
+      <div className="settings-header">
+      <h2 className="settings-title">SETTINGS</h2>
+      </div>
         <h3 className="edit-facilities-title">EDIT FACILITIES</h3>
 
         <div className="facility-list">
