@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import { supabaseClient } from '../supbaseClient.js';
 import Dashboard from './Dashboard';
 import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
@@ -9,27 +12,61 @@ import ReservationDetails from './ReservationDetails';
 import Settings from './Settings'; // <-- ADD this import
 
 function App() {
+  const [session, setSession] = useState(null)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [authError, setAuthError] = useState(null); 
+  const [loadingSession, setLoadingSession] = useState(true);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    })
+    .catch((error) => console.error("Error fetching session:", error))
+    .finally(() => setLoadingSession(false)); // Set loading to false
+    
+  const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe()
+  }, []); 
+
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setAuthError(null); // Clear any previous errors
 
     if (!email.endsWith('@dlsl.edu.ph')) {
-      alert('Only DLSL email addresses are allowed.');
+      setAuthError('Only DLSL email addresses are allowed.');
       return;
     }
 
-    if (!role) {
-      alert('Please select a role.');
+    if (!password) {
+      setAuthError('Password is required.');
       return;
     }
 
-    console.log('Simulated login:', { email, password, role });
-    setLoggedIn(true);
+    try {
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        setAuthError(error.message);
+      }
+      // If successful, the onAuthStateChange listener will update the session
+    } catch (error) {
+      console.error('Error signing in:', error);
+      setAuthError('An unexpected error occurred during sign in.');
+    }
   };
+
+  if (loadingSession) {
+    return <div>Loading session...</div>; // Or a spinner
+  }
 
   return (
     <Router>
@@ -37,9 +74,9 @@ function App() {
         <Route
           path="/"
           element={
-            loggedIn
-              ? <Navigate to="/dashboard" />
-              : <LoginPage
+            session ? (
+              <Navigate to="/dashboard" />
+            )  : <LoginPage
                   email={email}
                   setEmail={setEmail}
                   password={password}
@@ -47,6 +84,7 @@ function App() {
                   role={role}
                   setRole={setRole}
                   handleSubmit={handleSubmit}
+                  authError={authError}
                 />
           }
         />
@@ -54,7 +92,7 @@ function App() {
         <Route path="/new-reservation" element={<ReservationForm />} />
         <Route path="/user-records" element={<UserRecords />} />
         <Route path="/reservation/:id" element={<ReservationDetails />} />
-        <Route path="/settings" element={<Settings />} /> {/* <-- ADD THIS ROUTE */}
+        <Route path="/settings" element={<Settings />} /> 
       </Routes>
     </Router>
   );

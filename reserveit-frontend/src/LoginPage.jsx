@@ -2,9 +2,30 @@ import dlslLogo from './assets/dlsl-logo.png';
 import ilfoLogo from './assets/ilfo-logo.png';
 import reserveitLogo from '/reserveit-logo.png'; // notice the leading slash for public folder
 import './App.css';
+import { supabaseClient } from '../supbaseClient.js'; // Import supabaseClient if not already imported in this file
 
-function LoginPage({ email, setEmail, password, setPassword, role, setRole, handleSubmit }) {
+function LoginPage({ email, setEmail, password, setPassword, role, setRole, handleSubmit, authError }) {
   const handleRoleSelect = (selectedRole) => setRole(selectedRole);
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+      });
+
+      if (error) {
+        console.error('Error signing in with Google:', error);
+        // Optionally set an authError state to display to the user
+        // setAuthError(error.message);
+      }
+      // After successful redirect to Google, Supabase handles the callback
+      // and your auth state listener in App.jsx will update the session.
+    } catch (error) {
+      console.error('Unexpected error signing in with Google:', error);
+      // Optionally set an authError state to display to the user
+      // setAuthError('An unexpected error occurred during Google sign in.');
+    }
+  };
 
   return (
     <div className="login-container">
@@ -15,6 +36,8 @@ function LoginPage({ email, setEmail, password, setPassword, role, setRole, hand
         </p>
 
         <form className="login-form" onSubmit={handleSubmit}>
+          {authError && <p className="error-message">{authError}</p>}
+
           <label>Email Address</label>
           <input
             type="email"
@@ -61,6 +84,15 @@ function LoginPage({ email, setEmail, password, setPassword, role, setRole, hand
 
           <button type="submit" className="login-button">Log in</button>
         </form>
+
+        <div className="social-login">
+          <hr className="divider" />
+          <p className="social-text">Or sign in with</p>
+          <button type="button" className="google-button" onClick={handleSignInWithGoogle}>
+            <img src="/google-logo.png" alt="Google Logo" className="social-icon" />
+            Sign in with Google
+          </button>
+        </div>
       </div>
 
       <div className="login-right">
