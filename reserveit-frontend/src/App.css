@@ -135,6 +135,12 @@ body, input, select, textarea, button {
   height: auto;
 }
 
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+
 /* Dashboard */
 .dashboard-container {
   padding: 20px;
