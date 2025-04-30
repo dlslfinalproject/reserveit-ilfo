@@ -2,7 +2,7 @@ import React from 'react';
 import dlslLogo from './assets/dlsl-logo.png';
 import ilfoLogo from './assets/ilfo-logo.png';
 import reserveitLogo from '/reserveit-logo.png';
-import './App.css'; // You might still have some general styles
+import './App.css'; 
 import Button from 'react-bootstrap/Button';
 import { supabaseClient } from '../supbaseClient.js';
 
