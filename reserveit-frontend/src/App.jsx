@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -10,6 +11,7 @@ import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
 import ReservationDetails from './ReservationDetails';
 import Settings from './Settings'; // <-- ADD this import
+
 
 function App() {
   const [session, setSession] = useState(null)
