@@ -8,14 +8,20 @@ import { useNavigate } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
-const Dashboard = () => {
+const Dashboard = ({ onSignOut }) => {
   const [events, setEvents] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    window.location.href = '/';
+  const handleLogout = async () => {
+    if (onSignOut) {
+      await onSignOut();
+      navigate('/');
+    }
+    else {
+      console.error("Sign out function not passed as a prop.");
+    }
   };
 
   const goToPreviousMonth = () => {
