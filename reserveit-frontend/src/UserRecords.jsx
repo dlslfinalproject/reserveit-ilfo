@@ -1,6 +1,6 @@
 // UserRecords.jsx
 import React from 'react';
-import './App.css';
+import './ReservationDetails.css';
 import { useNavigate } from 'react-router-dom';
 import { useReservation } from './ReservationContext';
 

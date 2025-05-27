@@ -1,0 +1,73 @@
+/* Container for centering */
+.login-container-centered {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-height: 100vh;
+  background-color: #f0f0f0; /* Light grey background */
+}
+
+/* Content wrapper */
+.login-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content within the wrapper */
+  padding: 40px; /* Keep some padding for spacing */
+  border-radius: 8px; /* Optional: Keep rounded corners if you like */
+  box-shadow: none; /* Remove the shadow */
+  max-width: 900px; /* Increased max-width of the content block */
+}
+
+.center-logo {
+  max-width: 600px; /* Adjust logo size as needed based on the image */
+  height: auto;
+  margin-bottom: 30px; /* Increased margin for spacing */
+}
+
+.description-centered {
+  font-size: 1.6em; /* Adjust font size */
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+  max-width: 500%; /* Allow it to take full width of the content block */
+  white-space: pre-wrap; /* Preserve whitespace and wrap lines */
+}
+
+/* Google Sign-in Button (centered) */
+.google-signin-button-centered {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  padding: 10px 20px; /* Adjust padding */
+  font-size: 1em; /* Adjust font size */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); /* Add a subtle shadow to the button */
+  width: auto; /* Adjust width to content */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.google-signin-button-centered:hover {
+  background-color: #388E3C; /* Darker green on hover */
+}
+
+.google-signin-button-centered:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); /* Add a focus ring */
+}
+
+.error-message-centered {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.social-login-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

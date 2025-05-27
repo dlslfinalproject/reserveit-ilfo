@@ -1,6 +1,6 @@
 // ReservationDetails.jsx
 import React, { useState } from 'react';
-import './App.css';
+import './ReservationDetails.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const ReservationDetails = () => {
