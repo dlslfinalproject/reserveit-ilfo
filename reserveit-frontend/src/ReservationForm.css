@@ -13,18 +13,27 @@
 .form-header {
   background-color: #D1DFBB;
   padding: 20px;
-  border-radius: 20px 20px 0 0;
   font-size: 24px;
   font-weight: bold;
   color: black;
-  margin-bottom: 2rem;
+  border: 2px solid #4d4d4d;
+  border-bottom: 1px solid #4d4d4d; /* Separator line */
+  border-radius: 1rem 1rem 0 0;
+  margin-bottom: 0;
 }
+
 
 .reservation-form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  border: 2px solid #4d4d4d;
+  border-top: none; /* Removed top border to attach to header */
+  border-radius: 0 0 1rem 1rem; /* Only bottom corners rounded */
+  padding: 2rem;
+  background-color: #f8f8f8; /* Optional: to make it pop from background */
 }
+
 
 .form-columns {
   display: flex;

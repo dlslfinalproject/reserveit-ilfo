@@ -155,10 +155,24 @@ const UserRecords = () => {
   };
 
   return (
-    <div className="records-container" style={{ backgroundColor: '#FFFFFF' }}>
-      <div className="records-box" style={{ backgroundColor: '#F8F8F8' }}>
-        <h2 className="records-title">My Reservation</h2>
-        <table className="records-table" style={{ width: '100%', tableLayout: 'fixed' }}>
+    <div 
+    className="records-container" style={{ backgroundColor: '#FFFFFF', border: '2px solid #4d4d4d', }}>
+      <div className="records-box" style={{ backgroundColor: '#F8F8F8', borderRadius: '1rem', overflow: 'hidden',  }}>
+        <h2
+          className="records-title"
+          style={{
+            backgroundColor: '#D1DFBB',
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: 'black',
+            padding: '20px',
+            margin: '0',
+            borderBottom: '1px solid #4d4d4d'
+          }}
+        >
+          My Reservation
+        </h2>
+        <table className="records-table" style={{ width: '100%', borderCollapse: 'collapse',  }}>
           <thead>
             <tr>
               <th style={{ width: '16.66%' }}>Venue</th>
