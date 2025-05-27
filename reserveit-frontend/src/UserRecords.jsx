@@ -74,6 +74,86 @@ const UserRecords = () => {
     reportWindow.document.close();
   };
 
+  const generateSummaryReport = () => {
+    const summaryWindow = window.open('', '_blank');
+    const reportContent = `
+      <html>
+        <head>
+          <title>Reservation Summary</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 40px;
+              background-color: #ffffff;
+              color: #111827;
+            }
+            h2 {
+              font-size: 24px;
+              margin-bottom: 30px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 16px;
+            }
+            th, td {
+              padding: 12px;
+              text-align: left;
+              border-bottom: 1px solid #ccc;
+            }
+            th {
+              background-color: #E8F0E1;
+            }
+            .status-pill {
+              display: inline-block;
+              padding: 6px 14px;
+              border-radius: 20px;
+              font-weight: bold;
+            }
+            .Approved {
+              background-color: #3A5B22;
+              color: white;
+            }
+            .Rejected {
+              background-color: #B7410E;
+              color: white;
+            }
+            .Pending {
+              background-color: #D69E5E;
+              color: white;
+            }
+          </style>
+        </head>
+        <body>
+          <h2>All Reservation Status Summary</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Requester</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${reservations.map(r => `
+                <tr>
+                  <td>${r.organization || '—'}</td>
+                  <td>${r.date}</td>
+                  <td>${r.time || '—'}</td>
+                  <td><span class="status-pill ${r.status}">${r.status}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>window.print();</script>
+        </body>
+      </html>
+    `;
+    summaryWindow.document.write(reportContent);
+    summaryWindow.document.close();
+  };
+
   return (
     <div className="records-container" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="records-box" style={{ backgroundColor: '#F8F8F8' }}>
@@ -139,10 +219,36 @@ const UserRecords = () => {
           </tbody>
         </table>
 
-        <div className="back-button-wrapper">
+        {/* Bottom-right buttons */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '30px', gap: '12px' }}>
+          <button
+          onClick={generateSummaryReport}
+          style={{
+            backgroundColor: '#DDE7C7',
+            color: '#111827',
+            fontWeight: 'bold',
+            borderRadius: '9999px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            border: 'none'  // <-- Removed visible border
+          }}
+        >
+          Print Summary
+        </button>
+
           <button
             className="back-btn"
             onClick={() => navigate('/dashboard')}
+            style={{
+              backgroundColor: '#E5E5E5',
+              color: '#111827',
+              fontWeight: 'bold',
+              borderRadius: '9999px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              cursor: 'pointer',
+            }}
           >
             Back to Dashboard
           </button>
