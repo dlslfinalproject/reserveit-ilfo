@@ -157,11 +157,11 @@ const ReservationForm = () => {
             </div>
 
             <div className="form-group">
-              <label>Name of Program</label>
+              <label>Event Name</label>
               <input
                 type="text"
-                value={formData.nameOfProgram}
-                onChange={(e) => handleChange('nameOfProgram', e.target.value)}
+                value={formData.eventName}
+                onChange={(e) => handleChange('eventName', e.target.value)}
               />
             </div>
 
