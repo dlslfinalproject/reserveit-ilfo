@@ -35,6 +35,15 @@ function App() {
     return () => subscription.unsubscribe()
   }, []); 
 
+  console.log(session?.user?.email)
+
+  const signOut = async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        console.error('Error signing out:', error);
+      }
+  }; 
+
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,11 +99,11 @@ function App() {
                 />
           }
         />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/new-reservation" element={<ReservationForm />} />
         <Route path="/user-records" element={<UserRecords />} />
         <Route path="/reservation/:id" element={<ReservationDetails />} />
         <Route path="/settings" element={<Settings />} /> 
+        <Route path="/dashboard"element={session ? <Dashboard onSignOut={signOut} /> : <Navigate to="/" />}/>
       </Routes>
     </Router>
   );
