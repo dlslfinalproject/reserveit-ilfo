@@ -1,8 +1,8 @@
-// UserRecords.jsx
 import React from 'react';
 import './ReservationDetails.css';
 import { useNavigate } from 'react-router-dom';
 import { useReservation } from './ReservationContext';
+import fileIcon from './assets/file-icon.png'; // Adjust path if needed
 
 const UserRecords = () => {
   const navigate = useNavigate();
@@ -129,9 +129,9 @@ const UserRecords = () => {
           <table>
             <thead>
               <tr>
-                <th>Requester</th>
+                <th>Venue</th>
                 <th>Date</th>
-                <th>Time</th>
+                <th>Activity</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -158,14 +158,15 @@ const UserRecords = () => {
     <div className="records-container" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="records-box" style={{ backgroundColor: '#F8F8F8' }}>
         <h2 className="records-title">My Reservation</h2>
-        <table className="records-table">
+        <table className="records-table" style={{ width: '100%', tableLayout: 'fixed' }}>
           <thead>
             <tr>
-              <th>Venue</th>
-              <th>Date</th>
-              <th>Activity</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{ width: '16.66%' }}>Venue</th>
+              <th style={{ width: '16.66%' }}>Date</th>
+              <th style={{ width: '16.66%' }}>Activity</th>
+              <th style={{ width: '16.66%' }}>Status</th>
+              <th style={{ width: '16.66%' }}>View</th>
+              <th style={{ width: '16.66%' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -190,55 +191,63 @@ const UserRecords = () => {
                         state: { reservation },
                       })
                     }
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '12px',
+                      border: '1px solid #ccc',
+                      backgroundColor: '#fff',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
                   >
                     View Details
                   </button>
-
-                  <a
-                    href="#"
+                </td>
+                <td>
+                  <img
+                    src={fileIcon}
+                    alt="Generate Report"
+                    title="Generate Report"
                     onClick={(e) => {
                       e.preventDefault();
                       generateReport(reservation);
                     }}
                     style={{
-                      backgroundColor: '#DDE7C7',
-                      color: '#111827',
-                      fontWeight: 'bold',
-                      borderRadius: '9999px',
-                      padding: '10px 20px',
-                      textDecoration: 'none',
-                      marginLeft: '8px',
-                      display: 'inline-block',
+                      width: '22px',
+                      height: '22px',
+                      cursor: 'pointer'
                     }}
-                  >
-                    Generate Report
-                  </a>
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* Bottom-right buttons */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '30px', gap: '12px' }}>
+        {/* Bottom Buttons */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '30px',
+          gap: '12px'
+        }}>
           <button
-          onClick={generateSummaryReport}
-          style={{
-            backgroundColor: '#DDE7C7',
-            color: '#111827',
-            fontWeight: 'bold',
-            borderRadius: '9999px',
-            padding: '12px 24px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            border: 'none'  // <-- Removed visible border
-          }}
-        >
-          Print Summary
-        </button>
+            onClick={generateSummaryReport}
+            style={{
+              backgroundColor: '#DDE7C7',
+              color: '#111827',
+              fontWeight: 'bold',
+              borderRadius: '9999px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              cursor: 'pointer',
+              border: 'none'
+            }}
+          >
+            Print Summary
+          </button>
 
           <button
-            className="back-btn"
             onClick={() => navigate('/dashboard')}
             style={{
               backgroundColor: '#E5E5E5',
@@ -248,6 +257,7 @@ const UserRecords = () => {
               padding: '12px 24px',
               fontSize: '16px',
               cursor: 'pointer',
+              border: 'none'
             }}
           >
             Back to Dashboard
