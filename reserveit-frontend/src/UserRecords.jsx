@@ -234,7 +234,7 @@ const UserRecords = () => {
           <button
             onClick={generateSummaryReport}
             style={{
-              backgroundColor: '#DDE7C7',
+              backgroundColor: '#D1DFBB',
               color: '#111827',
               fontWeight: 'bold',
               borderRadius: '9999px',
