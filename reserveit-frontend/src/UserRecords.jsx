@@ -1,8 +1,8 @@
 import React from 'react';
-import './ReservationDetails.css';
+import './UserRecords.css'; // New CSS file
 import { useNavigate } from 'react-router-dom';
 import { useReservation } from './ReservationContext';
-import fileIcon from './assets/file-icon.png'; // Adjust path if needed
+import fileIcon from './assets/file-icon.png';
 
 const UserRecords = () => {
   const navigate = useNavigate();
@@ -11,13 +11,13 @@ const UserRecords = () => {
   const getStatusStyle = (status) => {
     switch (status) {
       case 'Approved':
-        return { backgroundColor: '#3A5B22', color: 'white' };
+        return 'Approved';
       case 'Rejected':
-        return { backgroundColor: '#B7410E', color: 'white' };
+        return 'Rejected';
       case 'Pending':
-        return { backgroundColor: '#D69E5E', color: 'white' };
+        return 'Pending';
       default:
-        return {};
+        return '';
     }
   };
 
@@ -155,32 +155,18 @@ const UserRecords = () => {
   };
 
   return (
-    <div 
-    className="records-container" style={{ backgroundColor: '#FFFFFF', border: '2px solid #4d4d4d', }}>
-      <div className="records-box" style={{ backgroundColor: '#F8F8F8', borderRadius: '1rem', overflow: 'hidden',  }}>
-        <h2
-          className="records-title"
-          style={{
-            backgroundColor: '#D1DFBB',
-            fontSize: '24px',
-            fontWeight: 'bold',
-            color: 'black',
-            padding: '20px',
-            margin: '0',
-            borderBottom: '1px solid #4d4d4d'
-          }}
-        >
-          My Reservation
-        </h2>
-        <table className="records-table" style={{ width: '100%', borderCollapse: 'collapse',  }}>
+    <div className="records-container">
+      <div className="records-box">
+        <h2 className="records-title">My Reservation</h2>
+        <table className="records-table">
           <thead>
             <tr>
-              <th style={{ width: '16.66%' }}>Venue</th>
-              <th style={{ width: '16.66%' }}>Date</th>
-              <th style={{ width: '16.66%' }}>Activity</th>
-              <th style={{ width: '16.66%' }}>Status</th>
-              <th style={{ width: '16.66%' }}>View</th>
-              <th style={{ width: '16.66%' }}></th>
+              <th>Venue</th>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Status</th>
+              <th>View</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -190,10 +176,7 @@ const UserRecords = () => {
                 <td>{reservation.date}</td>
                 <td>{reservation.natureOfActivity || '—'}</td>
                 <td>
-                  <span
-                    className="status-pill"
-                    style={getStatusStyle(reservation.status)}
-                  >
+                  <span className={`status-pill ${getStatusStyle(reservation.status)}`}>
                     {reservation.status}
                   </span>
                 </td>
@@ -205,14 +188,6 @@ const UserRecords = () => {
                         state: { reservation },
                       })
                     }
-                    style={{
-                      padding: '6px 12px',
-                      borderRadius: '12px',
-                      border: '1px solid #ccc',
-                      backgroundColor: '#fff',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
                   >
                     View Details
                   </button>
@@ -226,11 +201,7 @@ const UserRecords = () => {
                       e.preventDefault();
                       generateReport(reservation);
                     }}
-                    style={{
-                      width: '22px',
-                      height: '22px',
-                      cursor: 'pointer'
-                    }}
+                    className="file-icon"
                   />
                 </td>
               </tr>
@@ -238,42 +209,11 @@ const UserRecords = () => {
           </tbody>
         </table>
 
-        {/* Bottom Buttons */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: '30px',
-          gap: '12px'
-        }}>
-          <button
-            onClick={generateSummaryReport}
-            style={{
-              backgroundColor: '#D1DFBB',
-              color: '#111827',
-              fontWeight: 'bold',
-              borderRadius: '9999px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              cursor: 'pointer',
-              border: 'none'
-            }}
-          >
+        <div className="bottom-buttons">
+          <button className="print-summary-btn" onClick={generateSummaryReport}>
             Print Summary
           </button>
-
-          <button
-            onClick={() => navigate('/dashboard')}
-            style={{
-              backgroundColor: '#E5E5E5',
-              color: '#111827',
-              fontWeight: 'bold',
-              borderRadius: '9999px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              cursor: 'pointer',
-              border: 'none'
-            }}
-          >
+          <button className="back-dashboard-btn" onClick={() => navigate('/dashboard')}>
             Back to Dashboard
           </button>
         </div>
