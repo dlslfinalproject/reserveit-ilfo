@@ -18,8 +18,7 @@ const Dashboard = ({ onSignOut }) => {
     if (onSignOut) {
       await onSignOut();
       navigate('/');
-    }
-    else {
+    } else {
       console.error("Sign out function not passed as a prop.");
     }
   };
@@ -50,6 +49,11 @@ const Dashboard = ({ onSignOut }) => {
 
           <button className="dashboard-button"><FaEnvelope /> Gmail</button>
 
+          {/* ILFO Button */}
+          <button className="dashboard-button" onClick={() => navigate('/ilfo-designs')}>
+            ILFO
+          </button>
+
           <div className="profile-dropdown">
             <button onClick={() => setShowProfile(!showProfile)}>
               <FaUserCircle size={24} />
@@ -57,7 +61,7 @@ const Dashboard = ({ onSignOut }) => {
             {showProfile && (
               <div className="profile-menu">
                 <p>user@dlsl.edu.ph</p>
-                <button onClick={() => navigate('/settings')}>Settings</button> {/* <-- NEW SETTINGS BUTTON */}
+                <button onClick={() => navigate('/settings')}>Settings</button>
                 <button onClick={handleLogout}>Log Out</button>
               </div>
             )}

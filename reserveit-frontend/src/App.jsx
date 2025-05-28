@@ -10,7 +10,8 @@ import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
 import ReservationDetails from './ReservationDetails';
-import Settings from './Settings'; // <-- ADD this import
+import Settings from './Settings'; 
+import ILFO from './ILFO'; 
 
 
 function App() {
@@ -103,6 +104,7 @@ function App() {
         <Route path="/user-records" element={<UserRecords />} />
         <Route path="/reservation/:id" element={<ReservationDetails />} />
         <Route path="/settings" element={<Settings />} /> 
+        <Route path="/ilfo-designs" element={<ILFO />} />
         <Route path="/dashboard"element={session ? <Dashboard onSignOut={signOut} /> : <Navigate to="/" />}/>
       </Routes>
     </Router>
