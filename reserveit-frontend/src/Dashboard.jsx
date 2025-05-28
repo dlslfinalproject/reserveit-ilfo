@@ -43,13 +43,18 @@ const Dashboard = ({ onSignOut }) => {
             <FaPlus /> Reservation
           </button>
 
+          <button className="dashboard-button" onClick={() => navigate('/request-form')}>
+            <FaPlus /> Request
+          </button>
+
           <button className="dashboard-button" onClick={() => navigate('/user-records')}>
             <FaListAlt /> Records
           </button>
 
-          <button className="dashboard-button"><FaEnvelope /> Gmail</button>
+          <button className="dashboard-button">
+            <FaEnvelope /> Gmail
+          </button>
 
-          {/* ILFO Button */}
           <button className="dashboard-button" onClick={() => navigate('/ilfo-designs')}>
             ILFO
           </button>
@@ -69,20 +74,18 @@ const Dashboard = ({ onSignOut }) => {
         </div>
       </div>
 
-      {/* Custom Calendar Navigation */}
       <div className="calendar-nav-container">
         <button onClick={goToPreviousMonth} className="calendar-nav-button">
-          <FaChevronLeft /> 
+          <FaChevronLeft />
         </button>
 
         <span className="calendar-nav-month">{formattedMonthYear}</span>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">
-           <FaChevronRight />
+          <FaChevronRight />
         </button>
       </div>
 
-      {/* Calendar */}
       <Calendar
         localizer={localizer}
         events={events}
