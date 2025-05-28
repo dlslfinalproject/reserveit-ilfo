@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './RequestForm.css';
+import ApprovalForm from './ApprovalForm';
 
 const RequestForm = () => {
   const [activeTab, setActiveTab] = useState('details');
+  const [showApprovalForm, setShowApprovalForm] = useState(false); 
 
   return (
     <div className="request-container">
@@ -82,9 +84,11 @@ const RequestForm = () => {
         <div className="request-actions">
           <button className="btn cancel">Cancel</button>
           <button className="btn reject">Reject</button>
-          <button className="btn confirm">Confirm</button>
+          <button className="btn confirm" onClick={() => setShowApprovalForm(true)}>Confirm</button>
         </div>
       </div>
+
+      {showApprovalForm && <ApprovalForm onClose={() => setShowApprovalForm(false)} />}
     </div>
   );
 };
