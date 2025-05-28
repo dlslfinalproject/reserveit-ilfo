@@ -1,22 +1,26 @@
-.records-container {
-  background-color: #FFFFFF;
-  border: 2px solid #4d4d4d;
-}
-
-.records-box {
-  background-color: #F8F8F8;
-  border-radius: 1rem;
+.records-wrapper {
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  margin: 50px auto; /* Centered with smaller side margins */
+  padding: 0px;
+  background: #fff;
+  border: 1px solid #4d4d4d;
+  max-width: 1000px; /* Adjust width as needed */
 }
 
-.records-title {
+.records-wrapper .records-title {
   background-color: #D1DFBB;
   font-size: 24px;
   font-weight: bold;
   color: black;
-  padding: 30px;
+  padding: 35px;
   margin: 0;
   border-bottom: 1px solid #4d4d4d;
+}
+
+.table-container {
+  padding: 0 30px 20px;
 }
 
 .records-table {
@@ -25,7 +29,13 @@
 }
 
 .records-table th {
-  width: 16.66%;
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
+.records-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
 }
 
 .status-pill {
@@ -70,6 +80,7 @@
   justify-content: flex-end;
   margin-top: 30px;
   gap: 12px;
+  padding: 20px;
 }
 
 .print-summary-btn,

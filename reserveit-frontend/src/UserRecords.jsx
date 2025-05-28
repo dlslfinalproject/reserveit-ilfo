@@ -1,8 +1,8 @@
 import React from 'react';
-import './UserRecords.css'; // New CSS file
 import { useNavigate } from 'react-router-dom';
 import { useReservation } from './ReservationContext';
 import fileIcon from './assets/file-icon.png';
+import './UserRecords.css'; // CSS file import
 
 const UserRecords = () => {
   const navigate = useNavigate();
@@ -155,68 +155,69 @@ const UserRecords = () => {
   };
 
   return (
-    <div className="records-container">
-      <div className="records-box">
-        <h2 className="records-title">My Reservation</h2>
-        <table className="records-table">
-          <thead>
-            <tr>
-              <th>Venue</th>
-              <th>Date</th>
-              <th>Activity</th>
-              <th>Status</th>
-              <th>View</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservations.map((reservation) => (
-              <tr key={reservation.id}>
-                <td>{reservation.venue || '—'}</td>
-                <td>{reservation.date}</td>
-                <td>{reservation.natureOfActivity || '—'}</td>
-                <td>
-                  <span className={`status-pill ${getStatusStyle(reservation.status)}`}>
-                    {reservation.status}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="view-details-btn"
-                    onClick={() =>
-                      navigate(`/reservation/${reservation.id}`, {
-                        state: { reservation },
-                      })
-                    }
-                  >
-                    View Details
-                  </button>
-                </td>
-                <td>
-                  <img
-                    src={fileIcon}
-                    alt="Generate Report"
-                    title="Generate Report"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      generateReport(reservation);
-                    }}
-                    className="file-icon"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="records-wrapper">
+      <h2 className="records-title">My Reservation</h2>
 
-        <div className="bottom-buttons">
-          <button className="print-summary-btn" onClick={generateSummaryReport}>
-            Print Summary
-          </button>
-          <button className="back-dashboard-btn" onClick={() => navigate('/dashboard')}>
-            Back to Dashboard
-          </button>
-        </div>
+    <div className="table-container">
+      <table className="records-table">
+        <thead>
+          <tr>
+            <th>Venue</th>
+            <th>Date</th>
+            <th>Activity</th>
+            <th>Status</th>
+            <th>View</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((reservation) => (
+            <tr key={reservation.id}>
+              <td>{reservation.venue || '—'}</td>
+              <td>{reservation.date}</td>
+              <td>{reservation.natureOfActivity || '—'}</td>
+              <td>
+                <span className={`status-pill ${getStatusStyle(reservation.status)}`}>
+                  {reservation.status}
+                </span>
+              </td>
+              <td>
+                <button
+                  className="view-details-btn"
+                  onClick={() =>
+                    navigate(`/reservation/${reservation.id}`, {
+                      state: { reservation },
+                    })
+                  }
+                >
+                  View Details
+                </button>
+              </td>
+              <td>
+                <img
+                  src={fileIcon}
+                  alt="Generate Report"
+                  title="Generate Report"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    generateReport(reservation);
+                  }}
+                  className="file-icon"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
+
+      <div className="bottom-buttons">
+        <button className="print-summary-btn" onClick={generateSummaryReport}>
+          Print Summary
+        </button>
+        <button className="back-dashboard-btn" onClick={() => navigate('/dashboard')}>
+          Back to Dashboard
+        </button>
       </div>
     </div>
   );
