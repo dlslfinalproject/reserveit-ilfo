@@ -12,6 +12,7 @@ import UserRecords from './UserRecords';
 import ReservationDetails from './ReservationDetails';
 import Settings from './Settings'; 
 import ILFO from './ILFO'; 
+import RequestForm from './RequestForm'; // <-- ADD THIS
 
 
 function App() {
@@ -105,6 +106,7 @@ function App() {
         <Route path="/reservation/:id" element={<ReservationDetails />} />
         <Route path="/settings" element={<Settings />} /> 
         <Route path="/ilfo-designs" element={<ILFO />} />
+        <Route path="/request-form" element={<RequestForm />} />
         <Route path="/dashboard"element={session ? <Dashboard onSignOut={signOut} /> : <Navigate to="/" />}/>
       </Routes>
     </Router>

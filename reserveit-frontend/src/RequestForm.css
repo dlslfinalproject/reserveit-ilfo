@@ -1,0 +1,134 @@
+/* RequestForm.css */
+
+.request-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  background-color: #f2f2f2;
+  min-height: 100vh;
+}
+
+.request-card {
+  background-color: #fff;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  width: 1000px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.status-badge {
+  background-color: #cd925c;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.request-tabs {
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  font-weight: bold;
+  background: white;
+  border: none;
+  cursor: pointer;
+}
+
+.tab.active {
+  background-color: #c9e4c5;
+  color: black;
+}
+
+.request-details {
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 15px;
+  column-gap: 30px;
+}
+
+.request-row .label {
+  font-weight: 600;
+  color: #333;
+}
+
+.request-row .value {
+  font-weight: 400;
+  margin-top: 4px;
+  color: #111;
+}
+
+.request-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.cancel {
+  background-color: #ccc;
+  color: #000;
+}
+
+.request-actions {
+  display: flex;
+  justify-content: right; /* or space-between / space-around */
+  gap: 16px; /* space between buttons */
+  margin-top: 24px;
+}
+
+.reject {
+  background-color: #B33108;
+  color: white;
+}
+
+.confirm {
+  background-color: #3A5B22;
+  color: white;
+}
+
+.ilfo-link {
+  display: inline;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  text-decoration: underline;
+  color: #0645AD;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+.ilfo-note-box {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+}
+
