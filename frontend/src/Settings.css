@@ -1,0 +1,164 @@
+.settings-container {
+    width: 100%;
+    height: 100vh; /* FULL screen height */
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+  }
+  
+  .settings-card {
+    background: #ffffff;
+    border: 0.5px solid #000;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 1000px;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* NO overflow */
+  }
+
+  .settings-header {
+  background-color: #d4e3c2;
+  padding: 20px 40px;
+  border-bottom: 1px solid #000;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  margin: -20px -40px 20px -40px;
+} 
+  
+  .settings-title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #d4e3c2;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-align: left; 
+    margin-bottom: 20px;
+  }
+  
+  .edit-facilities-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    text-align: left; 
+  }  
+  
+  .facility-list {
+    flex: 1;
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .facility-input {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box; 
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: auto; 
+    padding-top: 20px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+  }
+  
+  
+  .back-button, .add-button, .save-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: auto;
+    min-width: 100px;
+  }
+  
+  .back-button {
+    background-color: #d3d3d3;
+    color: black;
+  }
+  
+  .add-button {
+    background-color: #d1a05f;
+    color: white;
+  }
+  
+  .save-button {
+    background-color: #45612f;
+    color: white;
+  }
+  
+  /* Popup Styles */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  }  
+  
+  .popup-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }  
+  
+  .popup-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }  
+  
+  .cancel-button, .confirm-add-button {
+    padding: 12px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 120px;
+  }
+  
+  .cancel-button {
+    background-color: #999;
+    color: black;
+  }
+  
+  .confirm-add-button {
+    background-color: #d1dfbb;
+    color: black;
+  }
+  
+  
