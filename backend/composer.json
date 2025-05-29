@@ -1,0 +1,15 @@
+{
+    "name": "janeallyson/backend",
+    "autoload": {
+        "psr-4": {
+            "Janeallyson\\Backend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jane Allyson",
+            "email": "janeallyson24@gmail.com"
+        }
+    ],
+    "require": {}
+}
