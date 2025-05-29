@@ -95,3 +95,58 @@
   background-color: #cc3d2c;
   color: #fff;
 }
+
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirmation-box {
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  min-width: 360px;
+}
+
+.confirmation-box p {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.confirm-no {
+  background-color: #c1c1c1;
+  color: #222;
+}
+
+.confirm-yes {
+  background-color: #d2995e;
+  color: #fff;
+}
+
+.confirm-no,
+.confirm-yes {
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}

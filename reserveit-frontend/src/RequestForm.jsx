@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './RequestForm.css';
 import ApprovalForm from './ApprovalForm';
 import RejectionForm from './RejectionForm';
@@ -8,6 +9,7 @@ const RequestForm = () => {
   const [showApprovalForm, setShowApprovalForm] = useState(false);
   const [showRejectionForm, setShowRejectionForm] = useState(false);
   const [showRejectConfirmation, setShowRejectConfirmation] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleRejectionSubmit = (reason, other) => {
     console.log('Rejected with reason:', reason, 'Other:', other);
@@ -19,6 +21,13 @@ const RequestForm = () => {
     setShowRejectConfirmation(false);
     alert('Reservation has been rejected.');
     // Add backend logic here if needed
+  };
+
+  const handleCancel = () => {
+    setShowApprovalForm(false);
+    setShowRejectionForm(false);
+    setShowRejectConfirmation(false);
+    navigate('/dashboard');
   };
 
   return (
@@ -103,7 +112,9 @@ const RequestForm = () => {
 
         {/* Action Buttons */}
         <div className="request-actions">
-          <button className="btn cancel">Cancel</button>
+          <button className="btn cancel" onClick={handleCancel}>
+            Cancel
+          </button>
           <button className="btn reject" onClick={() => setShowRejectionForm(true)}>
             Reject
           </button>
@@ -134,7 +145,7 @@ const RequestForm = () => {
       {showRejectConfirmation && (
         <div className="modal-backdrop">
           <div className="modal-confirm">
-            <p>Do you want to reject this reservation?</p>
+            <p>Are you sure you want to reject this reservation?</p>
             <div className="modal-actions">
               <button className="btn cancel" onClick={() => setShowRejectConfirmation(false)}>
                 No
