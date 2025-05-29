@@ -2,16 +2,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 60px;
+  padding: 20px;
   min-height: 100vh;
 }
 
-.approval-form-wrapper {
-  max-width: 900px;
+.rejection-form-wrapper {
+  max-width: 900px; 
   width: 100%;
 }
 
-.approval-header {
+.rejection-form {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-top: none;
+  padding: 40px 50px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  width: 900px; 
+}
+
+.rejection-header {
   background-color: #d1dfbb;
   padding: 20px 30px;
   border-top-left-radius: 16px;
@@ -22,19 +33,11 @@
   text-align: left;
   border: 1px solid #ccc;
   border-bottom: none;
+  width: 900px; 
+  margin: 0 auto; 
 }
 
-.approval-form {
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-top: none;
-  padding: 40px 50px;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  width: 900px;
-}
-
+/* Form inputs */
 .form-group {
   margin-bottom: 30px;
 }
@@ -47,22 +50,26 @@
 }
 
 .form-group select,
-.notes-box {
+.form-group textarea {
   width: 100%;
   padding: 14px 16px;
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 16px;
   resize: vertical;
-  background-color: #fff;
 }
 
-.notes-box ol {
-  margin: 0;
-  padding-left: 18px;
+.form-group textarea {
+  min-height: 140px;
 }
 
-.approval-actions {
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #888;
+}
+
+.rejection-actions {
   display: flex;
   justify-content: flex-end;
   gap: 18px;
@@ -86,10 +93,5 @@
 
 .btn.reject {
   background-color: #cc3d2c;
-  color: #fff;
-}
-
-.btn.approve {
-  background-color: #2e7d32;
   color: #fff;
 }
