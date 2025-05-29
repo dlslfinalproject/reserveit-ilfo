@@ -1,8 +1,23 @@
-// ApprovalForm.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import './ApprovalForm.css';
 
 const ApprovalForm = ({ onClose }) => {
+  const [showApproveConfirm, setShowApproveConfirm] = useState(false);
+
+  const handleApproveClick = () => {
+    setShowApproveConfirm(true); 
+  };
+
+  const confirmApproval = () => {
+    alert('Reservation has been approved.');
+    setShowApproveConfirm(false);
+    onClose(); 
+  };
+
+  const cancelApproval = () => {
+    setShowApproveConfirm(false); 
+  };
+
   return (
     <div className="approval-modal">
       <div className="approval-form-wrapper">
@@ -38,10 +53,22 @@ const ApprovalForm = ({ onClose }) => {
           <div className="approval-actions">
             <button onClick={onClose} className="btn cancel">Cancel</button>
             <button className="btn reject">Reject</button>
-            <button className="btn approve">Approve</button>
+            <button className="btn approve" onClick={handleApproveClick}>Approve</button>
           </div>
         </div>
       </div>
+
+      {showApproveConfirm && (
+        <div className="modal-backdrop">
+          <div className="modal-confirm">
+            <p>Are you sure you want to approve this reservation?</p>
+            <div className="modal-actions">
+              <button className="btn cancel" onClick={cancelApproval}>No</button>
+              <button className="btn approve" onClick={confirmApproval}>Yes</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
