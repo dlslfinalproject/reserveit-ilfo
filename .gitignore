@@ -64,8 +64,7 @@ logs/
 backend/vendor/
 
 #Frontend
-reserveit/frontend/
-
+reserveit-frontend/
 
 
 # Optional: Ignore compiled JS files if you have a build process
