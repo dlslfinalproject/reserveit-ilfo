@@ -25,8 +25,8 @@ _darcs
 .gitkeep
 
 # Node.js and npm
-node_modules
-package-lock.json
+frontend/node_modules/
+frontend/package-lock.json
 npm-debug.log*
 yarn-error.log*
 yarn.lock
@@ -39,8 +39,12 @@ dist
 .vscode/
 *.code-workspace
 
-# Supabase
-.env # If you have local environment variables for Supabase (be VERY careful not to commit real keys)
+# Environment Variables (for both frontend and backend)
+.env
+# Explicitly ignore .env files within the frontend and backend folders
+frontend/.env
+backend/.env
+
 
 # Build output (if you build your React app)
 build/
@@ -55,6 +59,10 @@ temp/
 
 # Logs
 logs/
+
+# Backend
+backend/vendor/
+
 
 # Optional: Ignore compiled JS files if you have a build process
 # *.js.map
