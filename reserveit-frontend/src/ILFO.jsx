@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ← import this
 import './ILFO.css';
 
 const ILFO = () => {
   const [activeTab, setActiveTab] = useState('details');
+  const navigate = useNavigate(); // ← initialize navigate
 
   return (
     <div className="ilfo-container">
@@ -14,6 +16,7 @@ const ILFO = () => {
         <span className="ilfo-status approved">Approved</span>
       </div>
 
+      {/* Tabs */}
       <div className="ilfo-tabs">
         <button
           className={`ilfo-tab ${activeTab === 'details' ? 'active' : ''}`}
@@ -29,6 +32,7 @@ const ILFO = () => {
         </button>
       </div>
 
+      {/* Tab Content */}
       {activeTab === 'details' && (
         <div className="ilfo-details">
           <div>
@@ -80,6 +84,13 @@ const ILFO = () => {
           </div>
         </div>
       )}
+
+      {/* Back Button */}
+      <div className="ilfo-back-button">
+        <button className="btn back" onClick={() => navigate('/dashboard')}>
+          Back to Dashboard
+        </button>
+      </div>
     </div>
   );
 };

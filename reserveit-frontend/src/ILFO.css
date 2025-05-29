@@ -38,7 +38,7 @@
 .ilfo-tabs {
   display: flex;
   margin-bottom: 24px;
-  border: 1px solid #ccc;
+  border: 0.2px solid black;
   border-radius: 20px;
   overflow: hidden;
 }
@@ -106,3 +106,31 @@
   color: #333;
   line-height: 1.6;
 }
+
+.ilfo-container {
+  position: relative; /* Add this so the absolute child can position relative to this */
+}
+
+.ilfo-back-button {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+}
+
+.ilfo-back-button .btn {
+  background-color: #e5e5e5; /* light gray background */
+  color: #000; /* black text */
+  font-weight: 700; /* bold text */
+  border: none;
+  padding: 10px 24px;
+  border-radius: 999px; /* full pill shape */
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.2s ease;
+}
+
+.ilfo-back-button .btn:hover {
+  background-color: #d4d4d4; /* slightly darker on hover */
+}
+
