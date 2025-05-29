@@ -5,16 +5,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* NO scrolling horizontally */
+    overflow: hidden; 
   }
   
   .settings-card {
     background: #ffffff;
-    border: 1px solid #c0c0c0;
+    border: 0.5px solid #000;
     border-radius: 20px;
     width: 90%;
-    max-width: 1200px;
-    height: 90%;
+    max-width: 1000px;
+    height: 70%;
     display: flex;
     flex-direction: column;
     padding: 20px 40px;
@@ -25,7 +25,7 @@
   .settings-header {
   background-color: #d4e3c2;
   padding: 20px 40px;
-  border-bottom: 1px solid #c0c0c0;
+  border-bottom: 1px solid #000;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   margin: -20px -40px 20px -40px;
@@ -45,13 +45,13 @@
     font-size: 24px;
     font-weight: bold;
     margin: 0 0 15px 0;
-    text-align: left; /* <-- changed from center */
+    text-align: left; 
   }  
   
   .facility-list {
     flex: 1;
-    overflow-y: auto; /* Only vertical scroll inside this list if too many facilities */
-    overflow-x: hidden; /* NEVER scroll sideways */
+    overflow-y: auto; 
+    overflow-x: hidden; 
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -63,7 +63,7 @@
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    box-sizing: border-box; /* Prevent horizontal scroll */
+    box-sizing: border-box; 
   }
   
   .button-group {

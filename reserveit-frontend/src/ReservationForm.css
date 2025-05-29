@@ -13,8 +13,8 @@ body {
 
 /* Reservation Form Container */
 .reservation-form-container {
-  max-width: 1500px; /* dati: width: 100vw */
-  margin: 2rem auto; /* center horizontally */
+  max-width: 1500px; 
+  margin: 2rem auto; 
   padding: 2rem;
   overflow-y: auto;
   animation: fadeInForm 0.6s ease-in;
