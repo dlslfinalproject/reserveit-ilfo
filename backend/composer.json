@@ -11,5 +11,7 @@
             "email": "janeallyson24@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "google/apiclient": "2.0"
+    }
 }
