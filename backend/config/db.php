@@ -1,45 +1,36 @@
 <?php
-// backend/config/db.php (or a dedicated database config file)
 
-// Load environment variables (if you're using a .env file, e.g., with Dotenv library)
-// require_once __DIR__ . '/../vendor/autoload.php';
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-// $dotenv->load();
+require_once __DIR__ . '/../vendor/autoload.php'; // Path to Composer's autoload.php from config/
 
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost'); // Your database host
-define('DB_USER', getenv('DB_USER') ?: 'root');     // Your database username
-define('DB_PASS', getenv('DB_PASS') ?: '');         // Your database password
-define('DB_NAME', getenv('DB_NAME') ?: 'reserveit'); // Your database name
+// Create Dotenv instance and load variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..'); // Path to your backend directory where .env resides
+$dotenv->load();
 
-// --- Using PDO for database connection (Recommended) ---
 function getDbConnection() {
-    $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4';
+    $host = $_ENV['DB_HOST'];
+    $user = $_ENV['DB_USER'];
+    $pass = $_ENV['DB_PASS'];
+    $db = 'reserveit';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
     $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Throw exceptions on errors
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,     // Fetch results as associative arrays
-        PDO::ATTR_EMULATE_PREPARES   => false,                // Disable emulation for better security and performance
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
     ];
 
     try {
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-        return $pdo;
+        return new PDO($dsn, $user, $pass, $options);
     } catch (PDOException $e) {
-        // Log the error (do not expose full error details in production)
-        error_log("Database connection failed: " . $e->getMessage());
-        // For development:
-        // die("Database connection failed: " . $e->getMessage());
-        // For production:
+        // Send JSON error response and exit
         http_response_code(500);
-        echo json_encode(["message" => "Database connection error."]);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database connection failed: ' . $e->getMessage()
+        ]);
         exit();
     }
 }
 
-// Example usage (you might not call it directly here, but from your API endpoints)
-// $pdo = getDbConnection();
-// if ($pdo) {
-//     echo "Database connected successfully!";
-// } else {
-//     echo "Failed to connect to database.";
-// }
 ?>

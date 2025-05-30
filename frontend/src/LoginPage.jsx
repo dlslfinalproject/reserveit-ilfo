@@ -1,17 +1,83 @@
+// frontend/src/LoginPage.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { useGoogleLogin } from '@react-oauth/google'; // Import the Google login hook
+
 import reserveitLogo from '/reserveit-logo.png';
-import googleLogo from '/google-logo.png'; // Import Google logo if you want to keep the image, but the functionality is removed for now
+import googleLogo from '/google-logo.png';
 import './LoginPage.css';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'; // Import Form component from react-bootstrap
+import Form from 'react-bootstrap/Form';
+
+// Adjust to your backend's API base URL.
+// Ensure this matches the actual path to your auth.php file.
+const API_BASE_URL = 'http://localhost/reserveit-ilfo/backend/api'; 
 
 // This component is responsible for rendering the login form.
-// It receives props from App.jsx to manage email, password, role,
-// handle form submission, and display authentication errors.
+// It receives props from App.jsx to manage email, password,
+// handle traditional form submission, and display authentication errors.
 function LoginPage({ email, setEmail, password, setPassword, handleSubmit, authError }) {
-  // The handleSignInWithGoogle function and its associated logic have been removed
-  // as they were tied to Supabase's authentication.
-  // Google authentication will need to be re-implemented on the PHP backend side.
+  const navigate = useNavigate(); // Initialize navigate hook
+
+  // --- Google Sign-In Logic ---
+  const handleGoogleSuccess = async (response) => {
+    // response.credential contains the ID token
+    const idToken = response.credential;
+
+    try {
+      // Send the ID token to your PHP backend for verification and user handling
+     const backendResponse = await fetch(`${API_BASE_URL}/auth.php`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    credentials: 'include', // This is the correct way to include credentials
+    body: JSON.stringify({ id_token: idToken }),
+});
+      const data = await backendResponse.json();
+
+      if (backendResponse.ok && data.success) {
+        // Store user info (e.g., in localStorage or a React Context for global state)
+        localStorage.setItem('user_data', JSON.stringify(data.user));
+
+        // Redirect based on the role returned by the backend
+        if (data.user.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (data.user.role === 'general_user') {
+          navigate('/dashboard'); // General user dashboard
+        } else {
+          // Fallback for unexpected roles
+          console.error("Unknown user role:", data.user.role);
+          alert("Login failed: Unknown user role.");
+          navigate('/login'); // Redirect back to login
+        }
+      } else {
+        // Backend returned an error (e.g., domain restriction, invalid token)
+        alert(`Login failed: ${data.message}`);
+        console.error("Backend login error:", data.message);
+      }
+    } catch (error) {
+      alert('An error occurred during Google Sign-In. Please try again.');
+      console.error("Frontend network or API error during Google Sign-In:", error);
+    }
+  };
+
+  const handleGoogleError = () => {
+    console.error('Google Sign-In failed.');
+    alert('Google Sign-In failed. Please try again.');
+  };
+
+  // Hook to get the Google login function
+  const login = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleError,
+    // You might want to specify scope if you need more than default (email, profile)
+    // scope: 'email profile',
+    // Consider adding `prompt_select_account: true` if you want to force account selection
+    // prompt_select_account: true,
+  });
+
+  // --- End Google Sign-In Logic ---
 
   return (
     <div className="login-container-centered">
@@ -53,20 +119,17 @@ function LoginPage({ email, setEmail, password, setPassword, handleSubmit, authE
           </Button>
         </Form>
 
-        {/* The Google Sign-in button is commented out/removed as its functionality
-            was tied to Supabase and needs a PHP backend implementation. */}
-        {/*
+        {/* Google Sign-in Button */}
         <div className="social-login-centered">
-          <Button variant="primary" className="google-signin-button-centered" onClick={handleSignInWithGoogle}>
+          <Button variant="primary" className="google-signin-button-centered" onClick={() => login()}>
             <img
-              src={googleLogo} // Using imported googleLogo
+              src={googleLogo}
               alt="Google Logo"
               style={{ height: '20px', width: '20px', marginRight: '8px' }}
             />
             Sign in with Google
           </Button>
         </div>
-        */}
       </div>
     </div>
   );

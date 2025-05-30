@@ -15,7 +15,7 @@ import RequestForm from './RequestForm';
 // IMPORTANT: You will need to ensure your PHP backend is running on this URL.
 // For local development, this will typically be something like 'http://localhost:8000/api'.
 // In a real application, you'd use a more robust environment variable setup.
-const PHP_API_BASE_URL = import.meta.env.VITE_PHP_API_BASE_URL || 'http://localhost:8000/api';
+const PHP_API_BASE_URL = 'http://localhost:8000/api';
 
 function App() {
   // `session` will now represent the logged-in user's information,

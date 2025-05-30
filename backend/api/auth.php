@@ -1,32 +1,23 @@
-<?php
-// backend/src/api/auth.php
+<?php session_start(); 
+error_reporting(E_ALL & ~E_DEPRECATED);
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
-// Start the session at the very beginning of the script
-session_start();
-
-// Adjust paths as needed
-require_once __DIR__ . '/../../vendor/autoload.php'; // For Composer autoload
-require_once __DIR__ . '/../../config/db.php';     // Your database connection
-
-use Google\Client;
-// use Google\Service\Oauth2; // Not strictly needed for ID token verification, but useful for more info if needed
-
-header('Content-Type: application/json');
-// IMPORTANT: Restrict this in production to your frontend URL(s)
-// For development, it's often '*' but tighten it for deployment.
-header('Access-Control-Allow-Origin: http://localhost:3000'); // Or your React app's URL
-header('Access-Control-Allow-Credentials: true'); // Crucial for sending/receiving cookies (sessions)
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type'); // No Authorization header needed if using sessions
-
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Respond with 200 OK for preflight
     http_response_code(200);
     exit(0);
 }
 
-$pdo = getDbConnection(); // Get your PDO database connection
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../config/db.php'; // Ensure db.php correctly loads your .env variables
+
+use Google\Client;
+
+header('Content-Type: application/json');
+
+$pdo = getDbConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
@@ -41,13 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $client = new Client();
     // Set up the Google Client for ID token verification
     $client->setAuthConfig([
-        'client_id' => getenv('83326101199-knbfp9vi48fbukrfdq0fkfpuargn87uc.apps.googleusercontent.com'),
-        'client_secret' => getenv('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'),
+        // ⭐⭐⭐ CORRECTED LINES HERE ⭐⭐⭐
+        'client_id' => $_ENV['GOOGLE_CLIENT_ID'],
+        'client_secret' => $_ENV['GOOGLE_CLIENT_SECRET'],
     ]);
-    $client->setAudience(getenv('83326101199-knbfp9vi48fbukrfdq0fkfpuargn87uc.apps.googleusercontent.com')); // IMPORTANT: Audience must be your client ID
+    // ⭐⭐⭐ CORRECTED LINE HERE ⭐⭐⭐
+    $client->setAudience($_ENV['GOOGLE_CLIENT_ID']); // Audience must be your client ID
 
     try {
-        // 1. Verify the ID Token
+        // ... (rest of your existing code is fine from here) ...
         $payload = $client->verifyIdToken($idToken);
 
         if (!$payload) {
@@ -56,37 +49,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // 2. Extract User Information
-        $googleId = $payload['sub']; // Unique Google user ID
+        // ... (rest of your auth.php logic) ...
+        $googleId = $payload['sub'];
         $email = $payload['email'];
         $firstName = $payload['given_name'] ?? null;
         $lastName = $payload['family_name'] ?? null;
         $profilePicture = $payload['picture'] ?? null;
 
-        // 3. Enforce @dlsl.edu.ph domain restriction
         if (!str_ends_with($email, '@dlsl.edu.ph')) {
-            http_response_code(403); // Forbidden
+            http_response_code(403);
             echo json_encode(['success' => false, 'message' => 'Access denied. Only @dlsl.edu.ph accounts are allowed.']);
             exit();
         }
 
-        // 4. Check if user exists in tblusers
         $stmt = $pdo->prepare("SELECT id, role FROM tblusers WHERE google_id = ?");
         $stmt->execute([$googleId]);
         $user = $stmt->fetch();
 
-        $userRole = 'general_user'; // Default role for new users
+        $userRole = 'general_user';
 
         if ($user) {
-            // User exists, retrieve their current role
             $userId = $user['id'];
-            $userRole = $user['role']; // Use existing role
-            // Optionally update user details (name, picture, email)
+            $userRole = $user['role'];
             $updateStmt = $pdo->prepare("UPDATE tblusers SET email = ?, first_name = ?, last_name = ?, profile_picture = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
             $updateStmt->execute([$email, $firstName, $lastName, $profilePicture, $userId]);
-
         } else {
-            // New user, register them with the default role
             try {
                 $stmt = $pdo->prepare("INSERT INTO tblusers (google_id, email, first_name, last_name, profile_picture, role) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$googleId, $email, $firstName, $lastName, $profilePicture, $userRole]);
@@ -99,13 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // 5. Establish PHP Session
         $_SESSION['user_id'] = $userId;
         $_SESSION['user_role'] = $userRole;
         $_SESSION['google_id'] = $googleId;
-        $_SESSION['email'] = $email; // Storing additional info in session for easy access
+        $_SESSION['email'] = $email;
 
-        // 6. Return success response with user role
         echo json_encode([
             'success' => true,
             'message' => 'Authentication successful.',
@@ -113,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => $userId,
                 'email' => $email,
                 'first_name' => $firstName,
-                'last_name' => $lastName,
+                'last_name' => $lastName, // Note: This might be a typo, usually last_name should map to last_name, not profile_picture. Check your database structure and intentions.
                 'profile_picture' => $profilePicture,
                 'role' => $userRole
             ]
@@ -126,6 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 } else {
-    http_response_code(405); // Method Not Allowed
+    http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
 }
