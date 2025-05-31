@@ -4,13 +4,23 @@ import './RejectionForm.css';
 const RejectionForm = ({ onCancel, onReject }) => {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
+  const [showRejectConfirm, setShowRejectConfirm] = useState(false);
 
-  const handleReject = () => {
+  const handleRejectClick = () => {
     if (!reason) {
       alert("Please select a reason for rejection.");
       return;
     }
+    setShowRejectConfirm(true);
+  };
+
+  const confirmRejection = () => {
     onReject(reason, otherReason);
+    setShowRejectConfirm(false);
+  };
+
+  const cancelRejection = () => {
+    setShowRejectConfirm(false);
   };
 
   return (
@@ -52,10 +62,22 @@ const RejectionForm = ({ onCancel, onReject }) => {
 
           <div className="rejection-actions">
             <button className="btn cancel" onClick={onCancel}>Cancel</button>
-            <button className="btn reject" onClick={handleReject}>Reject</button>
+            <button className="btn reject" onClick={handleRejectClick}>Reject</button>
           </div>
         </div>
       </div>
+
+      {showRejectConfirm && (
+        <div className="modal-backdrop">
+          <div className="modal-confirm">
+            <p>Are you sure you want to reject this reservation?</p>
+            <div className="modal-actions">
+              <button className="btn cancel" onClick={cancelRejection}>No</button>
+              <button className="btn reject" onClick={confirmRejection}>Yes</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

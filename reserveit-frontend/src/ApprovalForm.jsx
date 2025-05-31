@@ -3,15 +3,19 @@ import './ApprovalForm.css';
 
 const ApprovalForm = ({ onClose }) => {
   const [showApproveConfirm, setShowApproveConfirm] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleApproveClick = () => {
     setShowApproveConfirm(true); 
   };
 
   const confirmApproval = () => {
-    alert('Reservation has been approved.');
     setShowApproveConfirm(false);
-    onClose(); 
+    setShowSuccessPopup(true); // show "ReserveIT!" popup
+    setTimeout(() => {
+      setShowSuccessPopup(false);
+      onClose(); // close modal after a short delay
+    }, 1500); // adjust delay as needed
   };
 
   const cancelApproval = () => {
@@ -58,6 +62,7 @@ const ApprovalForm = ({ onClose }) => {
         </div>
       </div>
 
+      {/* Approve Confirmation Prompt */}
       {showApproveConfirm && (
         <div className="modal-backdrop">
           <div className="modal-confirm">
@@ -67,6 +72,13 @@ const ApprovalForm = ({ onClose }) => {
               <button className="btn approve" onClick={confirmApproval}>Yes</button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ✅ ReserveIT Popup */}
+      {showSuccessPopup && (
+        <div className="reserveit-popup">
+          <p><strong>ReserveIT!</strong></p>
         </div>
       )}
     </div>
