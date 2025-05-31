@@ -82,7 +82,7 @@
     font-size: 14px;
     font-weight: bold;
     border: none;
-    border-radius: 6px;
+    border-radius: 20px;
     cursor: pointer;
     width: auto;
     min-width: 100px;
@@ -129,7 +129,7 @@
   .popup-input {
     width: 100%;
     padding: 12px;
-    font-size: 18px;
+    font-size: 15px;
     border: 1px solid #aaa;
     border-radius: 10px;
     box-sizing: border-box;
@@ -145,14 +145,15 @@
     padding: 12px 30px;
     font-size: 18px;
     border: none;
-    border-radius: 20px;
+    border-radius: 35px;
+    border: 0.5px solid #000;
     font-weight: bold;
     cursor: pointer;
     min-width: 120px;
   }
   
   .cancel-button {
-    background-color: #999;
+    background-color: #969696;
     color: black;
   }
   
