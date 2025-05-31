@@ -66,6 +66,8 @@ backend/vendor/
 #Frontend
 reserveit-frontend/
 
+node_modules
+
 
 # Optional: Ignore compiled JS files if you have a build process
 # *.js.map
