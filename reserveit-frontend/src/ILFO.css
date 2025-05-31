@@ -108,7 +108,7 @@
 }
 
 .ilfo-container {
-  position: relative; /* Add this so the absolute child can position relative to this */
+  position: relative; 
 }
 
 .ilfo-back-button {
@@ -118,12 +118,12 @@
 }
 
 .ilfo-back-button .btn {
-  background-color: #e5e5e5; /* light gray background */
-  color: #000; /* black text */
-  font-weight: 700; /* bold text */
+  background-color: #e5e5e5; 
+  color: #000; 
+  font-weight: 700; 
   border: none;
   padding: 10px 24px;
-  border-radius: 999px; /* full pill shape */
+  border-radius: 999px; 
   font-size: 15px;
   cursor: pointer;
   box-shadow: none;
@@ -131,6 +131,6 @@
 }
 
 .ilfo-back-button .btn:hover {
-  background-color: #d4d4d4; /* slightly darker on hover */
+  background-color: #d4d4d4; 
 }
 
