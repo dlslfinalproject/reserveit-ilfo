@@ -51,6 +51,10 @@ const Dashboard = ({ onSignOut }) => {
             <FaListAlt /> Records
           </button>
 
+          <button className="dashboard-button" onClick={() => navigate('/user-records-1')}>
+            <FaListAlt /> ILFO Records
+          </button>
+
           <button className="dashboard-button">
             <FaEnvelope /> Gmail
           </button>

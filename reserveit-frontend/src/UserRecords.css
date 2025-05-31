@@ -2,7 +2,7 @@
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  margin: 50px auto; /* Centered with smaller side margins */
+  margin: 50px auto; 
   padding: 0px;
   background: #fff;
   border: 1px solid #4d4d4d;
@@ -102,3 +102,5 @@
   background-color: #E5E5E5;
   color: #111827;
 }
+
+

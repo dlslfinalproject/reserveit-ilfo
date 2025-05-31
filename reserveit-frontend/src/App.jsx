@@ -9,6 +9,7 @@ import Dashboard from './Dashboard';
 import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
+import Records1 from './Records1'; // <-- ADD THIS
 import ReservationDetails from './ReservationDetails';
 import Settings from './Settings'; 
 import ILFO from './ILFO'; 
@@ -103,6 +104,7 @@ function App() {
         />
         <Route path="/new-reservation" element={<ReservationForm />} />
         <Route path="/user-records" element={<UserRecords />} />
+        <Route path="/user-records-1" element={<Records1 />} />
         <Route path="/reservation/:id" element={<ReservationDetails />} />
         <Route path="/settings" element={<Settings />} /> 
         <Route path="/ilfo-designs" element={<ILFO />} />
