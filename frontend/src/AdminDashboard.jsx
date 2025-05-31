@@ -54,7 +54,14 @@ const AdminDashboard = ({ session, onSignOut }) => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h2>Reservation Calendar</h2>
+        <div className="dashboard-header-left">
+          <img 
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/reserveit-logo-bW3iq7A4wVSCnpoC86tviNKzWDJKWT.png" 
+            alt="ReserveIT Logo" 
+            className="dashboard-logo"
+          />
+          <h2>Reservation Calendar</h2>
+        </div>
 
         <div className="dashboard-actions">
           <button className="dashboard-button" onClick={() => navigate('/new-reservation')}>
