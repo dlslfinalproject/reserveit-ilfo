@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './Dashboard.css';
+import React, { useState, useEffect } from 'react';
+import './App.css';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -12,15 +12,22 @@ const Dashboard = ({ onSignOut }) => {
   const [events, setEvents] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user_data');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      setUserEmail(parsed.email || '');
+    }
+  }, []);
 
   const handleLogout = async () => {
     if (onSignOut) {
       await onSignOut();
-      navigate('/');
-    } else {
-      console.error("Sign out function not passed as a prop.");
     }
+    navigate('/');
   };
 
   const goToPreviousMonth = () => {
@@ -43,10 +50,6 @@ const Dashboard = ({ onSignOut }) => {
             <FaPlus /> Reservation
           </button>
 
-          <button className="dashboard-button" onClick={() => navigate('/request-form')}>
-            <FaPlus /> Request
-          </button>
-
           <button className="dashboard-button" onClick={() => navigate('/user-records')}>
             <FaListAlt /> Records
           </button>
@@ -55,17 +58,13 @@ const Dashboard = ({ onSignOut }) => {
             <FaEnvelope /> Gmail
           </button>
 
-          <button className="dashboard-button" onClick={() => navigate('/ilfo-designs')}>
-            ILFO
-          </button>
-
           <div className="profile-dropdown">
             <button onClick={() => setShowProfile(!showProfile)}>
               <FaUserCircle size={24} />
             </button>
             {showProfile && (
               <div className="profile-menu">
-                <p>user@dlsl.edu.ph</p>
+                <p>{userEmail || 'user@dlsl.edu.ph'}</p>
                 <button onClick={() => navigate('/settings')}>Settings</button>
                 <button onClick={handleLogout}>Log Out</button>
               </div>
@@ -74,6 +73,7 @@ const Dashboard = ({ onSignOut }) => {
         </div>
       </div>
 
+      {/* Custom Calendar Navigation */}
       <div className="calendar-nav-container">
         <button onClick={goToPreviousMonth} className="calendar-nav-button">
           <FaChevronLeft />
@@ -86,13 +86,14 @@ const Dashboard = ({ onSignOut }) => {
         </button>
       </div>
 
+      {/* Calendar */}
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         date={currentDate}
-        onNavigate={date => setCurrentDate(date)}
+        onNavigate={setCurrentDate}
         view={Views.MONTH}
         toolbar={false}
         style={{ height: 500, margin: '20px' }}

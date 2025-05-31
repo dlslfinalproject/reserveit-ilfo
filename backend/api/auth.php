@@ -63,6 +63,16 @@ if (!str_ends_with($email, '@dlsl.edu.ph')) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized email domain']);
     exit();
 }
+// Admin override list
+$adminEmails = [
+    'ilfo.office@dlsl.edu.ph',
+    'ilfo.manager@dlsl.edu.ph',
+    'mary.ann.lumban@dlsl.edu.ph',
+    'jane_allyson_paray@dlsl.edu.ph',
+];
+
+// Assign role based on override
+$assignedRole = in_array($email, $adminEmails) ? 'admin' : 'general_user';
 
 try {
     $db = getDbConnection();
@@ -80,7 +90,7 @@ try {
         $stmt = $db->prepare('INSERT INTO tblusers (google_id, email, first_name, last_name, profile_picture, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, "general_user", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)');
         $stmt->execute([$googleId, $email, $firstName, $lastName, $picture]);
         $userId = $db->lastInsertId();
-        $userRole = 'general_user';
+        $userRole = $assignedRole;
     }
 
     session_start();

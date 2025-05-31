@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.css';
+import './Dashboard.css';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -8,14 +8,37 @@ import { useNavigate } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
-const Dashboard = () => {
+const AdminDashboard = ({ session, onSignOut }) => {
   const [events, setEvents] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    window.location.href = '/';
+  const handleLogout = async () => {
+    try {
+      // Call your backend logout endpoint
+      const response = await fetch('http://localhost/reserveit-ilfo/backend/api/logout.php', {
+        method: 'POST',
+        credentials: 'include', // important to send cookies/session
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Clear local session state in frontend
+        if (onSignOut) {
+          onSignOut(); // clear session and roles in React state
+        }
+        setShowProfile(false); // close dropdown
+        navigate('/login'); // redirect to login page
+      } else {
+        console.error('Logout failed:', data.message || 'Unknown error');
+      }
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
   };
 
   const goToPreviousMonth = () => {
@@ -38,11 +61,21 @@ const Dashboard = () => {
             <FaPlus /> Reservation
           </button>
 
+          <button className="dashboard-button" onClick={() => navigate('/request-form')}>
+            <FaPlus /> Request
+          </button>
+
           <button className="dashboard-button" onClick={() => navigate('/user-records')}>
             <FaListAlt /> Records
           </button>
 
-          <button className="dashboard-button"><FaEnvelope /> Gmail</button>
+          <button className="dashboard-button">
+            <FaEnvelope /> Gmail
+          </button>
+
+          <button className="dashboard-button" onClick={() => navigate('/ilfo-designs')}>
+            ILFO
+          </button>
 
           <div className="profile-dropdown">
             <button onClick={() => setShowProfile(!showProfile)}>
@@ -50,8 +83,10 @@ const Dashboard = () => {
             </button>
             {showProfile && (
               <div className="profile-menu">
-                <p>user@dlsl.edu.ph</p>
-                <button onClick={() => navigate('/settings')}>Settings</button> {/* <-- NEW SETTINGS BUTTON */}
+                <p>{session?.user?.email || 'Unknown User'}</p>
+                <button onClick={() => { setShowProfile(false); navigate('/settings'); }}>
+                  Settings
+                </button>
                 <button onClick={handleLogout}>Log Out</button>
               </div>
             )}
@@ -59,20 +94,18 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Custom Calendar Navigation */}
       <div className="calendar-nav-container">
         <button onClick={goToPreviousMonth} className="calendar-nav-button">
-          <FaChevronLeft /> 
+          <FaChevronLeft />
         </button>
 
         <span className="calendar-nav-month">{formattedMonthYear}</span>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">
-           <FaChevronRight />
+          <FaChevronRight />
         </button>
       </div>
 
-      {/* Calendar */}
       <Calendar
         localizer={localizer}
         events={events}
@@ -88,4 +121,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;
