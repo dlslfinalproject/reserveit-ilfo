@@ -56,6 +56,8 @@ temp/
 # Logs
 logs/
 
+backend
+
 # Optional: Ignore compiled JS files if you have a build process
 # *.js.map
 # *.min.js
