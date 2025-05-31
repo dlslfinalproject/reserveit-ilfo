@@ -19,7 +19,7 @@
   flex-direction: column;
   min-height: 500px;
   position: relative;
-  padding-bottom: 100px; 
+  padding-bottom: 100px;
 }
 
 .request-header {
@@ -31,6 +31,7 @@
 
 .status-badge {
   background-color: #cd925c;
+  border: 1px solid #000;
   color: white;
   padding: 6px 16px;
   border-radius: 20px;
@@ -86,35 +87,31 @@
   display: flex;
   justify-content: flex-end;
   gap: 16px;
+  margin-top: 24px;
 }
 
-.btn {
+.request-actions .btn,
+.modal-actions .btn {
   padding: 10px 24px;
-  border: 0.5px solid #000;
-  border-radius: 8px;
+  border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
   font-size: 1rem;
 }
 
-.cancel {
+.request-actions .btn.cancel,
+.modal-actions .btn.cancel {
   background-color: #ccc;
   color: #000;
 }
 
-.request-actions {
-  display: flex;
-  justify-content: right; 
-  gap: 16px; 
-  margin-top: 24px;
-}
-
-.reject {
+.request-actions .btn.reject {
   background-color: #B33108;
   color: white;
 }
 
-.confirm {
+.request-actions .btn.confirm,
+.modal-actions .btn.confirm {
   background-color: #3A5B22;
   color: white;
 }
@@ -140,6 +137,7 @@
   color: #333;
   line-height: 1.6;
 }
+
 .modal-backdrop {
   position: fixed;
   top: 0; left: 0;
@@ -170,15 +168,3 @@
   justify-content: center;
   gap: 15px;
 }
-
-.modal-actions .btn.cancel {
-  background: #e0e0e0;
-  color: #333;
-}
-
-.modal-actions .btn.confirm {
-  background: #d39e00;
-  color: white;
-}
-
-
