@@ -21,7 +21,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php", {
+        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_all_reservation.php", {
           credentials: "include",
         })
         const data = await response.json()
