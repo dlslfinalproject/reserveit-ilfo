@@ -1,74 +1,96 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once '../config/db.php';
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow all origins
+header("Access-Control-Allow-Credentials: true"); // Allow credentials
+header("Access-Control-Allow-Methods: POST, OPTIONS"); // Allow specific methods
+header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+$input = file_get_contents("php://input");
+$data = json_decode($input, true);
 
-// Define required fields
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid JSON"]);
+    exit();
+}
+
+// Required fields
 $requiredFields = [
-    'user_id', 'who_reserved', 'event_name', 'activity_id',
-    'reservation_startdate', 'reservation_enddate',
-    'number_of_participants', 'start_time', 'end_time',
+    'user_id', 'who_reserved', 'event_name', 'reservation_startdate', 
+    'reservation_enddate', 'number_of_participants', 'start_time', 'end_time'
 ];
 
-// Check for missing fields
+// Check required fields
 foreach ($requiredFields as $field) {
-    if (!isset($data[$field])) {
+    if (!isset($data[$field]) || $data[$field] === '') {
         http_response_code(400);
-        echo json_encode(["error" => "Missing field: $field"]);
+        echo json_encode(["error" => "Missing or empty field: $field"]);
         exit();
     }
 }
 
-// Set optional fields
-$venue_id = isset($data['venue_id']) ? $data['venue_id'] : null;
+// Optional fields with defaults
+$activity_id = isset($data['activity_id']) ? $data['activity_id'] : null;
+$custom_activity = isset($data['custom_activity']) ? $data['custom_activity'] : null;
+$notes = isset($data['notes']) ? $data['notes'] : '';
+$link_to_csao_approved_poa = isset($data['link_to_csao_approved_poa']) ? $data['link_to_csao_approved_poa'] : '';
 
-// Prepare the SQL insert statement
+$approval_status = 0; // Pending
+
+// SQL query: if custom_activity is given, insert it instead of activity_id
+// Assuming your DB has either activity_id OR custom_activity, add custom_activity field if needed
 $query = "INSERT INTO reservations (
-    user_id, who_reserved, event_name, activity_id,
-    venue_id, reservation_startdate, reservation_enddate,
-    number_of_participants, start_time, end_time,
+    user_id, who_reserved, event_name, activity_id, custom_activity,
+    reservation_startdate, reservation_enddate, number_of_participants, start_time, end_time,
     notes, link_to_csao_approved_poa, approval_status
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($query);
 
-$approval_status = 0; // Default to 'Pending'
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(["error" => "Failed to prepare statement: " . $conn->error]);
+    exit();
+}
 
-// Bind parameters
+$activity_id = $activity_id !== '' ? $activity_id : null;
+$custom_activity = $custom_activity !== '' ? $custom_activity : null;
+
+
 $stmt->bind_param(
-    "issiiissssssi",
+    "isssisisssssi",
     $data['user_id'],
     $data['who_reserved'],
     $data['event_name'],
-    $data['activity_id'],
-    $venue_id,
+    $activity_id,
+    $custom_activity,
     $data['reservation_startdate'],
     $data['reservation_enddate'],
     $data['number_of_participants'],
     $data['start_time'],
     $data['end_time'],
-    $data['notes'],
-    $data['link_to_csao_approved_poa'],
+    $notes,
+    $link_to_csao_approved_poa,
     $approval_status
 );
 
-// Execute and return result
+
 if ($stmt->execute()) {
     http_response_code(201);
-    echo json_encode(["message" => "Reservation successfully created."]);
+    echo json_encode(["success" => true, "message" => "Reservation successfully created."]);
 } else {
     http_response_code(500);
-    echo json_encode(["error" => "Unable to create reservation.", "details" => $stmt->error]);
+    echo json_encode(["error" => "Failed to create reservation", "details" => $stmt->error]);
 }
 
 $stmt->close();
 $conn->close();
-?>

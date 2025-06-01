@@ -21,16 +21,16 @@ const AdminDashboard = ({ session, onSignOut }) => {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_reservations.php", {
+        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php", {
           credentials: "include",
         })
         const data = await response.json()
         if (response.ok && data.reservations) {
-          const loadedEvents = data.reservations.map((res) => ({
-            id: res.id,
-            title: `${res.eventName} (${res.status})`,
-            start: new Date(res.startDate + "T" + res.startTime),
-            end: new Date(res.endDate + "T" + res.endTime),
+         const loadedEvents = data.reservations.map((res) => ({
+            id: res.reservation_id,
+            title: `${res.nameOfProgram} (${res.status})`,
+            start: new Date(res.startDate + "T" + res.time.start),
+            end: new Date(res.endDate + "T" + res.time.end),
             status: res.status,
             raw: res,
           }))
