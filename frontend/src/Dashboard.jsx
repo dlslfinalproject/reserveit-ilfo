@@ -135,7 +135,6 @@ const Dashboard = ({ onSignOut }) => {
               <option>All Status</option>
               <option>Approved</option>
               <option>Pending</option>
-              <option>Rejected</option>
             </select>
           </div>
           <span className="calendar-nav-month">{formattedMonthYear}</span>
