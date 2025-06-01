@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { act, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -8,6 +8,20 @@ import { TimePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import TextField from "@mui/material/TextField"
 import "./ReservationForm.css"
+
+const activityMap = {
+  "Assembly": 1,
+  "Lasallian Formation": 2,
+  "Master Class": 3,
+  "Meeting": 4,
+  "Outreach Program": 5,
+  "PE Class": 6,
+  "Recollection": 7,
+  "Seminar": 8,
+  "Spiritual Formation": 9,
+  "Team Building": 10,
+  "Training": 11,
+}
 
 const ReservationForm = () => {
   const navigate = useNavigate()
@@ -112,20 +126,23 @@ const ReservationForm = () => {
     // Prepare payload
     const payload = {
       user_id: storedUser.id, // <-- use stored user ID here
-      whoReserved: formData.whoReserved.trim(),
-      eventName: formData.eventName.trim(),
-      natureOfActivity:
+      who_reserved: formData.whoReserved.trim(),
+      event_name: formData.eventName.trim(),
+      activity_id:
         formData.natureOfActivity === "Others: Please specify"
-          ? formData.customActivity.trim()
-          : formData.natureOfActivity,
-      numberOfParticipants: formData.numberOfParticipants,
-      startDate: formData.startDate.toISOString().split("T")[0],
-      endDate: formData.endDate.toISOString().split("T")[0],
-      startTime: formData.startTime.toTimeString().split(" ")[0],
-      endTime: formData.endTime.toTimeString().split(" ")[0],
+          ? null
+          : activityMap[formData.natureOfActivity] || null,
+      customActivity: 
+        formData.natureOfActivity === "Others: Please specify" 
+        ? formData.customActivity.trim() : "",
+      reservation_startdate: formData.startDate.toISOString().split("T")[0],
+      reservation_enddate: formData.endDate.toISOString().split("T")[0],
+      number_of_participants: Number(formData.numberOfParticipants),
+      start_time: formData.startTime.toTimeString().split(" ")[0],
+      end_time: formData.endTime.toTimeString().split(" ")[0],
       notes: formData.notes.trim(),
-      poaLink: formData.poaLink.trim(),
-      status: "Pending",
+      link_to_csao_approved_poa: formData.poaLink.trim(),
+
     }
 
     try {

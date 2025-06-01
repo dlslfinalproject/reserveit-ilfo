@@ -11,62 +11,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$required_fields = [
-    'user_id', 'who_reserved', 'event_name', 'activity_id', 'reservation_startdate', 'reservation_enddate',
-    'number_of_participants', 'start_time', 'end_time'
+// Define required fields
+$requiredFields = [
+    'user_id', 'who_reserved', 'event_name', 'activity_id',
+    'reservation_startdate', 'reservation_enddate',
+    'number_of_participants', 'start_time', 'end_time',
 ];
 
-foreach ($required_fields as $field) {
-    if (empty($data[$field]) && $data[$field] !== "0") {
+// Check for missing fields
+foreach ($requiredFields as $field) {
+    if (!isset($data[$field])) {
         http_response_code(400);
-        echo json_encode(["error" => "Missing required field: $field"]);
+        echo json_encode(["error" => "Missing field: $field"]);
         exit();
     }
 }
 
-$notes = isset($data['notes']) ? $data['notes'] : null;
-$link_to_csao_approved_poa = isset($data['link_to_csao_approved_poa']) ? $data['link_to_csao_approved_poa'] : null;
+// Set optional fields
+$venue_id = isset($data['venue_id']) ? $data['venue_id'] : null;
 
-$status_id = 1;
+// Prepare the SQL insert statement
+$query = "INSERT INTO reservations (
+    user_id, who_reserved, event_name, activity_id,
+    venue_id, reservation_startdate, reservation_enddate,
+    number_of_participants, start_time, end_time,
+    notes, link_to_csao_approved_poa, approval_status
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-try {
-    $pdo = getDbConnection();
+$stmt = $conn->prepare($query);
 
-    $sql = "
-        INSERT INTO tblreservations (
-            user_id, who_reserved, event_name, activity_id, venue_id,
-            reservation_startdate, reservation_enddate, number_of_participants,
-            start_time, end_time, status_id, notes, link_to_csao_approved_poa
-        ) VALUES (
-            :user_id, :who_reserved, :event_name, :activity_id, :venue_id,
-            :reservation_startdate, :reservation_enddate, :number_of_participants,
-            :start_time, :end_time, :status_id, :notes, :link_to_csao_approved_poa
-        )
-    ";
+$approval_status = 0; // Default to 'Pending'
 
-    $stmt = $pdo->prepare($sql);
+// Bind parameters
+$stmt->bind_param(
+    "issiiissssssi",
+    $data['user_id'],
+    $data['who_reserved'],
+    $data['event_name'],
+    $data['activity_id'],
+    $venue_id,
+    $data['reservation_startdate'],
+    $data['reservation_enddate'],
+    $data['number_of_participants'],
+    $data['start_time'],
+    $data['end_time'],
+    $data['notes'],
+    $data['link_to_csao_approved_poa'],
+    $approval_status
+);
 
-    $stmt->execute([
-        ':user_id' => $data['user_id'],
-        ':who_reserved' => $data['who_reserved'],
-        ':event_name' => $data['event_name'],
-        ':activity_id' => $data['activity_id'],
-        ':venue_id' => $venue_id,
-        ':reservation_startdate' => $data['reservation_startdate'],
-        ':reservation_enddate' => $data['reservation_enddate'],
-        ':number_of_participants' => $data['number_of_participants'],
-        ':start_time' => $data['start_time'],
-        ':end_time' => $data['end_time'],
-        ':status_id' => $status_id,
-        ':notes' => $notes,
-        ':link_to_csao_approved_poa' => $link_to_csao_approved_poa,
-    ]);
-
-    echo json_encode([
-        "success" => true,
-        "reservation_id" => $pdo->lastInsertId()
-    ]);
-} catch (PDOException $e) {
+// Execute and return result
+if ($stmt->execute()) {
+    http_response_code(201);
+    echo json_encode(["message" => "Reservation successfully created."]);
+} else {
     http_response_code(500);
-    echo json_encode(["error" => "Database insert failed: " . $e->getMessage()]);
+    echo json_encode(["error" => "Unable to create reservation.", "details" => $stmt->error]);
 }
+
+$stmt->close();
+$conn->close();
+?>
