@@ -197,7 +197,8 @@
 }
 
 .profile-menu button {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   padding: 12px 16px;
   background: none;
@@ -216,57 +217,6 @@
   background-color: #f1f5f9;
   color: #1e293b;
   transform: translateX(4px);
-}
-
-/* Filter Section */
-.filter-container {
-  margin: 20px 32px;
-  padding: 16px 24px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.filter-label {
-  font-weight: 600;
-  color: #374151;
-  font-size: 0.875rem;
-  letter-spacing: 0.025em;
-}
-
-.filter-select {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 2px solid #e5e7eb;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-  background: #fafafa;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
-  padding-right: 40px;
-  font-family: "Inter", sans-serif;
-}
-
-.filter-select:focus {
-  border-color: #8ba96d;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
-  background: white;
-}
-
-.filter-select:hover {
-  border-color: #d1d5db;
-  background: white;
 }
 
 /* Calendar Navigation with integrated filter */
@@ -373,58 +323,6 @@
   margin: 0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .calendar-nav-container {
-    gap: 16px;
-    margin: 0 20px 20px;
-    padding: 12px 16px;
-  }
-
-  .calendar-nav-center {
-    gap: 8px;
-  }
-
-  .filter-section {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .filter-label {
-    font-size: 0.8rem;
-  }
-
-  .filter-select {
-    min-width: 100px;
-    font-size: 0.8rem;
-  }
-
-  .calendar-nav-month {
-    font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .calendar-nav-container {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .calendar-nav-center {
-    order: -1;
-    width: 100%;
-  }
-
-  .filter-section {
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .calendar-nav-month {
-    font-size: 1.1rem;
-  }
-}
-
 /* Calendar Wrapper */
 .calendar-wrapper {
   margin: 0 32px 32px;
@@ -485,11 +383,175 @@
   color: #94a3b8;
 }
 
+/* Status Update Panel */
+.status-update-panel {
+  margin: 0 32px 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(139, 169, 109, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #8ba96d 0%, #a2ba82 100%);
+  color: white;
+}
+
+.status-panel-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.close-panel-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-panel-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.status-panel-content {
+  padding: 24px;
+}
+
+.current-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.status-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge.approved {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.status-badge.rejected {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.status-badge.pending {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+.status-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.025em;
+  flex: 1;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.approve-btn {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.3);
+}
+
+.approve-btn:hover {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(5, 150, 105, 0.4);
+}
+
+.reject-btn {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+}
+
+.reject-btn:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(220, 38, 38, 0.4);
+}
+
+.pending-btn {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);
+}
+
+.pending-btn:hover {
+  background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(217, 119, 6, 0.4);
+}
+
+.status-btn:focus {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
 /* Animations */
 @keyframes slideIn {
   from {
     opacity: 0;
     transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
   }
   to {
     opacity: 1;
@@ -554,30 +616,48 @@
     font-size: 0.8rem;
   }
 
-  .filter-container {
-    margin: 16px 20px;
-    padding: 12px 16px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .filter-label {
-    text-align: center;
-  }
-
   .calendar-nav-container {
     gap: 16px;
     margin: 0 20px 20px;
+    padding: 12px 16px;
+  }
+
+  .calendar-nav-center {
+    gap: 8px;
+  }
+
+  .filter-section {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .filter-label {
+    font-size: 0.8rem;
+  }
+
+  .filter-select {
+    min-width: 100px;
+    font-size: 0.8rem;
   }
 
   .calendar-nav-month {
     font-size: 1.25rem;
-    min-width: 150px;
   }
 
   .calendar-wrapper {
     margin: 0 20px 20px;
+  }
+
+  .status-update-panel {
+    margin: 0 20px 20px;
+  }
+
+  .status-actions {
+    flex-direction: column;
+  }
+
+  .status-btn {
+    min-width: auto;
   }
 }
 
@@ -595,6 +675,37 @@
 
   .dashboard-header h2 {
     font-size: 1.25rem;
+  }
+
+  .calendar-nav-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .calendar-nav-center {
+    order: -1;
+    width: 100%;
+  }
+
+  .filter-section {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .calendar-nav-month {
+    font-size: 1.1rem;
+  }
+
+  .status-panel-header {
+    padding: 16px 20px;
+  }
+
+  .status-panel-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .status-panel-content {
+    padding: 20px;
   }
 }
 

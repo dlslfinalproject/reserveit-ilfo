@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import "./ReservationRecords.css"
-import { FaPrint } from "react-icons/fa"
+import { FaPrint, FaEye } from "react-icons/fa"
 
 function ReservationRecords() {
   const navigate = useNavigate()
@@ -37,16 +37,16 @@ function ReservationRecords() {
         <head>
           <title>Reservation Summary Report</title>
           <style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
-            h1 { text-align: center; }
+            body { font-family: 'Inter', Arial, sans-serif; padding: 20px; }
+            h1 { text-align: center; color: #374151; }
             table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-            th { background-color: #f2f2f2; }
+            th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+            th { background-color: #8ba96d; color: white; }
           </style>
         </head>
         <body>
           <h1>Reservation Summary Report</h1>
-          <p>Date: ${date}</p>
+          <p>Generated on: ${date}</p>
           <table>
             <thead>
               <tr>
@@ -98,48 +98,57 @@ function ReservationRecords() {
   }
 
   return (
-    <div className="records1-container">
-      <h1 className="records1-title">All Reservation Status</h1>
+    <div className="reservation-records-container">
+      <div className="records-header">All Reservation Status</div>
 
-      <div className="records1-table-wrapper">
+      <div className="records-content">
         {reservations.length === 0 ? (
-          <p style={{ padding: "20px", textAlign: "center" }}>No reservation records found.</p>
+          <div className="no-records">
+            <p>No reservation records found.</p>
+          </div>
         ) : (
-          <table className="records1-table">
-            <thead>
-              <tr>
-                <th>Requester</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map((reservation) => (
-                <tr key={reservation.id}>
-                  <td>{reservation.name}</td>
-                  <td>{reservation.date}</td>
-                  <td>{reservation.time}</td>
-                  <td>
-                    <span className={getStatusClass(reservation.status)}>{reservation.status}</span>
-                  </td>
-                  <td>
-                    <button className="view-details-btn">View Details</button>
-                  </td>
+          <div className="records-table-wrapper">
+            <table className="records-table">
+              <thead>
+                <tr>
+                  <th>Requester</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reservations.map((reservation) => (
+                  <tr key={reservation.id}>
+                    <td className="requester-cell">{reservation.name}</td>
+                    <td>{reservation.date}</td>
+                    <td>{reservation.time}</td>
+                    <td>
+                      <span className={getStatusClass(reservation.status)}>{reservation.status}</span>
+                    </td>
+                    <td>
+                      <button className="view-details-btn">
+                        <FaEye style={{ marginRight: "6px" }} />
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
-      </div>
 
-      <div className="records1-actions">
-        <button className="print-summary-btn" onClick={generateSummaryReport}>
-          <FaPrint style={{ marginRight: "8px" }} />
-          Print Summary
-        </button>
-        <button className="back-dashboard-btn" onClick={() => navigate("/admin-dashboard")}>Back to Dashboard</button>
+        <div className="records-actions">
+          <button className="print-summary-btn" onClick={generateSummaryReport}>
+            <FaPrint style={{ marginRight: "8px" }} />
+            Print Summary
+          </button>
+          <button className="back-dashboard-btn" onClick={() => navigate("/admin-dashboard")}>
+            Back to Dashboard
+          </button>
+        </div>
       </div>
     </div>
   )
