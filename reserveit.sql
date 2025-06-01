@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2025 at 09:12 AM
+-- Generation Time: Jun 01, 2025 at 11:09 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -112,7 +112,7 @@ CREATE TABLE `tblreservations` (
   `number_of_participants` int(11) NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `status_id` int(11) NOT NULL,
+  `status_id` int(11) NOT NULL DEFAULT 1,
   `rejection_reason_id` int(11) DEFAULT NULL,
   `rejection_other_notes` text DEFAULT NULL,
   `notes` text DEFAULT NULL,

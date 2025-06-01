@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -10,7 +11,8 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 require_once '../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
+    http_response_code(200);
+    exit();
 }
 
 $input = file_get_contents("php://input");
@@ -38,58 +40,50 @@ foreach ($requiredFields as $field) {
 }
 
 // Optional fields with defaults
-$activity_id = isset($data['activity_id']) ? $data['activity_id'] : null;
-$custom_activity = isset($data['custom_activity']) ? $data['custom_activity'] : null;
+$activity_id = !empty($data['activity_id']) ? $data['activity_id'] : null;
+$custom_activity_name = !empty($data['custom_activity_name']) ? $data['custom_activity_name'] : null;
 $notes = isset($data['notes']) ? $data['notes'] : '';
 $link_to_csao_approved_poa = isset($data['link_to_csao_approved_poa']) ? $data['link_to_csao_approved_poa'] : '';
+$status_id = 1; // Pending
 
-$approval_status = 0; // Pending
+try {
+    $pdo = getDbConnection(); // ✅ Use PDO connection
 
-// SQL query: if custom_activity is given, insert it instead of activity_id
-// Assuming your DB has either activity_id OR custom_activity, add custom_activity field if needed
-$query = "INSERT INTO reservations (
-    user_id, who_reserved, event_name, activity_id, custom_activity,
-    reservation_startdate, reservation_enddate, number_of_participants, start_time, end_time,
-    notes, link_to_csao_approved_poa, approval_status
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO tblreservations (
+        user_id, who_reserved, event_name, activity_id, custom_activity_name,
+        reservation_startdate, reservation_enddate, number_of_participants,
+        start_time, end_time, notes, link_to_csao_approved_poa, status_id
+    ) VALUES (
+        :user_id, :who_reserved, :event_name, :activity_id, :custom_activity_name,
+        :reservation_startdate, :reservation_enddate, :number_of_participants,
+        :start_time, :end_time, :notes, :poa_link, :status
+    )";
 
-$stmt = $conn->prepare($query);
+    $stmt = $pdo->prepare($query);
 
-if (!$stmt) {
-    http_response_code(500);
-    echo json_encode(["error" => "Failed to prepare statement: " . $conn->error]);
-    exit();
-}
+    $stmt->execute([
+        ':user_id' => $data['user_id'],
+        ':who_reserved' => $data['who_reserved'],
+        ':event_name' => $data['event_name'],
+        ':activity_id' => $activity_id,
+        ':custom_activity_name' => $custom_activity_name,
+        ':reservation_startdate' => $data['reservation_startdate'],
+        ':reservation_enddate' => $data['reservation_enddate'],
+        ':number_of_participants' => $data['number_of_participants'],
+        ':start_time' => $data['start_time'],
+        ':end_time' => $data['end_time'],
+        ':notes' => $notes,
+        ':poa_link' => $link_to_csao_approved_poa,
+        ':status' => $status_id,
+    ]);
 
-$activity_id = $activity_id !== '' ? $activity_id : null;
-$custom_activity = $custom_activity !== '' ? $custom_activity : null;
-
-
-$stmt->bind_param(
-    "isssisisssssi",
-    $data['user_id'],
-    $data['who_reserved'],
-    $data['event_name'],
-    $activity_id,
-    $custom_activity,
-    $data['reservation_startdate'],
-    $data['reservation_enddate'],
-    $data['number_of_participants'],
-    $data['start_time'],
-    $data['end_time'],
-    $notes,
-    $link_to_csao_approved_poa,
-    $approval_status
-);
-
-
-if ($stmt->execute()) {
     http_response_code(201);
     echo json_encode(["success" => true, "message" => "Reservation successfully created."]);
-} else {
-    http_response_code(500);
-    echo json_encode(["error" => "Failed to create reservation", "details" => $stmt->error]);
-}
 
-$stmt->close();
-$conn->close();
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        "success" => false,
+        "error" => "Database error: " . $e->getMessage()
+    ]);
+}
