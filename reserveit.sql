@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2025 at 04:52 AM
+-- Generation Time: Jun 01, 2025 at 06:03 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -106,7 +106,7 @@ CREATE TABLE `tblreservations` (
   `who_reserved` varchar(255) NOT NULL,
   `event_name` varchar(255) NOT NULL,
   `activity_id` int(11) NOT NULL,
-  `venue_id` int(11) NOT NULL,
+  `venue_id` int(11) DEFAULT NULL,
   `reservation_startdate` date NOT NULL,
   `reservation_enddate` date NOT NULL,
   `number_of_participants` int(11) NOT NULL,
