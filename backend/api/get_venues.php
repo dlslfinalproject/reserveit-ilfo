@@ -1,10 +1,14 @@
 <?php
-require_once '../config/db.php';
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow all origins
-header("Access-Control-Allow-Methods: GET, OPTIONS"); // Allow specific methods
-header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
-header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
+require_once '../config/db.php';
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 try {
     $pdo = getDbConnection();
     $stmt = $pdo->query("SELECT venue_id, venue_name, min_capacity, max_capacity, description, is_active FROM tblvenues WHERE is_active = 1 ORDER BY venue_name");

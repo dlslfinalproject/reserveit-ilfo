@@ -1,10 +1,17 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Optional: log errors to file
+ini_set("log_errors", 1);
+ini_set("error_log", "php-error.log");
+
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
 require_once '../config/db.php';
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow all origins
-header("Access-Control-Allow-Credentials: true"); // Allow credentials
-header("Access-Control-Allow-Methods: GET, OPTIONS"); // Allow specific methods
-header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
-header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -20,7 +27,7 @@ try {
     u.first_name, u.last_name,
     r.event_name,
     a.activity_name,
-    r.custom_activity,
+    r.custom_activity_name,
     v.venue_name,
     r.reservation_startdate,
     r.reservation_enddate,
@@ -46,7 +53,7 @@ LEFT JOIN tblapproval_status s ON r.status_id = s.status_id
             'reservation_id' => (int)$row['reservation_id'],
             'whoReserved' => $row['first_name'] . ' ' . $row['last_name'],
             'nameOfProgram' => $row['event_name'],
-            'natureOfActivity' => !empty($row['custom_activity']) ? $row['custom_activity'] : $row['activity_name'],
+            'natureOfActivity' => !empty($row['custom_activity_name']) ? $row['custom_activity_name'] : $row['activity_name'],
             'venue' => $row['venue_name'],
             'numberOfParticipants' => (int)$row['number_of_participants'],
             'startDate' => $row['reservation_startdate'],

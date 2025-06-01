@@ -1,10 +1,14 @@
 <?php
-require_once '../config/db.php';
-header("Access-Control-Allow-Origin: *"); // Allow all origins
-header("Access-Control-Allow-Methods: GET, OPTIONS"); // Allow specific methods
-header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
-header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
+require_once '../config/db.php';
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 try {
     $pdo = getDbConnection();
     $stmt = $pdo->query("SELECT reason_id, reason_description FROM tblrejection_reasons ORDER BY reason_id");
