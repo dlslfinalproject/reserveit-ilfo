@@ -173,6 +173,7 @@ const ReservationForm = () => {
             value={formData.whoReserved}
             onChange={(e) => handleChange("whoReserved", e.target.value)}
             className={errors.whoReserved ? "error" : ""}
+            placeholder="First Name MI. Last Name (ex: Juan D. Cruz)"
           />
           {errors.whoReserved && <small className="error-message">{errors.whoReserved}</small>}
         </div>
@@ -185,6 +186,7 @@ const ReservationForm = () => {
             value={formData.eventName}
             onChange={(e) => handleChange("eventName", e.target.value)}
             className={errors.eventName ? "error" : ""}
+            placeholder="Name of the Event (ex: Taize Prayer)"
           />
           {errors.eventName && <small className="error-message">{errors.eventName}</small>}
         </div>
@@ -227,6 +229,7 @@ const ReservationForm = () => {
             value={formData.numberOfParticipants}
             onChange={(e) => handleChange("numberOfParticipants", e.target.value)}
             className={errors.numberOfParticipants ? "error" : ""}
+            placeholder="Enter Number of Participants (1-200)"
           />
           {errors.numberOfParticipants && <small className="error-message">{errors.numberOfParticipants}</small>}
         </div>
@@ -289,22 +292,22 @@ const ReservationForm = () => {
 
         {/* Notes */}
         <div className="form-group">
-          <label>Notes:</label>
+          <label>Notes (Optional):</label>
           <textarea
             value={formData.notes}
             onChange={(e) => handleChange("notes", e.target.value)}
-            placeholder="Additional notes (optional)"
+            placeholder="Additional notes or requests"
           />
         </div>
 
         {/* POA Link */}
         <div className="form-group">
-          <label>Proof of Activity Link (POA Link):</label>
+          <label>Program of Activity(POA) Link:</label>
           <input
             type="text"
             value={formData.poaLink}
             onChange={(e) => handleChange("poaLink", e.target.value)}
-            placeholder="URL to POA"
+            placeholder="Link to sent POA email"
           />
         </div>
 
