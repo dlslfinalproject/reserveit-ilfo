@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -12,27 +12,47 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [events, setEvents] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
+
+  // Fetch reservations on mount
+  useEffect(() => {
+    async function fetchReservations() {
+      try {
+        const response = await fetch('http://localhost/reserveit-ilfo/backend/api/get_reservations.php', {
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if (response.ok && data.reservations) {
+          const loadedEvents = data.reservations.map(res => ({
+            id: res.id,
+            title: `${res.eventName} (${res.status})`,
+            start: new Date(res.startDate + 'T' + res.startTime),
+            end: new Date(res.endDate + 'T' + res.endTime),
+            status: res.status,
+            raw: res,
+          }));
+          setEvents(loadedEvents);
+        }
+      } catch (error) {
+        console.error('Failed to load reservations', error);
+      }
+    }
+    fetchReservations();
+  }, []);
 
   const handleLogout = async () => {
     try {
-      // Call your backend logout endpoint
       const response = await fetch('http://localhost/reserveit-ilfo/backend/api/logout.php', {
         method: 'POST',
-        credentials: 'include', // important to send cookies/session
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
-
       if (response.ok && data.success) {
-        // Clear local session state in frontend
-        if (onSignOut) {
-          onSignOut(); // clear session and roles in React state
-        }
-        setShowProfile(false); // close dropdown
-        navigate('/login'); // redirect to login page
+        if (onSignOut) onSignOut();
+        setShowProfile(false);
+        navigate('/login');
       } else {
         console.error('Logout failed:', data.message || 'Unknown error');
       }
@@ -41,15 +61,39 @@ const AdminDashboard = ({ session, onSignOut }) => {
     }
   };
 
-  const goToPreviousMonth = () => {
-    setCurrentDate(moment(currentDate).subtract(1, 'month').toDate());
-  };
-
-  const goToNextMonth = () => {
-    setCurrentDate(moment(currentDate).add(1, 'month').toDate());
-  };
-
+  const goToPreviousMonth = () => setCurrentDate(moment(currentDate).subtract(1, 'month').toDate());
+  const goToNextMonth = () => setCurrentDate(moment(currentDate).add(1, 'month').toDate());
   const formattedMonthYear = moment(currentDate).format('MMMM YYYY');
+
+  // When event clicked
+  const handleEventClick = event => setSelectedEvent(event);
+
+  // Post update status to backend
+  const updateStatus = async (id, newStatus) => {
+    try {
+      const response = await fetch('http://localhost/reserveit-ilfo/backend/api/update_reservation_status.php', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: newStatus }),
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        // Update local events with new status and title
+        setEvents(prevEvents =>
+          prevEvents.map(ev =>
+            ev.id === id ? { ...ev, status: newStatus, title: `${ev.raw.eventName} (${newStatus})` } : ev
+          )
+        );
+        alert('Status updated successfully');
+        setSelectedEvent(null);
+      } else {
+        alert('Failed to update status: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error) {
+      alert('Error updating status: ' + error.message);
+    }
+  };
 
   return (
     <div className="dashboard-container">
@@ -65,15 +109,11 @@ const AdminDashboard = ({ session, onSignOut }) => {
 
         <div className="dashboard-actions">
           <button className="dashboard-button" onClick={() => navigate('/new-reservation')}>
-            <FaPlus /> Reservation
+            <FaPlus /> Make a Reservation
           </button>
 
-          <button className="dashboard-button" onClick={() => navigate('/request-form')}>
-            <FaPlus /> Request
-          </button>
-
-          <button className="dashboard-button" onClick={() => navigate('/user-records')}>
-            <FaListAlt /> Records
+          <button className="dashboard-button" onClick={() => navigate('/reservation-records')}>
+            <FaListAlt /> Reservation Records
           </button>
 
           <button className="dashboard-button">
@@ -123,7 +163,27 @@ const AdminDashboard = ({ session, onSignOut }) => {
         view={Views.MONTH}
         toolbar={false}
         style={{ height: 500, margin: '20px' }}
+        onSelectEvent={handleEventClick}
       />
+
+      {selectedEvent && (
+        <div className="status-update-panel" style={{ margin: '20px', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+          <h3>Update Status for: {selectedEvent.raw.eventName}</h3>
+          <p>Current status: <b>{selectedEvent.status}</b></p>
+          <button onClick={() => updateStatus(selectedEvent.id, 'Approved')} style={{ marginRight: '8px' }}>
+            Approve
+          </button>
+          <button onClick={() => updateStatus(selectedEvent.id, 'Rejected')} style={{ marginRight: '8px' }}>
+            Reject
+          </button>
+          <button onClick={() => updateStatus(selectedEvent.id, 'Pending')} style={{ marginRight: '8px' }}>
+            Set Pending
+          </button>
+          <button onClick={() => setSelectedEvent(null)}>
+            Cancel
+          </button>
+        </div>
+      )}
     </div>
   );
 };

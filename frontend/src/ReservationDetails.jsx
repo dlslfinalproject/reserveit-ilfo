@@ -1,17 +1,54 @@
-// ReservationDetails.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ReservationDetails.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ReservationDetails = () => {
   const [activeTab, setActiveTab] = useState('details');
+  const [reservation, setReservation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const reservation = location.state?.reservation || {};
 
-  console.log('Loaded reservation:', reservation);
+  useEffect(() => {
+    fetch(`http://localhost/reserveit/api/get_reservation.php?id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+          navigate('/user-records');
+        } else {
+          setReservation(data);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching reservation:', err);
+        navigate('/user-records');
+      });
+  }, [id, navigate]);
 
-  if (!Object.keys(reservation).length) {
+  const formatTime = (timeStr) => {
+    if (!timeStr) return '';
+    const [hour, minute] = timeStr.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hour));
+    date.setMinutes(parseInt(minute));
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  if (loading) return <p>Loading...</p>;
+
+  if (!reservation) {
     return (
       <div className="reservation-card">
         <p>No reservation data found.</p>
@@ -25,8 +62,8 @@ const ReservationDetails = () => {
       <div className="reservation-header-row">
         <h2>Reservation Details</h2>
         <div className="reservation-header-right">
-          <span className={`reservation-badge reservation-${reservation.status?.toLowerCase()}`}>
-            {reservation.status || 'Pending'}
+          <span className={`reservation-badge reservation-${reservation.status.toLowerCase()}`}>
+            {reservation.status}
           </span>
           <button className="reservation-close-button" onClick={() => navigate('/user-records')}>
             ×
@@ -61,15 +98,18 @@ const ReservationDetails = () => {
             <div className="reservation-field-label">Nature of Activity:</div>
             <div className="reservation-field-value">{reservation.natureOfActivity}</div>
 
+            <div className="reservation-field-label">Venue:</div>
+            <div className="reservation-field-value">{reservation.venue}</div>
+
             <div className="reservation-field-label">Number of Participants:</div>
             <div className="reservation-field-value">{reservation.numberOfParticipants}</div>
 
             <div className="reservation-field-label">Date:</div>
-            <div className="reservation-field-value">{reservation.date}</div>
+            <div className="reservation-field-value">{formatDate(reservation.date)}</div>
 
             <div className="reservation-field-label">Time:</div>
             <div className="reservation-field-value">
-              {reservation.time?.start} – {reservation.time?.end}
+              {formatTime(reservation.time?.start)} – {formatTime(reservation.time?.end)}
             </div>
           </div>
         ) : (

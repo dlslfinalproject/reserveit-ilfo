@@ -1,237 +1,193 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import TextField from '@mui/material/TextField';
-import { useReservation } from './ReservationContext';
-import './ReservationForm.css';
+"use client"
 
-// Improved Time Picker Component using MUI
-const CustomTimePicker = ({ label, value, onChange }) => {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <TimePicker
-        label={label}
-        value={value}
-        onChange={onChange}
-        ampm={true} // Use 24-hour format
-        minutesStep={1}
-        allowKeyboardControl
-        openTo="hours"
-        views={['hours', 'minutes']}
-        slotProps={{
-          textField: {
-            fullWidth: true,
-            size: 'small',
-            error: !value,
-            sx: {
-              backgroundColor: '#fff',
-              borderRadius: '4px',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: value ? '#ccc' : '#d32f2f',
-                },
-              },
-            },
-          },
-        }}
-      />
-    </LocalizationProvider>
-  );
-};
-
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { TimePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
+import TextField from "@mui/material/TextField"
+import "./ReservationForm.css"
 
 const ReservationForm = () => {
-  const navigate = useNavigate();
-  const { addReservation } = useReservation();
+  const navigate = useNavigate()
 
+  // Load logged-in user data from localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user_data"))
+  // You can optionally check if user exists and redirect if not logged in
+
+  // State for form fields
   const [formData, setFormData] = useState({
-    whoReserved: '',
-    numberOfParticipants: '',
-    eventName: '',
+    whoReserved: "",
+    eventName: "",
+    natureOfActivity: "",
+    customActivity: "",
+    numberOfParticipants: "",
     startDate: null,
     endDate: null,
     startTime: null,
     endTime: null,
-    natureOfActivity: '',
-    customActivity: '',
-    notes: '',
-    poaLink: '',
-  });
+    notes: "",
+    poaLink: "",
+  })
 
-  const [errors, setErrors] = useState({});
+  // Validation errors state
+  const [errors, setErrors] = useState({})
 
-  const [showModal, setShowModal] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  // For showing feedback messages
+  const [message, setMessage] = useState("")
 
-  const isOtherSelected = formData.natureOfActivity === 'Others: Please specify';
-
+  // Handle field changes
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
 
-  const handleCancel = () => {
-    navigate('/dashboard');
-  };
+  // Validate all inputs and return errors object
+  const validate = () => {
+    const newErrors = {}
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+    if (!formData.whoReserved.trim()) newErrors.whoReserved = "Required"
+    if (!formData.eventName.trim()) newErrors.eventName = "Required"
 
-  const activity = isOtherSelected ? formData.customActivity : formData.natureOfActivity;
-  const newErrors = {};
+    // Activity validation (handle "Others")
+    if (!formData.natureOfActivity) newErrors.natureOfActivity = "Select an activity"
+    else if (formData.natureOfActivity === "Others: Please specify" && !formData.customActivity.trim())
+      newErrors.customActivity = "Specify the activity"
 
-  const requiredFields = [
-    'whoReserved',
-    'numberOfParticipants',
-    'eventName',
-    'startDate',
-    'endDate',
-    'startTime',
-    'endTime',
-  ];
+    // Number of participants validation
+    const num = Number.parseInt(formData.numberOfParticipants, 10)
+    if (!num || num <= 0) newErrors.numberOfParticipants = "Enter a valid number > 0"
 
-  // Required fields check
-  requiredFields.forEach((field) => {
-    if (!formData[field]) {
-      newErrors[field] = 'This field is required';
+    // Dates validation
+    if (!formData.startDate) newErrors.startDate = "Start date required"
+    if (!formData.endDate) newErrors.endDate = "End date required"
+
+    if (formData.startDate && formData.endDate && formData.startDate > formData.endDate) {
+      newErrors.startDate = "Start date cannot be after end date"
+      newErrors.endDate = "End date cannot be before start date"
     }
-  });
 
-  const today = new Date();
-const minStartDate = new Date();
-const maxStartDate = new Date();
+    // Time validation
+    if (!formData.startTime) newErrors.startTime = "Start time required"
+    if (!formData.endTime) newErrors.endTime = "End time required"
 
-minStartDate.setDate(today.getDate() + 3);       // Minimum: 3 days from today
-maxStartDate.setMonth(today.getMonth() + 1);     // Maximum: 1 month from today
+    if (
+      formData.startDate &&
+      formData.endDate &&
+      formData.startTime &&
+      formData.endTime &&
+      formData.startDate.toDateString() === formData.endDate.toDateString()
+    ) {
+      const start = new Date(formData.startDate)
+      start.setHours(formData.startTime.getHours(), formData.startTime.getMinutes())
 
-if (
-  formData.startDate < minStartDate ||
-  formData.startDate > maxStartDate
-) {
-  alert('Reservation start date must be at least 3 days from today and no more than 1 month ahead.');
-  return;
-}
+      const end = new Date(formData.endDate)
+      end.setHours(formData.endTime.getHours(), formData.endTime.getMinutes())
 
-
-  // Activity field check
-  if (!activity) {
-    newErrors.natureOfActivity = 'Please specify nature of activity';
-  }
-
-  // Number of participants must be > 0
-  const numParticipants = parseInt(formData.numberOfParticipants);
-  if (isNaN(numParticipants) || numParticipants <= 0) {
-    newErrors.numberOfParticipants = 'Invalid number of participants';
-  }
-
-  // Date logic
-  if (formData.startDate && formData.endDate) {
-    if (formData.startDate > formData.endDate) {
-      newErrors.startDate = 'Start date must not be after end date';
-      newErrors.endDate = 'End date must not be before start date';
+      if (start >= end) {
+        newErrors.startTime = "Start time must be before end time"
+        newErrors.endTime = "End time must be after start time"
+      }
     }
+
+    return newErrors
   }
 
-  // Time logic (on the same date)
-  if (
-    formData.startDate &&
-    formData.endDate &&
-    formData.startTime &&
-    formData.endTime &&
-    formData.startDate.toDateString() === formData.endDate.toDateString()
-  ) {
-    const start = new Date(formData.startDate);
-    start.setHours(formData.startTime.getHours(), formData.startTime.getMinutes());
+  // Submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-    const end = new Date(formData.endDate);
-    end.setHours(formData.endTime.getHours(), formData.endTime.getMinutes());
-
-    if (start >= end) {
-      newErrors.startTime = 'Start time must be before end time';
-      newErrors.endTime = 'End time must be after start time';
+    if (!storedUser) {
+      setMessage("You must be logged in to submit a reservation.")
+      return
     }
-  }
 
-  setErrors(newErrors);
+    const validationErrors = validate()
+    setErrors(validationErrors)
 
-  if (Object.keys(newErrors).length > 0) {
-    return; // Block submission if errors exist
-  }
+    if (Object.keys(validationErrors).length > 0) {
+      return // Stop submission if errors
+    }
 
-  setFormData((prev) => ({ ...prev, natureOfActivity: activity }));
-  setShowModal(true);
-};
-
-
-  const confirmSubmit = () => {
-    const activity = isOtherSelected ? formData.customActivity : formData.natureOfActivity;
-
-    const newReservation = {
-      whoReserved: formData.whoReserved,
-      eventName: formData.eventName,
-      natureOfActivity: activity,
+    // Prepare payload
+    const payload = {
+      user_id: storedUser.id, // <-- use stored user ID here
+      whoReserved: formData.whoReserved.trim(),
+      eventName: formData.eventName.trim(),
+      natureOfActivity:
+        formData.natureOfActivity === "Others: Please specify"
+          ? formData.customActivity.trim()
+          : formData.natureOfActivity,
       numberOfParticipants: formData.numberOfParticipants,
-      date: formData.date?.toLocaleDateString(),
-     time: {
-  start: formData.startTime?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true, // ✅ this makes it 12-hour format with AM/PM
-  }),
-  end: formData.endTime?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true, // ✅
-  }),
-},
+      startDate: formData.startDate.toISOString().split("T")[0],
+      endDate: formData.endDate.toISOString().split("T")[0],
+      startTime: formData.startTime.toTimeString().split(" ")[0],
+      endTime: formData.endTime.toTimeString().split(" ")[0],
+      notes: formData.notes.trim(),
+      poaLink: formData.poaLink.trim(),
+      status: "Pending",
+    }
 
-      notes: formData.notes,
-      poaLink: formData.poaLink,
-      venue: '', // if you’re adding venue later
-      status: 'Pending'
-    };    
+    try {
+      const response = await fetch("http://localhost/reserveit-ilfo/backend/api/add_reservation.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
 
-    addReservation(newReservation); // ✅ save to context
+      const data = await response.json()
 
-    setShowModal(false);
-    setPopupMessage('ReserveIT!');
-    setTimeout(() => {
-      setPopupMessage('');
-      navigate('/dashboard');
-    }, 1500);
-  };
+      if (response.ok && data.success) {
+        setMessage("Reservation submitted successfully!")
+        setTimeout(() => {
+          setMessage("")
+          navigate("/dashboard") // Redirect after success
+        }, 2000)
+      } else {
+        setMessage("Failed to submit reservation: " + (data.message || "Unknown error"))
+      }
+    } catch (err) {
+      setMessage("Error submitting reservation: " + err.message)
+    }
+  }
 
   return (
     <div className="reservation-form-container">
       <h2 className="form-header">Create New Reservation</h2>
-      <form className="reservation-form" onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit} className="reservation-form">
         <div className="form-columns">
           <div className="form-left">
             <div className="form-group">
-              <label>Who Reserved</label>
+              <label>Who Reserved:</label>
               <input
                 type="text"
                 value={formData.whoReserved}
-                onChange={(e) => handleChange('whoReserved', e.target.value)}
+                onChange={(e) => handleChange("whoReserved", e.target.value)}
+                className={errors.whoReserved ? "error" : ""}
               />
+              {errors.whoReserved && <small className="error-message">{errors.whoReserved}</small>}
             </div>
 
             <div className="form-group">
-              <label>Event Name</label>
+              <label>Event Name:</label>
               <input
                 type="text"
                 value={formData.eventName}
-                onChange={(e) => handleChange('eventName', e.target.value)}
+                onChange={(e) => handleChange("eventName", e.target.value)}
+                className={errors.eventName ? "error" : ""}
               />
+              {errors.eventName && <small className="error-message">{errors.eventName}</small>}
             </div>
 
             <div className="form-group">
-              <label>Nature of Activity</label>
+              <label>Nature of Activity:</label>
               <select
                 value={formData.natureOfActivity}
-                onChange={(e) => handleChange('natureOfActivity', e.target.value)}
+                onChange={(e) => handleChange("natureOfActivity", e.target.value)}
+                className={errors.natureOfActivity ? "error" : ""}
               >
                 <option value="">Select activity</option>
                 <option>Assembly</option>
@@ -247,124 +203,122 @@ if (
                 <option>Training</option>
                 <option>Others: Please specify</option>
               </select>
-              {isOtherSelected && (
+              {errors.natureOfActivity && <small className="error-message">{errors.natureOfActivity}</small>}
+
+              {formData.natureOfActivity === "Others: Please specify" && (
                 <input
                   type="text"
-                  placeholder="Please specify"
+                  placeholder="Specify activity"
                   value={formData.customActivity}
-                  onChange={(e) => handleChange('customActivity', e.target.value)}
+                  onChange={(e) => handleChange("customActivity", e.target.value)}
+                  className={errors.customActivity ? "error" : ""}
                 />
               )}
+              {errors.customActivity && <small className="error-message">{errors.customActivity}</small>}
             </div>
 
             <div className="form-group">
-              <label>Notes (Optional)</label>
-              <textarea
-                value={formData.notes}
-                onChange={(e) => handleChange('notes', e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Link of CSAO Approved POA (If Applicable)</label>
-              <input
-                type="text"
-                value={formData.poaLink}
-                onChange={(e) => handleChange('poaLink', e.target.value)}
-              />
-            </div>
-          </div>
-
-<         div className="form-right">
-            <div className="form-group">
-              <label>Number of Participants</label>
+              <label>Number of Participants:</label>
               <input
                 type="number"
                 min="1"
                 max="200"
                 value={formData.numberOfParticipants}
-                onChange={(e) => handleChange('numberOfParticipants', e.target.value)}
-                className={errors.numberOfParticipants ? 'error' : ''} 
+                onChange={(e) => handleChange("numberOfParticipants", e.target.value)}
+                className={errors.numberOfParticipants ? "error" : ""}
               />
-              {errors.numberOfParticipants && <p className="error-message">{errors.numberOfParticipants}</p>}
+              {errors.numberOfParticipants && <small className="error-message">{errors.numberOfParticipants}</small>}
             </div>
+          </div>
 
           <div className="form-right">
-          <div className="form-group">
-  <label>Start Date</label>
-  <DatePicker
-    selected={formData.startDate}
-    onChange={(date) => handleChange('startDate', date)}
-    dateFormat="MMMM d, yyyy"
-     minDate={new Date(new Date().setDate(new Date().getDate() + 3))} // 3 days ahead
-  maxDate={new Date(new Date().setMonth(new Date().getMonth() + 1))} // 1 month ahead
-    placeholderText="Select start date"
-    className="custom-datepicker"
-  />
-</div>
+            <div className="form-group">
+              <label>Start Date:</label>
+              <DatePicker
+                selected={formData.startDate}
+                onChange={(date) => handleChange("startDate", date)}
+                dateFormat="MMMM d, yyyy"
+                minDate={new Date(new Date().setDate(new Date().getDate() + 3))}
+                maxDate={new Date(new Date().setMonth(new Date().getMonth() + 1))}
+                placeholderText="Select start date"
+                className={`custom-datepicker ${errors.startDate ? "error" : ""}`}
+              />
+              {errors.startDate && <small className="error-message">{errors.startDate}</small>}
+            </div>
 
-<div className="form-group">
-  <label>End Date</label>
-  <DatePicker
-    selected={formData.endDate}
-    onChange={(date) => handleChange('endDate', date)}
-    dateFormat="MMMM d, yyyy"
-    minDate={formData.startDate || new Date()}
-    placeholderText="Select end date"
-    className="custom-datepicker"
-  />
-</div>
+            <div className="form-group">
+              <label>End Date:</label>
+              <DatePicker
+                selected={formData.endDate}
+                onChange={(date) => handleChange("endDate", date)}
+                dateFormat="MMMM d, yyyy"
+                minDate={formData.startDate || new Date()}
+                placeholderText="Select end date"
+                className={`custom-datepicker ${errors.endDate ? "error" : ""}`}
+              />
+              {errors.endDate && <small className="error-message">{errors.endDate}</small>}
+            </div>
 
-<div className="form-group grid grid-cols-2 gap-4">
-  <div>
-    <label>Start Time</label>
-    <CustomTimePicker
-      value={formData.startTime}
-      onChange={(time) => handleChange('startTime', time)}
-    />
-  </div>
-  <div>
-    <label>End Time</label>
-    <CustomTimePicker
-      value={formData.endTime}
-      onChange={(time) => handleChange('endTime', time)}
-    />
-  </div>
-</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-group">
+                <label>Start Time:</label>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <TimePicker
+                    value={formData.startTime}
+                    onChange={(time) => handleChange("startTime", time)}
+                    renderInput={(params) => <TextField {...params} error={!!errors.startTime} fullWidth />}
+                  />
+                </LocalizationProvider>
+                {errors.startTime && <small className="error-message">{errors.startTime}</small>}
+              </div>
 
-        </div>
-        <div className="form-buttons">
-          <button type="button" className="cancel-button" onClick={handleCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="submit-button">
-            SUBMIT
-          </button>
-        </div>
-        </div>
-        </div>
-      </form>
-    
+              <div className="form-group">
+                <label>End Time:</label>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <TimePicker
+                    value={formData.endTime}
+                    onChange={(time) => handleChange("endTime", time)}
+                    renderInput={(params) => <TextField {...params} error={!!errors.endTime} fullWidth />}
+                  />
+                </LocalizationProvider>
+                {errors.endTime && <small className="error-message">{errors.endTime}</small>}
+              </div>
+            </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <p>Do you want to submit this form?</p>
-            <div className="modal-buttons">
-              <button style={{ backgroundColor: '#969696' }} onClick={() => setShowModal(false)}>
-                No
-              </button>
-              <button style={{ backgroundColor: '#D1DFBB' }} onClick={confirmSubmit}>
-                Yes
-              </button>
+            <div className="form-group">
+              <label>Notes:</label>
+              <textarea
+                value={formData.notes}
+                onChange={(e) => handleChange("notes", e.target.value)}
+                placeholder="Additional notes (optional)"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Proof of Activity Link (POA Link):</label>
+              <input
+                type="text"
+                value={formData.poaLink}
+                onChange={(e) => handleChange("poaLink", e.target.value)}
+                placeholder="URL to POA"
+              />
             </div>
           </div>
         </div>
-      )}
 
-      {popupMessage && <div className="popup-success">{popupMessage}</div>}
+        <div className="form-buttons">
+          <button type="button" className="cancel-button" onClick={() => navigate("/dashboard")}>
+            Cancel
+          </button>
+          <button type="submit" className="submit-button">
+            Submit Reservation
+          </button>
+        </div>
+
+        {message && <div className="popup-success">{message}</div>}
+      </form>
     </div>
-  );
-};
+  )
+}
 
-export default ReservationForm;
+export default ReservationForm

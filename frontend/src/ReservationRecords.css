@@ -1,0 +1,120 @@
+.records1-container {
+  background-color: #ffffff;
+  border: 1px solid #000;
+  border-radius: 16px;
+  max-width: 1500px;
+  margin: 50px auto;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.records1-title {
+  background-color: #D1DFBB;
+  border-bottom: 1px solid #000;
+  padding: 35px 24px;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #111827;
+}
+
+.records1-table-wrapper {
+  overflow-x: auto;
+  padding: 0 24px 20px;
+}
+
+.records1-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  color: #333;
+}
+
+.records1-table th,
+.records1-table td {
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.records1-table th {
+  color: #4B5563;
+  font-weight: 600;
+}
+
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  min-width: 90px;
+  display: inline-block;
+}
+
+.status-pill.approved {
+  background-color: #3A5B22;
+}
+
+.status-pill.rejected {
+  background-color: #B7410E;
+}
+
+.status-pill.pending {
+  background-color: #D69E5E;
+}
+
+.view-details-btn {
+  background-color: #fff;
+  border: 1px solid #999;
+  padding: 6px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.view-details-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.records1-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 24px;
+  gap: 12px;
+}
+
+.print-summary-btn,
+.back-dashboard-btn {
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.print-summary-btn {
+  background-color: #D1DFBB;
+  color: #111827;
+}
+
+.print-summary-btn:hover {
+  background-color: #c4d4a9;
+}
+
+.back-dashboard-btn {
+  background-color: #E5E5E5;
+  color: #111827;
+}
+
+.back-dashboard-btn:hover {
+  background-color: #d4d4d4;
+}

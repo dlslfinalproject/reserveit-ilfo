@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import AdminDashboard from './AdminDashboard';
@@ -8,6 +8,7 @@ import ReservationForm from './ReservationForm';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
 import ReservationDetails from './ReservationDetails';
+import ReservationRecords from './ReservationRecords';
 import Settings from './Settings';
 import ILFO from './ILFO';
 import RequestForm from './RequestForm';
@@ -116,7 +117,6 @@ function App() {
           }
         />
 
-        {/* ✅ Added /login route here */}
         <Route
           path="/login"
           element={
@@ -157,6 +157,18 @@ function App() {
         <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
         <Route path="/ilfo-designs" element={session ? <ILFO /> : <Navigate to="/" />} />
         <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
+
+        {/* ✅ NEW: Route to view all reservation records (admin-only) */}
+        <Route
+          path="/reservation-records"
+          element={
+            session?.user?.role === 'admin' ? (
+              <ReservationRecords />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
 
         {/* Optional: Catch-all for unmatched routes */}
         <Route path="*" element={<Navigate to="/" />} />

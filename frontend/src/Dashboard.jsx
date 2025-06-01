@@ -54,7 +54,7 @@ const Dashboard = ({ onSignOut }) => {
 
         <div className="dashboard-actions">
           <button className="dashboard-button" onClick={() => navigate('/new-reservation')}>
-            <FaPlus /> Reservation
+            <FaPlus /> Make a Reservation
           </button>
 
           <button className="dashboard-button" onClick={() => navigate('/user-records')}>
@@ -72,7 +72,6 @@ const Dashboard = ({ onSignOut }) => {
             {showProfile && (
               <div className="profile-menu">
                 <p>{userEmail || 'user@dlsl.edu.ph'}</p>
-                <button onClick={() => navigate('/settings')}>Settings</button>
                 <button onClick={handleLogout}>Log Out</button>
               </div>
             )}
