@@ -123,10 +123,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
             <FaEnvelope /> Gmail
           </button>
 
-          <button className="dashboard-button" onClick={() => navigate("/ilfo-designs")}>
-            ILFO
-          </button>
-
           <div className="profile-dropdown">
             <button onClick={() => setShowProfile(!showProfile)}>
               <FaUserCircle size={24} />
