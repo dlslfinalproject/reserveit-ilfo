@@ -11,7 +11,7 @@ function ReservationRecords() {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php", {
+        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_all_reservation.php", {
           credentials: "include",
         })
         const data = await response.json()
@@ -51,9 +51,13 @@ function ReservationRecords() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Date</th>
+                <th>Requester</th>
+                <th>Program Name</th>
+                <th>Nature of Activity</th>
+                <th>Venue</th>
+                <th>Participants</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>Time</th>
                 <th>Status</th>
               </tr>
@@ -61,16 +65,20 @@ function ReservationRecords() {
             <tbody>
               ${reservations
                 .map(
-                  (reservation) => `
-                <tr>
-                  <td>${reservation.id}</td>
-                  <td>${reservation.name}</td>
-                  <td>${reservation.contact}</td>
-                  <td>${reservation.date}</td>
-                  <td>${reservation.time}</td>
-                  <td>${reservation.status}</td>
-                </tr>
-              `,
+                  (r) => `
+                  <tr>
+                    <td>${r.reservation_id}</td>
+                    <td>${r.whoReserved}</td>
+                    <td>${r.nameOfProgram}</td>
+                    <td>${r.natureOfActivity}</td>
+                    <td>${r.venue}</td>
+                    <td>${r.numberOfParticipants}</td>
+                    <td>${r.startDate}</td>
+                    <td>${r.endDate}</td>
+                    <td>${r.time.start} - ${r.time.end}</td>
+                    <td>${r.status}</td>
+                  </tr>
+              `
                 )
                 .join("")}
             </tbody>
@@ -112,6 +120,10 @@ function ReservationRecords() {
               <thead>
                 <tr>
                   <th>Requester</th>
+                  <th>Program Name</th>
+                  <th>Nature of Activity</th>
+                  <th>Venue</th>
+                  <th>Participants</th>
                   <th>Date</th>
                   <th>Time</th>
                   <th>Status</th>
@@ -119,13 +131,17 @@ function ReservationRecords() {
                 </tr>
               </thead>
               <tbody>
-                {reservations.map((reservation) => (
-                  <tr key={reservation.id}>
-                    <td className="requester-cell">{reservation.name}</td>
-                    <td>{reservation.date}</td>
-                    <td>{reservation.time}</td>
+                {reservations.map((r) => (
+                  <tr key={r.reservation_id}>
+                    <td>{r.whoReserved}</td>
+                    <td>{r.nameOfProgram}</td>
+                    <td>{r.natureOfActivity}</td>
+                    <td>{r.venue}</td>
+                    <td>{r.numberOfParticipants}</td>
+                    <td>{r.startDate} to {r.endDate}</td>
+                    <td>{r.time.start} - {r.time.end}</td>
                     <td>
-                      <span className={getStatusClass(reservation.status)}>{reservation.status}</span>
+                      <span className={getStatusClass(r.status)}>{r.status}</span>
                     </td>
                     <td>
                       <button className="view-details-btn">

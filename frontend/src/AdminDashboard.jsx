@@ -4,7 +4,11 @@ import { useState, useEffect } from "react"
 import "./AdminDashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight, FaCog, FaCheck, FaTimes, FaClock } from "react-icons/fa"
+import { 
+  FaPlus, FaListAlt, FaEnvelope, FaUserCircle, 
+  FaChevronLeft, FaChevronRight, FaCog, 
+  FaCheck, FaTimes 
+} from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 
@@ -18,7 +22,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [filterStatus, setFilterStatus] = useState("All")
   const navigate = useNavigate()
 
-  // Helper: Split multi-day reservation into daily events
+  // Split multi-day reservations into daily events
   const splitReservationIntoDays = (reservation) => {
     const start = moment(reservation.startDate)
     const end = moment(reservation.endDate)
@@ -50,7 +54,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
         })
         const data = await response.json()
         if (response.ok && data.reservations) {
-          // Split multi-day reservations into daily events
           const loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
           setEvents(loadedEvents)
         }
@@ -58,6 +61,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
         console.error("Failed to load reservations", error)
       }
     }
+
     fetchReservations()
   }, [])
 
@@ -98,8 +102,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
       if (response.ok && data.success) {
         setEvents((prevEvents) =>
           prevEvents.map((ev) =>
-            ev.reservationId === id ? { ...ev, status: newStatus, title: `${ev.raw.nameOfProgram} (${newStatus})` } : ev,
-          ),
+            ev.reservationId === id
+              ? { ...ev, status: newStatus, title: `${ev.raw.nameOfProgram} (${newStatus})` }
+              : ev
+          )
         )
         alert("Status updated successfully")
         setSelectedEvent(null)
@@ -111,17 +117,34 @@ const AdminDashboard = ({ session, onSignOut }) => {
     }
   }
 
-  const filteredEvents = filterStatus === "All" ? events : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
+  const filteredEvents = filterStatus === "All"
+    ? events
+    : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
 
-  // Custom event rendering inside calendar cells
+  // ✅ Google Calendar-like Event Display
   const EventComponent = ({ event }) => {
+    const statusColor = {
+      Approved: "#4CAF50",
+      Pending: "#FFA500",
+      Rejected: "#F44336",
+    }
+
     return (
-      <div style={{ padding: "2px", fontSize: "0.75rem", whiteSpace: "normal" }}>
-        <div><strong>{event.whoReserved}</strong></div>
+      <div
+        style={{
+          backgroundColor: statusColor[event.status] || "#9E9E9E",
+          color: "#fff",
+          padding: "4px 6px",
+          borderRadius: "4px",
+          fontSize: "0.75rem",
+          lineHeight: "1.2",
+          overflow: "hidden",
+          whiteSpace: "normal",
+        }}
+      >
+        <div style={{ fontWeight: "bold" }}>{event.whoReserved}</div>
         <div>{`${event.category} | ${event.timeRange}`}</div>
-        <div>
-          Status: <span style={{ color: event.status === "Approved" ? "green" : event.status === "Pending" ? "orange" : "red" }}>{event.status}</span>
-        </div>
+        <div style={{ fontStyle: "italic", fontSize: "0.7rem" }}>{event.status}</div>
       </div>
     )
   }
@@ -144,15 +167,12 @@ const AdminDashboard = ({ session, onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/new-reservation")}>
             <FaPlus /> Make a Reservation
           </button>
-
           <button className="dashboard-button" onClick={() => navigate("/reservation-records")}>
             <FaListAlt /> Reservation Records
           </button>
-
           <button className="dashboard-button">
             <FaEnvelope /> Gmail
           </button>
-
           <div className="profile-dropdown">
             <button onClick={() => setShowProfile(!showProfile)}>
               <FaUserCircle size={24} />
@@ -160,12 +180,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
             {showProfile && (
               <div className="profile-menu">
                 <p>{session?.user?.email || "Unknown User"}</p>
-                <button
-                  onClick={() => {
-                    setShowProfile(false)
-                    navigate("/settings")
-                  }}
-                >
+                <button onClick={() => {
+                  setShowProfile(false)
+                  navigate("/settings")
+                }}>
                   <FaCog style={{ marginRight: "8px" }} />
                   Settings
                 </button>
@@ -176,7 +194,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
         </div>
       </div>
 
-      {/* Calendar Navigation with integrated filter */}
       <div className="calendar-nav-container">
         <button onClick={goToPreviousMonth} className="calendar-nav-button">
           <FaChevronLeft />
@@ -207,7 +224,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
         </button>
       </div>
 
-      {/* Calendar */}
       <div className="calendar-wrapper">
         <Calendar
           localizer={localizer}
@@ -220,13 +236,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
           toolbar={false}
           style={{ height: 500 }}
           onSelectEvent={handleEventClick}
-          components={{
-            event: EventComponent,
-          }}
+          components={{ event: EventComponent }}
         />
       </div>
 
-      {/* Status Update Panel */}
       {selectedEvent && (
         <div className="status-update-panel">
           <div className="status-panel-header">
@@ -235,7 +248,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
               <FaTimes />
             </button>
           </div>
-          
+
           <div className="status-panel-content">
             <div className="current-status">
               <span className="status-label">Current Status:</span>
@@ -243,21 +256,13 @@ const AdminDashboard = ({ session, onSignOut }) => {
                 {selectedEvent.status}
               </span>
             </div>
-            
             <div className="status-actions">
-              <button 
-                className="status-btn approve-btn" 
-                onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}
-              >
+              <button className="status-btn approve-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}>
                 <FaCheck /> Approve
               </button>
-              <button 
-                className="status-btn reject-btn" 
-                onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}
-              >
+              <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
                 <FaTimes /> Reject
               </button>
-              
             </div>
           </div>
         </div>
