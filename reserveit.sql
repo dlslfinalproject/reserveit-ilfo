@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2025 at 11:32 PM
+-- Generation Time: Jun 01, 2025 at 04:52 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -118,21 +118,7 @@ CREATE TABLE `tblreservations` (
   `notes` text DEFAULT NULL,
   `link_to_csao_approved_poa` varchar(500) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `schedule_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblschedules`
---
-
-CREATE TABLE `tblschedules` (
-  `schedule_id` int(11) NOT NULL,
-  `schedule_option` varchar(255) NOT NULL,
-  `start_time` time NOT NULL,
-  `end_time` time NOT NULL
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -158,11 +144,11 @@ CREATE TABLE `tblusers` (
 --
 
 INSERT INTO `tblusers` (`id`, `google_id`, `email`, `first_name`, `last_name`, `profile_picture`, `role`, `created_at`, `updated_at`) VALUES
-(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-05-31 21:21:11'),
+(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-01 01:54:20'),
 (2, NULL, 'mary.ann.lumban@dlsl.edu.ph\r\n', 'Mary Ann', 'Lumban', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (3, '', 'ilfo.office@dlsl.edu.ph', 'ILFO', 'Office', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (4, NULL, 'ilfo.manager@dlsl.edu.ph\r\n', 'ILFO', ' Manager', NULL, 'admin', '2025-05-28 23:27:06', '2025-05-28 23:27:06'),
-(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-05-31 20:16:09');
+(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-01 01:28:27');
 
 -- --------------------------------------------------------
 
@@ -228,15 +214,7 @@ ALTER TABLE `tblreservations`
   ADD KEY `activity_id` (`activity_id`),
   ADD KEY `venue_id` (`venue_id`),
   ADD KEY `status_id` (`status_id`),
-  ADD KEY `rejection_reason_id` (`rejection_reason_id`),
-  ADD KEY `fk_reservation_schedule` (`schedule_id`);
-
---
--- Indexes for table `tblschedules`
---
-ALTER TABLE `tblschedules`
-  ADD PRIMARY KEY (`schedule_id`),
-  ADD UNIQUE KEY `schedule_option` (`schedule_option`);
+  ADD KEY `rejection_reason_id` (`rejection_reason_id`);
 
 --
 -- Indexes for table `tblusers`
@@ -284,12 +262,6 @@ ALTER TABLE `tblreservations`
   MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tblschedules`
---
-ALTER TABLE `tblschedules`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `tblusers`
 --
 ALTER TABLE `tblusers`
@@ -309,7 +281,6 @@ ALTER TABLE `tblvenues`
 -- Constraints for table `tblreservations`
 --
 ALTER TABLE `tblreservations`
-  ADD CONSTRAINT `fk_reservation_schedule` FOREIGN KEY (`schedule_id`) REFERENCES `tblschedules` (`schedule_id`),
   ADD CONSTRAINT `tblreservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tblusers` (`id`),
   ADD CONSTRAINT `tblreservations_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `tblactivities` (`activity_id`),
   ADD CONSTRAINT `tblreservations_ibfk_3` FOREIGN KEY (`venue_id`) REFERENCES `tblvenues` (`venue_id`),
