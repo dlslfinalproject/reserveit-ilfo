@@ -18,6 +18,30 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [filterStatus, setFilterStatus] = useState("All")
   const navigate = useNavigate()
 
+  // Helper: Split multi-day reservation into daily events
+  const splitReservationIntoDays = (reservation) => {
+    const start = moment(reservation.startDate)
+    const end = moment(reservation.endDate)
+    const days = []
+
+    for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
+      days.push({
+        id: reservation.reservation_id + "-" + m.format("YYYYMMDD"),
+        reservationId: reservation.reservation_id,
+        title: reservation.nameOfProgram,
+        whoReserved: reservation.whoReserved,
+        category: reservation.natureOfActivity,
+        status: reservation.status,
+        start: m.toDate(),
+        end: m.toDate(),
+        timeRange: `${reservation.time.start} - ${reservation.time.end}`,
+        raw: reservation,
+      })
+    }
+
+    return days
+  }
+
   useEffect(() => {
     async function fetchReservations() {
       try {
@@ -26,14 +50,8 @@ const AdminDashboard = ({ session, onSignOut }) => {
         })
         const data = await response.json()
         if (response.ok && data.reservations) {
-         const loadedEvents = data.reservations.map((res) => ({
-            id: res.reservation_id,
-            title: `${res.nameOfProgram} (${res.status})`,
-            start: new Date(res.startDate + "T" + res.time.start),
-            end: new Date(res.endDate + "T" + res.time.end),
-            status: res.status,
-            raw: res,
-          }))
+          // Split multi-day reservations into daily events
+          const loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
           setEvents(loadedEvents)
         }
       } catch (error) {
@@ -65,7 +83,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
 
   const goToPreviousMonth = () => setCurrentDate(moment(currentDate).subtract(1, "month").toDate())
   const goToNextMonth = () => setCurrentDate(moment(currentDate).add(1, "month").toDate())
-  const formattedMonthYear = moment(currentDate).format("MMMM YYYY")
 
   const handleEventClick = (event) => setSelectedEvent(event)
 
@@ -81,7 +98,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
       if (response.ok && data.success) {
         setEvents((prevEvents) =>
           prevEvents.map((ev) =>
-            ev.id === id ? { ...ev, status: newStatus, title: `${ev.raw.eventName} (${newStatus})` } : ev,
+            ev.reservationId === id ? { ...ev, status: newStatus, title: `${ev.raw.nameOfProgram} (${newStatus})` } : ev,
           ),
         )
         alert("Status updated successfully")
@@ -95,6 +112,19 @@ const AdminDashboard = ({ session, onSignOut }) => {
   }
 
   const filteredEvents = filterStatus === "All" ? events : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
+
+  // Custom event rendering inside calendar cells
+  const EventComponent = ({ event }) => {
+    return (
+      <div style={{ padding: "2px", fontSize: "0.75rem", whiteSpace: "normal" }}>
+        <div><strong>{event.whoReserved}</strong></div>
+        <div>{`${event.category} | ${event.timeRange}`}</div>
+        <div>
+          Status: <span style={{ color: event.status === "Approved" ? "green" : event.status === "Pending" ? "orange" : "red" }}>{event.status}</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="dashboard-container">
@@ -166,9 +196,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
               <option value="All">All Status</option>
               <option value="Approved">Approved</option>
               <option value="Pending">Pending</option>
+              <option value="Rejected">Rejected</option>
             </select>
           </div>
-          <span className="calendar-nav-month">{formattedMonthYear}</span>
+          <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>
         </div>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">
@@ -189,6 +220,9 @@ const AdminDashboard = ({ session, onSignOut }) => {
           toolbar={false}
           style={{ height: 500 }}
           onSelectEvent={handleEventClick}
+          components={{
+            event: EventComponent,
+          }}
         />
       </div>
 
@@ -196,7 +230,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
       {selectedEvent && (
         <div className="status-update-panel">
           <div className="status-panel-header">
-            <h3>Update Status for: {selectedEvent.raw.eventName}</h3>
+            <h3>Update Status for: {selectedEvent.raw.nameOfProgram}</h3>
             <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>
               <FaTimes />
             </button>
@@ -213,22 +247,17 @@ const AdminDashboard = ({ session, onSignOut }) => {
             <div className="status-actions">
               <button 
                 className="status-btn approve-btn" 
-                onClick={() => updateStatus(selectedEvent.id, "Approved")}
+                onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}
               >
                 <FaCheck /> Approve
               </button>
               <button 
                 className="status-btn reject-btn" 
-                onClick={() => updateStatus(selectedEvent.id, "Rejected")}
+                onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}
               >
                 <FaTimes /> Reject
               </button>
-              <button 
-                className="status-btn pending-btn" 
-                onClick={() => updateStatus(selectedEvent.id, "Pending")}
-              >
-                <FaClock /> Set Pending
-              </button>
+              
             </div>
           </div>
         </div>
