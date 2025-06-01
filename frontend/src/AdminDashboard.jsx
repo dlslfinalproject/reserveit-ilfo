@@ -107,7 +107,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
               className="dashboard-logo enhanced"
             />
           </div>
-          <h2>Admin Dashboard</h2>
+          <h2>Reservation Calendar</h2>
         </div>
 
         <div className="dashboard-actions">
