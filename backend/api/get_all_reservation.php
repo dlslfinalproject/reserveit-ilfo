@@ -1,31 +1,40 @@
 <?php
 require_once '../config/db.php';
-header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow all origins
+header("Access-Control-Allow-Credentials: true"); // Allow credentials
+header("Access-Control-Allow-Methods: GET, OPTIONS"); // Allow specific methods
+header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
+header("Content-Type: application/json");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 try {
     $pdo = getDbConnection();
 
     $sql = "
         SELECT 
-            r.reservation_id,
-            u.first_name, u.last_name,
-            r.event_name,
-            a.activity_name,
-            v.venue_name,
-            r.reservation_startdate,
-            r.reservation_enddate,
-            r.start_time,
-            r.end_time,
-            r.number_of_participants,
-            s.status_name AS status,
-            r.link_to_csao_approved_poa AS poa_link,
-            r.notes
-        FROM tblreservations r
-        JOIN tblusers u ON r.user_id = u.id
-        JOIN tblactivities a ON r.activity_id = a.activity_id
-        JOIN tblvenues v ON r.venue_id = v.venue_id
-        JOIN tblapproval_status s ON r.status_id = s.status_id
+    r.reservation_id,
+    u.first_name, u.last_name,
+    r.event_name,
+    a.activity_name,
+    r.custom_activity,
+    v.venue_name,
+    r.reservation_startdate,
+    r.reservation_enddate,
+    r.start_time,
+    r.end_time,
+    r.number_of_participants,
+    s.status_name AS status,
+    r.link_to_csao_approved_poa AS poa_link,
+    r.notes
+FROM tblreservations r
+JOIN tblusers u ON r.user_id = u.id
+LEFT JOIN tblactivities a ON r.activity_id = a.activity_id
+LEFT JOIN tblvenues v ON r.venue_id = v.venue_id
+LEFT JOIN tblapproval_status s ON r.status_id = s.status_id
     ";
 
     $stmt = $pdo->prepare($sql);
@@ -37,7 +46,7 @@ try {
             'reservation_id' => (int)$row['reservation_id'],
             'whoReserved' => $row['first_name'] . ' ' . $row['last_name'],
             'nameOfProgram' => $row['event_name'],
-            'natureOfActivity' => $row['activity_name'],
+            'natureOfActivity' => !empty($row['custom_activity']) ? $row['custom_activity'] : $row['activity_name'],
             'venue' => $row['venue_name'],
             'numberOfParticipants' => (int)$row['number_of_participants'],
             'startDate' => $row['reservation_startdate'],
