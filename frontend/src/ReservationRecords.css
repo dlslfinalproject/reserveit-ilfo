@@ -38,6 +38,26 @@ body {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+.modal-header {
+  position: relative;
+  padding-top: 1.5rem;
+  gap: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-panel-btn.top-right {
+  position: absolute;
+  top: -1.25rem;
+  right: -1.5rem;
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  cursor: pointer;
+}
+
+
 /* Records Content */
 .records-content {
   border: 1px solid rgba(139, 169, 109, 0.2);
@@ -361,10 +381,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .modal-header-title {
+  top: -1.25rem;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.2;
@@ -376,6 +397,7 @@ body {
 }
 
 .status-pill {
+  top: -1.25rem;
   background-color: #335522;
   color: white;
   padding: 6px 18px;

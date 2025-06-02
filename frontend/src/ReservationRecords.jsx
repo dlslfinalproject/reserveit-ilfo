@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./ReservationRecords.css";
-import { FaPrint } from "react-icons/fa";
+import { FaPrint, FaCheck, FaTimes } from "react-icons/fa";
 import logo from './assets/ilfo-logo.png';
 
 function ReservationRecords() {
@@ -32,10 +32,10 @@ function ReservationRecords() {
   }, []);
 
   const generateSummaryReport = () => {
-  const printWindow = window.open("", "_blank");
-  const date = new Date().toLocaleDateString();
+    const printWindow = window.open("", "_blank");
+    const date = new Date().toLocaleDateString();
 
-  const summaryTable = `
+    const summaryTable = `
     <html>
       <head>
         <title>Reservation Summary Report</title>
@@ -129,16 +129,16 @@ function ReservationRecords() {
     </html>
   `;
 
-  printWindow.document.write(summaryTable);
-  printWindow.document.close();
-  printWindow.print();
-};
+    printWindow.document.write(summaryTable);
+    printWindow.document.close();
+    printWindow.print();
+  };
 
   const generateIndividualReport = (r) => {
-  const printWindow = window.open("", "_blank");
-  const date = new Date().toLocaleDateString();
+    const printWindow = window.open("", "_blank");
+    const date = new Date().toLocaleDateString();
 
-  const reportHTML = `
+    const reportHTML = `
     <html>
       <head>
         <title>Reservation Report - ${r.reservation_id}</title>
@@ -194,10 +194,10 @@ function ReservationRecords() {
     </html>
   `;
 
-  printWindow.document.write(reportHTML);
-  printWindow.document.close();
-  printWindow.print();
-};
+    printWindow.document.write(reportHTML);
+    printWindow.document.close();
+    printWindow.print();
+  };
 
   const getStatusClass = (status) => {
     switch (status.toLowerCase()) {
@@ -260,11 +260,16 @@ function ReservationRecords() {
           <div className="reservation-modal-overlay" onClick={() => setSelectedReservation(null)}>
             <div className="reservation-modal" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
+                <button className="close-panel-btn top-right" onClick={() => setSelectedReservation(null)}>
+                  <FaTimes />
+                </button>
                 <div>
                   <div className="modal-header-title">Reservation ID {selectedReservation.reservation_id}</div>
                   <div className="modal-header-sub">{selectedReservation.whoReserved}</div>
                 </div>
-                <span className={getStatusClass(selectedReservation.status)}>{selectedReservation.status}</span>
+                <span className={getStatusClass(selectedReservation.status)}>
+                  {selectedReservation.status}
+                </span>
               </div>
 
               <div className="tab-container">
@@ -284,32 +289,32 @@ function ReservationRecords() {
 
               <div className="modal-body">
                 {activeTab === "details" ? (
-                <>
-                  <div className="modal-content-item">
-                    <span>Event Name</span>
-                    <p>{selectedReservation.nameOfProgram}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Participants</span>
-                    <p>{selectedReservation.numberOfParticipants}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Nature of Activity</span>
-                    <p>{selectedReservation.natureOfActivity}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Date</span>
-                    <p>{selectedReservation.startDate} to {selectedReservation.endDate}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Venue</span>
-                    <p>{selectedReservation.venue}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Time</span>
-                    <p>{selectedReservation.time.start} - {selectedReservation.time.end}</p>
-                  </div>
-                </>
+                  <>
+                    <div className="modal-content-item">
+                      <span>Event Name</span>
+                      <p>{selectedReservation.nameOfProgram}</p>
+                    </div>
+                    <div className="modal-content-item">
+                      <span>Participants</span>
+                      <p>{selectedReservation.numberOfParticipants}</p>
+                    </div>
+                    <div className="modal-content-item">
+                      <span>Nature of Activity</span>
+                      <p>{selectedReservation.natureOfActivity}</p>
+                    </div>
+                    <div className="modal-content-item">
+                      <span>Date</span>
+                      <p>{selectedReservation.startDate} to {selectedReservation.endDate}</p>
+                    </div>
+                    <div className="modal-content-item">
+                      <span>Venue</span>
+                      <p>{selectedReservation.venue}</p>
+                    </div>
+                    <div className="modal-content-item">
+                      <span>Time</span>
+                      <p>{selectedReservation.time.start} - {selectedReservation.time.end}</p>
+                    </div>
+                  </>
                 ) : (
                   <div className="modal-content-item">
                     <span>POA (Program of Activities)</span>
@@ -317,19 +322,25 @@ function ReservationRecords() {
                   </div>
                 )}
               </div>
-
-              <button className="close-modal-btn" onClick={() => setSelectedReservation(null)}>Close</button>
+              <div className="status-actions">
+                <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
+                  <FaTimes /> Reject
+                </button>
+                <button className="status-btn approve-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}>
+                  <FaCheck /> Approve
+                </button>
+              </div>
             </div>
           </div>
         )}
 
         <div className="records-actions">
-          <button className="back-dashboard-btn" onClick={() => navigate("/admin-dashboard")}>
-            Back to Dashboard
-          </button>
           <button className="print-summary-btn" onClick={generateSummaryReport}>
             <FaPrint style={{ marginRight: "8px" }} />
             Print Summary
+          </button>
+          <button className="back-dashboard-btn" onClick={() => navigate("/admin-dashboard")}>
+            Back to Dashboard
           </button>
         </div>
       </div>
