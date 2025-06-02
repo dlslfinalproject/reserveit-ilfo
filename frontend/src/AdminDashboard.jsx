@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import "./AdminDashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"

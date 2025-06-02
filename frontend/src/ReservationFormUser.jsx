@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { TimePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import TextField from "@mui/material/TextField"
-import "./ReservationForm.css"
+import "./ReservationFormUser.css"
 
 const activityMap = {
   Assembly: 1,
@@ -23,7 +23,7 @@ const activityMap = {
   Training: 11,
 }
 
-const ReservationForm = () => {
+const ReservationFormUser = () => {
   const navigate = useNavigate()
 
   const storedUser = JSON.parse(localStorage.getItem("user_data"))
@@ -331,4 +331,4 @@ const ReservationForm = () => {
   )
 }
 
-export default ReservationForm
+export default ReservationFormUser
