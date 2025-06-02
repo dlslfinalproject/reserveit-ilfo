@@ -4,7 +4,14 @@ import { useState, useEffect } from "react"
 import "./Dashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import {
+  FaPlus,
+  FaListAlt,
+  FaEnvelope,
+  FaUserCircle,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 
@@ -27,27 +34,29 @@ const Dashboard = ({ onSignOut }) => {
     }
   }, [])
 
-  const splitReservationIntoDays = (reservation) => {
-    const start = moment(reservation.startDate)
-    const end = moment(reservation.endDate)
-    const days = []
+ const splitReservationIntoDays = (reservation) => {
+  const start = moment(reservation.startDate)
+  const end = moment(reservation.endDate)
+  const days = []
 
-    for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
-      days.push({
-        id: reservation.id + "-" + m.format("YYYYMMDD"),
-        title: `${reservation.eventName}`,
-        whoReserved: reservation.whoReserved,
-        category: reservation.natureOfActivity,
-        status: reservation.status,
-        start: m.toDate(),
-        end: m.toDate(),
-        timeRange: `${reservation.startTime} - ${reservation.endTime}`,
-        raw: reservation,
-      })
-    }
-
-    return days
+  for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
+    days.push({
+      id: reservation.reservation_id + "-" + m.format("YYYYMMDD"), // match admin ID field
+      reservationId: reservation.reservation_id,
+      title: reservation.nameOfProgram,
+      whoReserved: reservation.whoReserved,
+      category: reservation.natureOfActivity,
+      status: reservation.status,
+      start: m.toDate(),
+      end: m.toDate(),
+      timeRange: `${reservation.time.start} - ${reservation.time.end}`, // if time is nested like that
+      raw: reservation,
+    })
   }
+
+  return days
+}
+
 
   useEffect(() => {
     async function fetchReservations() {
@@ -55,11 +64,18 @@ const Dashboard = ({ onSignOut }) => {
         const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
+
         if (response.ok && data.reservations) {
-          let loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
+          let userReservations = data.reservations.filter(
+            (r) => r.email?.toLowerCase() === userEmail.toLowerCase()
+          )
+
+          let loadedEvents = userReservations.flatMap(splitReservationIntoDays)
 
           if (filterStatus !== "All") {
-            loadedEvents = loadedEvents.filter((ev) => ev.status.toLowerCase() === filterStatus.toLowerCase())
+            loadedEvents = loadedEvents.filter(
+              (ev) => ev.status.toLowerCase() === filterStatus.toLowerCase()
+            )
           }
 
           setEvents(loadedEvents)
@@ -69,8 +85,10 @@ const Dashboard = ({ onSignOut }) => {
       }
     }
 
-    fetchReservations()
-  }, [filterStatus])
+    if (userEmail) {
+      fetchReservations()
+    }
+  }, [filterStatus, userEmail])
 
   const handleLogout = async () => {
     if (onSignOut) {
