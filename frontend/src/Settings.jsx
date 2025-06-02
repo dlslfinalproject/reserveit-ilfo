@@ -67,7 +67,7 @@ const Settings = () => {
       {showAddPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3><Venue></Venue></h3>
+            <h3>Add New Venue</h3>
             <input
               type="text"
               value={newVenue}
