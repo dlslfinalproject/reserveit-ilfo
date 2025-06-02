@@ -17,6 +17,7 @@ const Dashboard = ({ onSignOut }) => {
   const [userEmail, setUserEmail] = useState("")
   const [filterStatus, setFilterStatus] = useState("All")
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const [activeStatusTab, setActiveStatusTab] = useState("details");
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -227,19 +228,56 @@ const Dashboard = ({ onSignOut }) => {
               <span className="status-label">Status:</span>
               <span className={`status-badge ${selectedEvent.status.toLowerCase()}`}>{selectedEvent.status}</span>
             </div>
-            <div className="reservation-info">
-              <p>
-                <strong>Reserved By:</strong> {selectedEvent.whoReserved}
-              </p>
-              <p>
-                <strong>Category:</strong> {selectedEvent.category}
-              </p>
-              <p>
-                <strong>Date:</strong> {moment(selectedEvent.start).format("MMMM D, YYYY")}
-              </p>
-              <p>
-                <strong>Time:</strong> {selectedEvent.timeRange}
-              </p>
+            <div className="tab-container">
+              <div
+                className={`tab ${activeStatusTab === "details" ? "active" : ""}`}
+                onClick={() => setActiveStatusTab("details")}
+              >
+                Details
+              </div>
+              <div
+                className={`tab ${activeStatusTab === "poa" ? "active" : ""}`}
+                onClick={() => setActiveStatusTab("poa")}
+              >
+                POA
+              </div>
+            </div>
+
+            {/* TAB CONTENT */}
+            <div className="modal-body">
+              {activeStatusTab === "details" ? (
+                <>
+                  <div className="modal-content-item">
+                    <span>Event Name</span>
+                    <p>{selectedEvent.raw.nameOfProgram}</p>
+                  </div>
+                  <div className="modal-content-item">
+                    <span>Participants</span>
+                    <p>{selectedEvent.raw.numberOfParticipants}</p>
+                  </div>
+                  <div className="modal-content-item">
+                    <span>Nature of Activity</span>
+                    <p>{selectedEvent.raw.natureOfActivity}</p>
+                  </div>
+                  <div className="modal-content-item">
+                    <span>Date</span>
+                    <p>{selectedEvent.raw.startDate} to {selectedEvent.raw.endDate}</p>
+                  </div>
+                  <div className="modal-content-item">
+                    <span>Venue</span>
+                    <p>{selectedEvent.raw.venue}</p>
+                  </div>
+                  <div className="modal-content-item">
+                    <span>Time</span>
+                    <p>{selectedEvent.raw.time.start} - {selectedEvent.raw.time.end}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="modal-content-item">
+                  <span>POA (Program of Activities)</span>
+                  <p>{selectedEvent.raw.poa || "No POA uploaded."}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
