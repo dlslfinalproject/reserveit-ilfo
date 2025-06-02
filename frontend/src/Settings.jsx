@@ -31,7 +31,6 @@ const Settings = () => {
       <div className="settings-header">
       <h2 className="settings-title">VENUE</h2>
       </div>
-        <h3 className="edit-facilities-title">EDIT VENUE</h3>
 
         <h3 className="edit-venues-title">Edit Venue</h3>
 
