@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import fileIcon from './assets/file-icon.png';
 import './UserRecords.css'; // CSS file import
-
 const UserRecords = () => {
   const navigate = useNavigate();
   const { reservations } = useReservation();

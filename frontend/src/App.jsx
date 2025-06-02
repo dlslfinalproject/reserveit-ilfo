@@ -9,7 +9,6 @@ import ReservationForm from './ReservationForm';
 import ReservationFormUser from './ReservationFormUser';
 import ReservationRecords from './ReservationRecords';
 import UserRecords from './UserRecords';
-import ReservationDetails from './ReservationDetails';
 import Settings from './Settings';
 import ILFO from './ILFO';
 import RequestForm from './RequestForm';
@@ -199,7 +198,6 @@ function App() {
 
         
         <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
-        <Route path="/reservation/:id" element={session ? <ReservationDetails /> : <Navigate to="/" />} />
         <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
         <Route path="/ilfo-designs" element={session ? <ILFO /> : <Navigate to="/" />} />
         <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
