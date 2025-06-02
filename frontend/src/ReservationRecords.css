@@ -13,12 +13,14 @@ body {
 
 /* Reservation Records Container */
 .reservation-records-container {
-  max-width: 1200px;
+  max-width: 100%;
+  width: 100%;
   margin: 2rem auto;
   padding: 2rem;
   animation: fadeInForm 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 20px;
   position: relative;
+  overflow-x: visible;
 }
 
 /* Header */
@@ -69,12 +71,13 @@ body {
   border-collapse: collapse;
   font-size: 0.875rem;
   background: white;
+  table-layout: auto;
 }
 
 .records-table th {
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   padding: 16px 20px;
-  text-align: left;
+  text-align: center;
   font-weight: 600;
   color: #374151;
   border-bottom: 2px solid #e5e7eb;
@@ -88,6 +91,19 @@ body {
   border-bottom: 1px solid #f3f4f6;
   color: #374151;
   vertical-align: middle;
+  text-align: center;
+}
+
+.records-table th,
+.records-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  vertical-align: middle;
+  white-space: nowrap; /* 🔧 Prevent wrapping */
+  overflow: hidden;     /* Optional: hide overflow */
+  text-overflow: ellipsis; /* Optional: add "..." if too long */
+  max-width: 200px;     /* Optional: limit width */
 }
 
 .records-table tbody tr {
@@ -130,34 +146,6 @@ body {
 
 .status-pill.pending {
   background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-}
-
-/* View Details Button */
-.view-details-btn {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  color: #374151;
-  padding: 8px 16px;
-  border: 2px solid #d1d5db;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-flex;
-  align-items: center;
-  font-family: "Inter", sans-serif;
-}
-
-.view-details-btn:hover {
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border-color: #9ca3af;
-}
-
-.view-details-btn:focus {
-  outline: 2px solid #8ba96d;
-  outline-offset: 2px;
 }
 
 /* Action Buttons */
@@ -289,10 +277,6 @@ body {
     min-width: 70px;
   }
 
-  .view-details-btn {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
 }
 
 /* High contrast mode support */
@@ -317,3 +301,28 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+.generate-icon-btn {
+  background: transparent;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: #374151;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 2px;
+}
+
+.generate-icon-btn:hover {
+  color: #6b8e23;
+  transform: scale(1.1);
+}
+
+.generate-icon-btn:focus {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
