@@ -30,33 +30,38 @@ const Dashboard = ({ onSignOut }) => {
     const userData = localStorage.getItem("user_data")
     if (userData) {
       const parsed = JSON.parse(userData)
-      setUserEmail(parsed.email || "")
+      if (parsed.email) {
+        setUserEmail(parsed.email)
+      } else {
+        console.warn("Email not found in user_data")
+      }
+    } else {
+      navigate("/") // Redirect to login if no user data
     }
   }, [])
 
- const splitReservationIntoDays = (reservation) => {
-  const start = moment(reservation.startDate)
-  const end = moment(reservation.endDate)
-  const days = []
+  const splitReservationIntoDays = (reservation) => {
+    const start = moment(reservation.startDate)
+    const end = moment(reservation.endDate)
+    const days = []
 
-  for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
-    days.push({
-      id: reservation.reservation_id + "-" + m.format("YYYYMMDD"), // match admin ID field
-      reservationId: reservation.reservation_id,
-      title: reservation.nameOfProgram,
-      whoReserved: reservation.whoReserved,
-      category: reservation.natureOfActivity,
-      status: reservation.status,
-      start: m.toDate(),
-      end: m.toDate(),
-      timeRange: `${reservation.time.start} - ${reservation.time.end}`, // if time is nested like that
-      raw: reservation,
-    })
+    for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
+      days.push({
+        id: reservation.reservation_id + "-" + m.format("YYYYMMDD"),
+        reservationId: reservation.reservation_id,
+        title: reservation.nameOfProgram,
+        whoReserved: reservation.whoReserved,
+        category: reservation.natureOfActivity,
+        status: reservation.status,
+        start: m.toDate(),
+        end: m.toDate(),
+        timeRange: `${reservation.time.start} - ${reservation.time.end}`,
+        raw: reservation,
+      })
+    }
+
+    return days
   }
-
-  return days
-}
-
 
   useEffect(() => {
     async function fetchReservations() {
@@ -64,6 +69,8 @@ const Dashboard = ({ onSignOut }) => {
         const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
+
+        console.log("Fetched reservations:", data.reservations)
 
         if (response.ok && data.reservations) {
           let userReservations = data.reservations.filter(
@@ -79,6 +86,7 @@ const Dashboard = ({ onSignOut }) => {
           }
 
           setEvents(loadedEvents)
+          console.log("User's Events:", loadedEvents)
         }
       } catch (error) {
         console.error("Failed to load reservations", error)
@@ -218,7 +226,7 @@ const Dashboard = ({ onSignOut }) => {
       {selectedEvent && (
         <div className="status-update-panel">
           <div className="status-panel-header">
-            <h3>Details for: {selectedEvent.raw.eventName}</h3>
+            <h3>Details for: {selectedEvent.raw.nameOfProgram}</h3>
             <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>×</button>
           </div>
 
