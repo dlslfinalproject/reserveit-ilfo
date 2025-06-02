@@ -4,6 +4,9 @@ import { useEffect, useState } from "react"
 import "./ReservationRecords.css"
 import { FaPrint } from "react-icons/fa"
 
+// Import logo image
+import logo from "./assets/ilfo-logo.png";
+
 function ReservationRecords() {
   const navigate = useNavigate()
   const [reservations, setReservations] = useState([])
@@ -38,6 +41,15 @@ function ReservationRecords() {
           <title>Reservation Summary Report</title>
           <style>
             body { font-family: 'Inter', Arial, sans-serif; padding: 20px; }
+            .report-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .report-header img {
+                max-width: 150px; /* Adjust logo size as needed */
+                height: auto;
+                margin-bottom: 10px;
+            }
             h1 { text-align: center; color: #374151; }
             table { width: 100%; border-collapse: collapse; margin-top: 20px; }
             th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
@@ -45,7 +57,10 @@ function ReservationRecords() {
           </style>
         </head>
         <body>
-          <h1>Reservation Summary Report</h1>
+        <div class="report-header">
+            <img src="${logo}" alt="Company Logo" />
+            <h1>Reservation Summary Report</h1>
+          </div>
           <p>Generated on: ${date}</p>
           <table>
             <thead>
@@ -102,13 +117,25 @@ function ReservationRecords() {
           <title>Reservation Report - ${reservation.nameOfProgram}</title>
           <style>
             body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1f2937; }
+            .report-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .report-header img {
+                max-width: 150px; /* Adjust logo size as needed */
+                height: auto;
+                margin-bottom: 10px;
+            }
             h1 { text-align: center; color: #374151; }
             p { margin: 8px 0; }
             .label { font-weight: bold; }
           </style>
         </head>
         <body>
+          <div class="report-header">
+            <img src="${logo}" alt="Company Logo" />
           <h1>Reservation Report</h1>
+          </div>
           <p><span class="label">Generated on:</span> ${date}</p>
           <hr />
           <p><span class="label">Reservation ID:</span> ${reservation.reservation_id}</p>
