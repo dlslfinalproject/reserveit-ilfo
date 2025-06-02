@@ -7,6 +7,8 @@ const Settings = () => {
   const navigate = useNavigate();
   const [venues, setVenues] = useState([]);
   const [newVenue, setNewVenue] = useState("");
+  const [minCapacity, setMinCapacity] = useState("");
+  const [maxCapacity, setMaxCapacity] = useState("");
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -14,7 +16,6 @@ const Settings = () => {
 
   const apiUrl = "http://localhost/reserveit-ilfo/backend/api/venues.php";
 
-  // Debug-friendly fetch wrapper
   const fetchWithDebug = async (url, options = {}) => {
     try {
       const res = await fetch(url, options);
@@ -45,7 +46,10 @@ const Settings = () => {
   }, []);
 
   const handleAddVenue = () => {
-    if (newVenue.trim() === "") return;
+    if (newVenue.trim() === "" || minCapacity === "" || maxCapacity === "") {
+      alert("Please fill out all fields.");
+      return;
+    }
 
     fetchWithDebug(apiUrl, {
       method: "POST",
@@ -53,14 +57,16 @@ const Settings = () => {
       credentials: "include",
       body: JSON.stringify({
         venue_name: newVenue,
-        min_capacity: 1,
-        max_capacity: 10,
+        min_capacity: parseInt(minCapacity),
+        max_capacity: parseInt(maxCapacity),
         description: "",
       }),
     }).then((data) => {
       if (data.status === "success") {
         setVenues([...venues, data.data]);
         setNewVenue("");
+        setMinCapacity("");
+        setMaxCapacity("");
         setShowAddPopup(false);
       } else {
         alert("Failed to add venue: " + data.message);
@@ -172,8 +178,32 @@ const Settings = () => {
               className="popup-input"
               autoFocus
             />
+            <input
+              type="number"
+              value={minCapacity}
+              onChange={(e) => setMinCapacity(e.target.value)}
+              placeholder="Minimum capacity"
+              className="popup-input"
+              min={1}
+            />
+            <input
+              type="number"
+              value={maxCapacity}
+              onChange={(e) => setMaxCapacity(e.target.value)}
+              placeholder="Maximum capacity"
+              className="popup-input"
+              min={1}
+            />
             <div className="popup-buttons">
-              <button className="cancel-button" onClick={() => setShowAddPopup(false)}>
+              <button
+                className="cancel-button"
+                onClick={() => {
+                  setShowAddPopup(false);
+                  setNewVenue("");
+                  setMinCapacity("");
+                  setMaxCapacity("");
+                }}
+              >
                 Cancel
               </button>
               <button className="confirm-add-button" onClick={handleAddVenue}>
