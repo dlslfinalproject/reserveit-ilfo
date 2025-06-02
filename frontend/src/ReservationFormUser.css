@@ -15,6 +15,26 @@ body {
   min-height: 100vh;
 }
 
+.reservation-form-container .form-buttons .cancel-button {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  padding: 12px 24px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+.reservation-form-container .form-buttons .cancel-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
 /* Reservation Form Container */
 .reservation-form-container {
   max-width: 1200px; 
