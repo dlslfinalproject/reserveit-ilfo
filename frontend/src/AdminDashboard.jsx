@@ -14,10 +14,9 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All")
-  const [activeStatusTab, setActiveStatusTab] = useState("details");
+  const [activeStatusTab, setActiveStatusTab] = useState("details")
   const navigate = useNavigate()
 
-  // Split multi-day reservations into daily events
   const splitReservationIntoDays = (reservation) => {
     const start = moment(reservation.startDate)
     const end = moment(reservation.endDate)
@@ -82,7 +81,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
 
   const goToPreviousMonth = () => setCurrentDate(moment(currentDate).subtract(1, "month").toDate())
   const goToNextMonth = () => setCurrentDate(moment(currentDate).add(1, "month").toDate())
-
   const handleEventClick = (event) => setSelectedEvent(event)
 
   const updateStatus = async (id, newStatus) => {
@@ -116,7 +114,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
     ? events
     : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
 
-  // ✅ Google Calendar-like Event Display
   const EventComponent = ({ event }) => {
     const statusColor = {
       Approved: "#d1dfbb",
@@ -165,7 +162,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/admin/reservation-records")}>
             <FaListAlt /> Reservation Records
           </button>
-          <button className="dashboard-button">
+          <button className="dashboard-button" onClick={() => window.open("https://mail.google.com", "_blank")}>
             <FaEnvelope /> Gmail
           </button>
           <div className="profile-dropdown">
@@ -251,7 +248,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
               </span>
             </div>
 
-            {/* TABS */}
             <div className="tab-container">
               <div
                 className={`tab ${activeStatusTab === "details" ? "active" : ""}`}
@@ -267,7 +263,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
               </div>
             </div>
 
-            {/* TAB CONTENT */}
             <div className="modal-body">
               {activeStatusTab === "details" ? (
                 <>
@@ -304,7 +299,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
               )}
             </div>
 
-            {/* ACTION BUTTONS */}
             <div className="status-actions">
               <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
                 <FaTimes /> Reject

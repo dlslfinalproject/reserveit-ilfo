@@ -7,6 +7,8 @@ const Settings = () => {
   const navigate = useNavigate();
   const [venues, setVenues] = useState([]);
   const [newVenue, setNewVenue] = useState("");
+  const [minCapacity, setMinCapacity] = useState("");
+  const [maxCapacity, setMaxCapacity] = useState("");
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -14,7 +16,6 @@ const Settings = () => {
 
   const apiUrl = "http://localhost/reserveit-ilfo/backend/api/venues.php";
 
-  // Debug-friendly fetch wrapper
   const fetchWithDebug = async (url, options = {}) => {
     try {
       const res = await fetch(url, options);
@@ -45,27 +46,46 @@ const Settings = () => {
   }, []);
 
   const handleAddVenue = () => {
-    if (newVenue.trim() === "") return;
+  if (newVenue.trim() === "" || minCapacity === "" || maxCapacity === "") {
+    alert("Please fill out all fields.");
+    return;
+  }
 
-    fetchWithDebug(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        venue_name: newVenue,
-        min_capacity: 1,
-        max_capacity: 10,
-      }),
-    }).then((data) => {
-      if (data.status === "success") {
-        setVenues([...venues, data.data]);
-        setNewVenue("");
-        setShowAddPopup(false);
-      } else {
-        alert("Failed to add venue: " + data.message);
-      }
-    });
-  };
+  const min = parseInt(minCapacity);
+  const max = parseInt(maxCapacity);
+
+  if (isNaN(min) || isNaN(max) || min < 1 || max < 1) {
+    alert("Capacity values must be valid positive numbers.");
+    return;
+  }
+
+  if (max < min) {
+    alert("Maximum capacity must be greater than or equal to minimum capacity.");
+    return;
+  }
+
+  fetchWithDebug(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      venue_name: newVenue,
+      min_capacity: min,
+      max_capacity: max,
+      description: "",
+    }),
+  }).then((data) => {
+    if (data.status === "success") {
+      setVenues([...venues, data.data]);
+      setNewVenue("");
+      setMinCapacity("");
+      setMaxCapacity("");
+      setShowAddPopup(false);
+    } else {
+      alert("Failed to add venue: " + data.message);
+    }
+  });
+};
 
   const handleSaveChanges = async () => {
     try {
@@ -79,6 +99,7 @@ const Settings = () => {
             venue_name: venue.venue_name,
             min_capacity: venue.min_capacity,
             max_capacity: venue.max_capacity,
+            description: venue.description || "",
           }),
         });
       }
@@ -170,8 +191,32 @@ const Settings = () => {
               className="popup-input"
               autoFocus
             />
+            <input
+              type="number"
+              value={minCapacity}
+              onChange={(e) => setMinCapacity(e.target.value)}
+              placeholder="Minimum capacity"
+              className="popup-input"
+              min={1}
+            />
+            <input
+              type="number"
+              value={maxCapacity}
+              onChange={(e) => setMaxCapacity(e.target.value)}
+              placeholder="Maximum capacity"
+              className="popup-input"
+              min={1}
+            />
             <div className="popup-buttons">
-              <button className="cancel-button" onClick={() => setShowAddPopup(false)}>
+              <button
+                className="cancel-button"
+                onClick={() => {
+                  setShowAddPopup(false);
+                  setNewVenue("");
+                  setMinCapacity("");
+                  setMaxCapacity("");
+                }}
+              >
                 Cancel
               </button>
               <button className="confirm-add-button" onClick={handleAddVenue}>
