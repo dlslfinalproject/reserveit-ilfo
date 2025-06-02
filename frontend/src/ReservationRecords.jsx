@@ -97,7 +97,7 @@ function ReservationRecords() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Requester</th>
+              <th>Requestor</th>
               <th>Program Name</th>
               <th>Activity</th>
               <th>Venue</th>
@@ -182,7 +182,7 @@ function ReservationRecords() {
           <div class="date">Generated on: ${date}</div>
         </div>
         <div class="section"><span>Reservation ID:</span> ${r.reservation_id}</div>
-        <div class="section"><span>Requester:</span> ${r.whoReserved}</div>
+        <div class="section"><span>Requestor:</span> ${r.whoReserved}</div>
         <div class="section"><span>Event Name:</span> ${r.nameOfProgram}</div>
         <div class="section"><span>Participants:</span> ${r.numberOfParticipants}</div>
         <div class="section"><span>Nature of Activity:</span> ${r.natureOfActivity}</div>
@@ -227,7 +227,7 @@ function ReservationRecords() {
             <table className="records-table">
               <thead>
                 <tr>
-                  <th>Requester</th>
+                  <th>Requestor</th>
                   <th>Date</th>
                   <th>Time</th>
                   <th>Status</th>
