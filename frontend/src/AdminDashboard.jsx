@@ -124,8 +124,8 @@ const AdminDashboard = ({ session, onSignOut }) => {
   // ✅ Google Calendar-like Event Display
   const EventComponent = ({ event }) => {
     const statusColor = {
-      Approved: "#C9E1B8",
-      Pending: "#FFB527",
+      Approved: "#d1dfbb",
+      Pending: "#d2995e",
       Rejected: "#E78A8A",
     }
 
