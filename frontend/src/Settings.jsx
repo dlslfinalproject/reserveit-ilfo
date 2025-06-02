@@ -47,23 +47,22 @@ const Settings = () => {
 
   const handleAddVenue = () => {
     const min = parseInt(minCapacity);
-const max = parseInt(maxCapacity);
+    const max = parseInt(maxCapacity);
 
-      if (newVenue.trim() === "" || isNaN(min) || isNaN(max)) {
-        alert("Please fill out all fields correctly.");
-        return;
-      }
+    if (newVenue.trim() === "" || isNaN(min) || isNaN(max)) {
+      alert("Please fill out all fields correctly.");
+      return;
+    }
 
-      if (min < 1) {
-        alert("Minimum capacity must be at least 1.");
-        return;
-      }
+    if (min < 1) {
+      alert("Minimum capacity must be at least 1.");
+      return;
+    }
 
-      if (max < min) {
-        alert("Maximum capacity must be equal to or greater than minimum capacity.");
-        return;
-      }
-
+    if (max < min) {
+      alert("Maximum capacity must be equal to or greater than minimum capacity.");
+      return;
+    }
 
     fetchWithDebug(apiUrl, {
       method: "POST",
@@ -87,46 +86,45 @@ const max = parseInt(maxCapacity);
     });
   };
 
- const handleSaveChanges = async () => {
-  try {
-    for (const venue of venues) {
-      const min = parseInt(venue.min_capacity);
-      const max = parseInt(venue.max_capacity);
+  const handleSaveChanges = async () => {
+    try {
+      for (const venue of venues) {
+        const min = parseInt(venue.min_capacity);
+        const max = parseInt(venue.max_capacity);
 
-      if (venue.venue_name.trim() === "" || isNaN(min) || isNaN(max)) {
-        alert(`Please ensure all fields are filled for venue ID ${venue.venue_id}`);
-        return;
+        if (venue.venue_name.trim() === "" || isNaN(min) || isNaN(max)) {
+          alert(`Please ensure all fields are filled for venue ID ${venue.venue_id}`);
+          return;
+        }
+
+        if (min < 1) {
+          alert(`Minimum capacity must be at least 1 for venue ID ${venue.venue_id}`);
+          return;
+        }
+
+        if (max < min) {
+          alert(`Maximum capacity must be equal to or greater than minimum for venue ID ${venue.venue_id}`);
+          return;
+        }
+
+        await fetchWithDebug(apiUrl, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            venue_id: venue.venue_id,
+            venue_name: venue.venue_name,
+            min_capacity: min,
+            max_capacity: max,
+          }),
+        });
       }
-
-      if (min < 1) {
-        alert(`Minimum capacity must be at least 1 for venue ID ${venue.venue_id}`);
-        return;
-      }
-
-      if (max < min) {
-        alert(`Maximum capacity must be equal to or greater than minimum for venue ID ${venue.venue_id}`);
-        return;
-      }
-
-      await fetchWithDebug(apiUrl, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          venue_id: venue.venue_id,
-          venue_name: venue.venue_name,
-          min_capacity: min,
-          max_capacity: max,
-        }),
-      });
+      setShowSavePopup(false);
+      alert("Changes saved!");
+    } catch (err) {
+      alert("Error saving changes.");
     }
-    setShowSavePopup(false);
-    alert("Changes saved!");
-  } catch (err) {
-    alert("Error saving changes.");
-  }
-};
-
+  };
 
   const handleDeleteVenueConfirmed = () => {
     if (!venueToDelete) return;
@@ -151,10 +149,10 @@ const max = parseInt(maxCapacity);
     <div className="settings-container">
       <div className="settings-card">
         <div className="settings-header">
-          <h2 className="settings-title">VENUE</h2>
+          <h2 className="settings-title">VENUE MANAGEMENT</h2>
         </div>
 
-        <h3 className="edit-venues-title">Edit Venue</h3>
+        <h3 className="edit-venues-title">Edit Venues</h3>
 
         <div className="venue-list">
           {venues.map((venue, index) => (
@@ -168,31 +166,39 @@ const max = parseInt(maxCapacity);
                   updatedVenues[index].venue_name = e.target.value;
                   setVenues(updatedVenues);
                 }}
+                placeholder="Enter venue name"
               />
-              <input
-                type="number"
-                className="venue-capacity-input"
-                value={venue.min_capacity}
-                onChange={(e) => {
-                  const updatedVenues = [...venues];
-                  updatedVenues[index].min_capacity = e.target.value;
-                  setVenues(updatedVenues);
-                }}
-                placeholder="Min"
-                min={1}
-              />
-              <input
-                type="number"
-                className="venue-capacity-input"
-                value={venue.max_capacity}
-                onChange={(e) => {
-                  const updatedVenues = [...venues];
-                  updatedVenues[index].max_capacity = e.target.value;
-                  setVenues(updatedVenues);
-                }}
-                placeholder="Max"
-                min={1}
-              />
+              
+              <div className="capacity-group">
+                <input
+                  type="number"
+                  className="venue-capacity-input"
+                  value={venue.min_capacity}
+                  onChange={(e) => {
+                    const updatedVenues = [...venues];
+                    updatedVenues[index].min_capacity = e.target.value;
+                    setVenues(updatedVenues);
+                  }}
+                  placeholder="Min"
+                  min={1}
+                  title="Minimum Capacity"
+                />
+                <span style={{ color: '#9ca3af', fontSize: '0.875rem', fontWeight: '500' }}>to</span>
+                <input
+                  type="number"
+                  className="venue-capacity-input"
+                  value={venue.max_capacity}
+                  onChange={(e) => {
+                    const updatedVenues = [...venues];
+                    updatedVenues[index].max_capacity = e.target.value;
+                    setVenues(updatedVenues);
+                  }}
+                  placeholder="Max"
+                  min={1}
+                  title="Maximum Capacity"
+                />
+              </div>
+
               <button
                 className="delete-venue-button"
                 onClick={() => {
@@ -205,6 +211,17 @@ const max = parseInt(maxCapacity);
               </button>
             </div>
           ))}
+          
+          {venues.length === 0 && (
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '40px', 
+              color: '#9ca3af',
+              fontSize: '1rem'
+            }}>
+              No venues found. Add your first venue below.
+            </div>
+          )}
         </div>
 
         <div className="button-group">
@@ -273,13 +290,16 @@ const max = parseInt(maxCapacity);
       {showSavePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Do you want to save these changes?</h3>
+            <h3>Save Changes</h3>
+            <p style={{ color: '#6b7280', marginBottom: '24px' }}>
+              Do you want to save all venue changes?
+            </p>
             <div className="popup-buttons">
               <button className="cancel-button" onClick={() => setShowSavePopup(false)}>
-                No
+                Cancel
               </button>
               <button className="confirm-add-button" onClick={handleSaveChanges}>
-                Yes
+                Save
               </button>
             </div>
           </div>
@@ -290,7 +310,10 @@ const max = parseInt(maxCapacity);
       {showDeletePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Are you sure you want to delete this venue?</h3>
+            <h3>Delete Venue</h3>
+            <p style={{ color: '#6b7280', marginBottom: '24px' }}>
+              Are you sure you want to delete "{venueToDelete?.venue_name}"? This action cannot be undone.
+            </p>
             <div className="popup-buttons">
               <button
                 className="cancel-button"
@@ -299,10 +322,10 @@ const max = parseInt(maxCapacity);
                   setVenueToDelete(null);
                 }}
               >
-                No
+                Cancel
               </button>
               <button className="confirm-add-button" onClick={handleDeleteVenueConfirmed}>
-                Yes
+                Delete
               </button>
             </div>
           </div>
