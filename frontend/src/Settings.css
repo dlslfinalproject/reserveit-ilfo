@@ -132,13 +132,13 @@
 }
 
 .save-button {
-  background: linear-gradient(135deg, #45612f 0%, #3a5227 100%);
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
   color: white;
   box-shadow: 0 4px 6px -1px rgba(69, 97, 47, 0.3);
 }
 
 .save-button:hover {
-  background: linear-gradient(135deg, #3a5227 0%, #2f4420 100%);
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
   transform: translateY(-1px);
   box-shadow: 0 8px 12px -2px rgba(69, 97, 47, 0.4);
 }
