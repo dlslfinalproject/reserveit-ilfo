@@ -1,39 +1,101 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Settings.css";
-import trashLogo from "../src/assets/trash-icon.png"; // ✅ Make sure this path is correct
+import trashLogo from "../src/assets/trash-icon.png";
 
 const Settings = () => {
   const navigate = useNavigate();
-  const [venues, setVenues] = useState(["Cabana 1", "Cabana 2", "Cabana 3", "Cabana 4", "Mess Hall"]);
+  const [venues, setVenues] = useState([]);
   const [newVenue, setNewVenue] = useState("");
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [venueToDeleteIndex, setVenueToDeleteIndex] = useState(null);
+  const [venueToDelete, setVenueToDelete] = useState(null);
 
+  // Fetch venues on component mount
+  useEffect(() => {
+    fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setVenues(data.data);
+        } else {
+          console.error("Failed to fetch venues");
+        }
+      })
+      .catch((err) => console.error("Error fetching venues:", err));
+  }, []);
+
+  // Handle adding a new venue
   const handleAddVenue = () => {
-    if (newVenue.trim() !== "") {
-      setVenues([...venues, newVenue]);
-      setNewVenue("");
-      setShowAddPopup(false);
-    }
+    if (newVenue.trim() === "") return;
+
+    fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        venue_name: newVenue,
+        min_capacity: 1,
+        max_capacity: 10,
+        description: "",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setVenues([...venues, data.data]);
+          setNewVenue("");
+          setShowAddPopup(false);
+        } else {
+          alert("Failed to add venue: " + data.message);
+        }
+      });
   };
 
-  const handleSaveChanges = () => {
+  // Handle saving all changes (PUT all updated venues)
+  const handleSaveChanges = async () => {
+    for (const venue of venues) {
+      await fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          venue_id: venue.venue_id,
+          venue_name: venue.venue_name,
+          min_capacity: venue.min_capacity,
+          max_capacity: venue.max_capacity,
+          description: venue.description || "",
+        }),
+      });
+    }
+
     setShowSavePopup(false);
     alert("Changes saved!");
   };
 
+  // Handle confirmed deletion of a venue
   const handleDeleteVenueConfirmed = () => {
-    if (venueToDeleteIndex !== null) {
-      const updatedVenues = venues.filter((_, index) => index !== venueToDeleteIndex);
-      setVenues(updatedVenues);
-      setVenueToDeleteIndex(null);
-    }
-    setShowDeletePopup(false);
+    if (!venueToDelete) return;
+
+    fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ venue_id: venueToDelete.venue_id }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setVenues(venues.filter((v) => v.venue_id !== venueToDelete.venue_id));
+        } else {
+          alert("Failed to delete venue: " + data.message);
+        }
+        setShowDeletePopup(false);
+        setVenueToDelete(null);
+      });
   };
 
   return (
@@ -47,21 +109,21 @@ const Settings = () => {
 
         <div className="venue-list">
           {venues.map((venue, index) => (
-            <div key={index} className="venue-item">
+            <div key={venue.venue_id || index} className="venue-item">
               <input
                 type="text"
                 className="venue-input"
-                value={venue}
+                value={venue.venue_name}
                 onChange={(e) => {
                   const updatedVenues = [...venues];
-                  updatedVenues[index] = e.target.value;
+                  updatedVenues[index].venue_name = e.target.value;
                   setVenues(updatedVenues);
                 }}
               />
               <button
                 className="delete-venue-button"
                 onClick={() => {
-                  setVenueToDeleteIndex(index);
+                  setVenueToDelete(venue);
                   setShowDeletePopup(true);
                 }}
                 title="Delete Venue"
@@ -137,7 +199,7 @@ const Settings = () => {
                 className="cancel-button"
                 onClick={() => {
                   setShowDeletePopup(false);
-                  setVenueToDeleteIndex(null);
+                  setVenueToDelete(null);
                 }}
               >
                 No
