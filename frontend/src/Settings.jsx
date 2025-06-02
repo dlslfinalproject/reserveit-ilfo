@@ -46,10 +46,24 @@ const Settings = () => {
   }, []);
 
   const handleAddVenue = () => {
-    if (newVenue.trim() === "" || minCapacity === "" || maxCapacity === "") {
-      alert("Please fill out all fields.");
-      return;
-    }
+    const min = parseInt(minCapacity);
+const max = parseInt(maxCapacity);
+
+      if (newVenue.trim() === "" || isNaN(min) || isNaN(max)) {
+        alert("Please fill out all fields correctly.");
+        return;
+      }
+
+      if (min < 1) {
+        alert("Minimum capacity must be at least 1.");
+        return;
+      }
+
+      if (max < min) {
+        alert("Maximum capacity must be equal to or greater than minimum capacity.");
+        return;
+      }
+
 
     fetchWithDebug(apiUrl, {
       method: "POST",
@@ -59,7 +73,6 @@ const Settings = () => {
         venue_name: newVenue,
         min_capacity: parseInt(minCapacity),
         max_capacity: parseInt(maxCapacity),
-        description: "",
       }),
     }).then((data) => {
       if (data.status === "success") {
@@ -74,28 +87,46 @@ const Settings = () => {
     });
   };
 
-  const handleSaveChanges = async () => {
-    try {
-      for (const venue of venues) {
-        await fetchWithDebug(apiUrl, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            venue_id: venue.venue_id,
-            venue_name: venue.venue_name,
-            min_capacity: venue.min_capacity,
-            max_capacity: venue.max_capacity,
-            description: venue.description || "",
-          }),
-        });
+ const handleSaveChanges = async () => {
+  try {
+    for (const venue of venues) {
+      const min = parseInt(venue.min_capacity);
+      const max = parseInt(venue.max_capacity);
+
+      if (venue.venue_name.trim() === "" || isNaN(min) || isNaN(max)) {
+        alert(`Please ensure all fields are filled for venue ID ${venue.venue_id}`);
+        return;
       }
-      setShowSavePopup(false);
-      alert("Changes saved!");
-    } catch (err) {
-      alert("Error saving changes.");
+
+      if (min < 1) {
+        alert(`Minimum capacity must be at least 1 for venue ID ${venue.venue_id}`);
+        return;
+      }
+
+      if (max < min) {
+        alert(`Maximum capacity must be equal to or greater than minimum for venue ID ${venue.venue_id}`);
+        return;
+      }
+
+      await fetchWithDebug(apiUrl, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          venue_id: venue.venue_id,
+          venue_name: venue.venue_name,
+          min_capacity: min,
+          max_capacity: max,
+        }),
+      });
     }
-  };
+    setShowSavePopup(false);
+    alert("Changes saved!");
+  } catch (err) {
+    alert("Error saving changes.");
+  }
+};
+
 
   const handleDeleteVenueConfirmed = () => {
     if (!venueToDelete) return;
@@ -137,6 +168,30 @@ const Settings = () => {
                   updatedVenues[index].venue_name = e.target.value;
                   setVenues(updatedVenues);
                 }}
+              />
+              <input
+                type="number"
+                className="venue-capacity-input"
+                value={venue.min_capacity}
+                onChange={(e) => {
+                  const updatedVenues = [...venues];
+                  updatedVenues[index].min_capacity = e.target.value;
+                  setVenues(updatedVenues);
+                }}
+                placeholder="Min"
+                min={1}
+              />
+              <input
+                type="number"
+                className="venue-capacity-input"
+                value={venue.max_capacity}
+                onChange={(e) => {
+                  const updatedVenues = [...venues];
+                  updatedVenues[index].max_capacity = e.target.value;
+                  setVenues(updatedVenues);
+                }}
+                placeholder="Max"
+                min={1}
               />
               <button
                 className="delete-venue-button"

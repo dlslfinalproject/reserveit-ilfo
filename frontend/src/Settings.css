@@ -340,3 +340,7 @@
   height: 20px;
   object-fit: contain;
 }
+
+.input-error {
+  border: 2px solid red;
+}
