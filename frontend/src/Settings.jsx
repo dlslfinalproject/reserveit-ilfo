@@ -55,7 +55,6 @@ const Settings = () => {
         venue_name: newVenue,
         min_capacity: 1,
         max_capacity: 10,
-        description: "",
       }),
     }).then((data) => {
       if (data.status === "success") {
@@ -80,7 +79,6 @@ const Settings = () => {
             venue_name: venue.venue_name,
             min_capacity: venue.min_capacity,
             max_capacity: venue.max_capacity,
-            description: venue.description || "",
           }),
         });
       }

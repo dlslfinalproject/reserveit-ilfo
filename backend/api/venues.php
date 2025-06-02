@@ -70,12 +70,11 @@ switch ($method) {
             jsonResponse('error', 'Capacity values must be numeric');
         }
 
-        $stmt = $conn->prepare("INSERT INTO tblvenues (venue_name, min_capacity, max_capacity, description, created_by) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO tblvenues (venue_name, min_capacity, max_capacity, created_by) VALUES (?, ?, ?, ?)");
         $stmt->execute([
             trim($input['venue_name']),
             (int)$input['min_capacity'],
             (int)$input['max_capacity'],
-            $input['description'] ?? null,
             $_SESSION['user_id'] ?? null
         ]);
 
@@ -100,12 +99,11 @@ switch ($method) {
             jsonResponse('error', 'Capacity values must be numeric');
         }
 
-        $stmt = $conn->prepare("UPDATE tblvenues SET venue_name = ?, min_capacity = ?, max_capacity = ?, description = ?, updated_by = ? WHERE venue_id = ?");
+        $stmt = $conn->prepare("UPDATE tblvenues SET venue_name = ?, min_capacity = ?, max_capacity = ?, updated_by = ? WHERE venue_id = ?");
         $stmt->execute([
             trim($input['venue_name']),
             (int)$input['min_capacity'],
             (int)$input['max_capacity'],
-            $input['description'] ?? null,
             $_SESSION['user_id'] ?? null,
             $input['venue_id']
         ]);
