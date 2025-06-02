@@ -217,9 +217,14 @@
 }
 
 .cancel-button {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  color: #374151;
-  border: 2px solid #d1d5db;
+  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
+  color: #ffffff;
+}
+
+.cancel-button:hover {
+  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(227, 93, 91, 0.3);
 }
 
 .confirm-add-button {
