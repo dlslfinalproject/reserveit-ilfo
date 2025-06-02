@@ -103,6 +103,7 @@ function UserRecords() {
             <table className="records-table">
               <thead>
                 <tr>
+                  <th>Venue</th>
                   <th>Date</th>
                   <th>Time</th>
                   <th>Status</th>
@@ -112,14 +113,12 @@ function UserRecords() {
               <tbody>
                 {reservations.map((r) => (
                   <tr key={r.reservation_id}>
+                    <td>{r.venue}</td> {/* Added Venue data */}
                     <td>{r.startDate} to {r.endDate}</td>
                     <td>{r.time.start} - {r.time.end}</td>
                     <td><span className={getStatusClass(r.status)}>{r.status}</span></td>
                     <td>
                       <button className="view-btn" onClick={() => setSelectedReservation(r)}>View</button>
-                      <button className="generate-icon-btn" title="Print" onClick={() => printReservation(r)}>
-                        <FaPrint />
-                      </button>
                     </td>
                   </tr>
                 ))}
