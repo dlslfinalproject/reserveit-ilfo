@@ -10,7 +10,6 @@ import ReservationFormUser from './ReservationFormUser';
 import ReservationRecords from './ReservationRecords';
 import UserRecords from './UserRecords';
 import Settings from './Settings';
-import ILFO from './ILFO';
 import RequestForm from './RequestForm';
 
 const PHP_API_BASE_URL = 'http://localhost/reserveit-ilfo/backend/api';
