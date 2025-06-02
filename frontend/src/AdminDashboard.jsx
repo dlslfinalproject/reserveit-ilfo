@@ -250,11 +250,11 @@ const AdminDashboard = ({ session, onSignOut }) => {
               </span>
             </div>
             <div className="status-actions">
-              <button className="status-btn approve-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}>
-                <FaCheck /> Approve
-              </button>
               <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
                 <FaTimes /> Reject
+              </button>
+              <button className="status-btn approve-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}>
+                <FaCheck /> Approve
               </button>
             </div>
           </div>
