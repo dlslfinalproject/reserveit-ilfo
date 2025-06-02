@@ -187,7 +187,7 @@ function App() {
         <Route
           path="/general-user/reservations"
           element={
-            session?.user?.role === 'admin' ? (
+            session?.user?.role === 'general_user' ? (
               <UserRecords />
             ) : (
               <Navigate to="/" />
