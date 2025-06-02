@@ -49,7 +49,7 @@ const ReservationForm = () => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-const validate = () => {
+  const validate = () => {
   const newErrors = {}
 
   if (!formData.whoReserved.trim()) newErrors.whoReserved = "Required"
@@ -138,12 +138,12 @@ const validate = () => {
         formData.natureOfActivity === "Others: Please specify"
           ? null
           : activityMap[formData.natureOfActivity] || null,
-      custom_activity_name:
+      custom_activity:
         formData.natureOfActivity === "Others: Please specify"
           ? formData.customActivity.trim()
           : null,
       reservation_startdate: formData.startDate.toLocaleDateString("en-CA"),
-reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
+      reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
       number_of_participants: Number(formData.numberOfParticipants),
       start_time: formData.startTime.toTimeString().split(" ")[0],
       end_time: formData.endTime.toTimeString().split(" ")[0],
@@ -319,6 +319,17 @@ reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
             value={formData.notes}
             onChange={(e) => handleChange("notes", e.target.value)}
             placeholder="Additional notes or requests"
+          />
+        </div>
+
+        {/* POA Link */}
+        <div className="form-group">
+          <label>Program of Activity(POA) Link:</label>
+          <input
+            type="text"
+            value={formData.poaLink}
+            onChange={(e) => handleChange("poaLink", e.target.value)}
+            placeholder="Link to sent POA email"
           />
         </div>
 
