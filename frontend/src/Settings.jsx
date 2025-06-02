@@ -27,9 +27,9 @@ const Settings = () => {
     <div className="settings-container">
       <div className="settings-card">
       <div className="settings-header">
-      <h2 className="settings-title">SETTINGS</h2>
+      <h2 className="settings-title">VENUE</h2>
       </div>
-        <h3 className="edit-facilities-title">EDIT FACILITIES</h3>
+        <h3 className="edit-facilities-title">EDIT VENUE</h3>
 
         <div className="facility-list">
           {facilities.map((facility, index) => (
@@ -58,7 +58,7 @@ const Settings = () => {
       {showAddPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Facility</h3>
+            <h3><Venue></Venue></h3>
             <input
               type="text"
               value={newFacility}
