@@ -2,14 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import LoginPage from './LoginPage';
 import AdminDashboard from './AdminDashboard';
 import Dashboard from './Dashboard';
 import ReservationForm from './ReservationForm';
 import ReservationFormUser from './ReservationFormUser';
-import LoginPage from './LoginPage';
-import UserRecords from './UserRecords';
-import ReservationDetails from './ReservationDetails';
 import ReservationRecords from './ReservationRecords';
+import UserRecords from './UserRecords';
 import Settings from './Settings';
 import ILFO from './ILFO';
 import RequestForm from './RequestForm';
@@ -105,7 +104,7 @@ function App() {
               session.user.role === 'admin' ? (
                 <Navigate to="/admin" />
               ) : (
-                <Navigate to="/dashboard" />
+                <Navigate to="/general-user" />
               )
             ) : (
               <LoginPage
@@ -142,9 +141,9 @@ function App() {
         />
 
         <Route
-          path="/dashboard"
+          path="/general-user"
           element={
-            session && session.user.role !== 'admin' ? (
+            session && session.user.role == 'general_user' ? (
               <Dashboard onSignOut={signOut} />
             ) : (
               <Navigate to="/" />
@@ -164,7 +163,7 @@ function App() {
         />
 
         <Route
-          path="/general_user/new-reservation"
+          path="/general-user/new-reservation"
           element={
             session?.user?.role === 'general_user' ? (
               <ReservationFormUser />
@@ -174,16 +173,8 @@ function App() {
           }
         />
 
-
-        <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
-        <Route path="/reservation/:id" element={session ? <ReservationDetails /> : <Navigate to="/" />} />
-        <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
-        <Route path="/ilfo-designs" element={session ? <ILFO /> : <Navigate to="/" />} />
-        <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
-
-        {/* ✅ NEW: Route to view all reservation records (admin-only) */}
         <Route
-          path="/reservation-records"
+          path="/admin/reservation-records"
           element={
             session?.user?.role === 'admin' ? (
               <ReservationRecords />
@@ -192,6 +183,24 @@ function App() {
             )
           }
         />
+
+        <Route
+          path="/general-user/reservations"
+          element={
+            session?.user?.role === 'general_user' ? (
+              <UserRecords />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        
+
+        
+        <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
+        <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
+        <Route path="/ilfo-designs" element={session ? <ILFO /> : <Navigate to="/" />} />
+        <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
 
         {/* Optional: Catch-all for unmatched routes */}
         <Route path="*" element={<Navigate to="/" />} />

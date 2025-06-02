@@ -28,9 +28,16 @@ const Settings = () => {
   return (
     <div className="settings-container">
       <div className="settings-card">
+<<<<<<< HEAD
         <div className="settings-header">
           <h2 className="settings-title">Settings</h2>
         </div>
+=======
+      <div className="settings-header">
+      <h2 className="settings-title">VENUE</h2>
+      </div>
+        <h3 className="edit-facilities-title">EDIT VENUE</h3>
+>>>>>>> 5294987a00c090ba1a7dc142750cfbdf744dc9d0
 
         <h3 className="edit-venues-title">Edit Venue</h3>
 
@@ -67,7 +74,11 @@ const Settings = () => {
       {showAddPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
+<<<<<<< HEAD
             <h3>Add New Venue</h3>
+=======
+            <h3><Venue></Venue></h3>
+>>>>>>> 5294987a00c090ba1a7dc142750cfbdf744dc9d0
             <input
               type="text"
               value={newVenue}

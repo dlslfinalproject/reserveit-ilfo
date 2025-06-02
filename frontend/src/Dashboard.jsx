@@ -4,14 +4,7 @@ import { useState, useEffect } from "react"
 import "./Dashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import {
-  FaPlus,
-  FaListAlt,
-  FaEnvelope,
-  FaUserCircle,
-  FaChevronLeft,
-  FaChevronRight,
-} from "react-icons/fa"
+import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 
@@ -66,23 +59,19 @@ const Dashboard = ({ onSignOut }) => {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php"
+        const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservation.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
 
         console.log("Fetched reservations:", data.reservations)
 
         if (response.ok && data.reservations) {
-          let userReservations = data.reservations.filter(
-            (r) => r.email?.toLowerCase() === userEmail.toLowerCase()
-          )
+          const userReservations = data.reservations.filter((r) => r.email?.toLowerCase() === userEmail.toLowerCase())
 
           let loadedEvents = userReservations.flatMap(splitReservationIntoDays)
 
           if (filterStatus !== "All") {
-            loadedEvents = loadedEvents.filter(
-              (ev) => ev.status.toLowerCase() === filterStatus.toLowerCase()
-            )
+            loadedEvents = loadedEvents.filter((ev) => ev.status.toLowerCase() === filterStatus.toLowerCase())
           }
 
           setEvents(loadedEvents)
@@ -154,11 +143,11 @@ const Dashboard = ({ onSignOut }) => {
         </div>
 
         <div className="dashboard-actions">
-          <button className="dashboard-button" onClick={() => navigate("/general_user/new-reservation")}>
+          <button className="dashboard-button" onClick={() => navigate("/general-user/new-reservation")}>
             <FaPlus /> Make a Reservation
           </button>
-          <button className="dashboard-button" onClick={() => navigate("/user-records")}>
-            <FaListAlt /> Records
+          <button className="dashboard-button" onClick={() => navigate("/general-user/reservations")}>
+            <FaListAlt /> My Reservations
           </button>
           <button className="dashboard-button">
             <FaEnvelope /> Gmail
@@ -227,21 +216,29 @@ const Dashboard = ({ onSignOut }) => {
         <div className="status-update-panel">
           <div className="status-panel-header">
             <h3>Details for: {selectedEvent.raw.nameOfProgram}</h3>
-            <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>×</button>
+            <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>
+              ×
+            </button>
           </div>
 
           <div className="status-panel-content">
             <div className="current-status">
               <span className="status-label">Status:</span>
-              <span className={`status-badge ${selectedEvent.status.toLowerCase()}`}>
-                {selectedEvent.status}
-              </span>
+              <span className={`status-badge ${selectedEvent.status.toLowerCase()}`}>{selectedEvent.status}</span>
             </div>
             <div className="reservation-info">
-              <p><strong>Reserved By:</strong> {selectedEvent.whoReserved}</p>
-              <p><strong>Category:</strong> {selectedEvent.category}</p>
-              <p><strong>Date:</strong> {moment(selectedEvent.start).format("MMMM D, YYYY")}</p>
-              <p><strong>Time:</strong> {selectedEvent.timeRange}</p>
+              <p>
+                <strong>Reserved By:</strong> {selectedEvent.whoReserved}
+              </p>
+              <p>
+                <strong>Category:</strong> {selectedEvent.category}
+              </p>
+              <p>
+                <strong>Date:</strong> {moment(selectedEvent.start).format("MMMM D, YYYY")}
+              </p>
+              <p>
+                <strong>Time:</strong> {selectedEvent.timeRange}
+              </p>
             </div>
           </div>
         </div>

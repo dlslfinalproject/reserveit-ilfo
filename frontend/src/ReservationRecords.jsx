@@ -214,17 +214,22 @@ function ReservationRecords() {
         )}
 
         {selectedReservation && (
-          <div className="modal-overlay" onClick={() => setSelectedReservation(null)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="reservation-modal-overlay" onClick={() => setSelectedReservation(null)}>
+            <div className="reservation-modal" onClick={(e) => e.stopPropagation()}>
               <h2>Reservation Details</h2>
-              <p><strong>Requester:</strong> {selectedReservation.whoReserved}</p>
-              <p><strong>Program Name:</strong> {selectedReservation.nameOfProgram}</p>
-              <p><strong>Nature of Activity:</strong> {selectedReservation.natureOfActivity}</p>
-              <p><strong>Date:</strong> {selectedReservation.startDate} to {selectedReservation.endDate}</p>
-              <p><strong>Time:</strong> {selectedReservation.time.start} - {selectedReservation.time.end}</p>
-              <p><strong>Participants:</strong> {selectedReservation.numberOfParticipants}</p>
-              <p><strong>Facility:</strong> {selectedReservation.venue}</p>
-              <button onClick={() => setSelectedReservation(null)}>Close</button>
+              <div className="modal-content">
+                <p><strong>Reservation ID:</strong> {selectedReservation.reservation_id}</p>
+                <p><strong>Requester:</strong> {selectedReservation.whoReserved}</p>
+                <p><strong>Program Name:</strong> {selectedReservation.nameOfProgram}</p>
+                <p><strong>Nature of Activity:</strong> {selectedReservation.natureOfActivity}</p>
+                <p><strong>Venue:</strong> {selectedReservation.venue}</p>
+                <p><strong>Participants:</strong> {selectedReservation.numberOfParticipants}</p>
+                <p><strong>Start Date:</strong> {selectedReservation.startDate}</p>
+                <p><strong>End Date:</strong> {selectedReservation.endDate}</p>
+                <p><strong>Time:</strong> {selectedReservation.time.start} - {selectedReservation.time.end}</p>
+                <p><strong>Status:</strong> <span className={getStatusClass(selectedReservation.status)}>{selectedReservation.status}</span></p>
+              </div>
+              <button className="close-modal-btn" onClick={() => setSelectedReservation(null)}>Close</button>
             </div>
           </div>
         )}

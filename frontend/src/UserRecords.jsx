@@ -1,11 +1,33 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useReservation } from './ReservationContext';
 import fileIcon from './assets/file-icon.png';
-import './UserRecords.css'; // CSS file import
+import './UserRecords.css';
 
 const UserRecords = () => {
   const navigate = useNavigate();
-  const { reservations } = useReservation();
+  const [reservations, setReservations] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost/reserveit-ilfo/backend/api/get_all_reservation.php')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch reservations');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data.reservations)) {
+          setReservations(data.reservations);
+        } else {
+          throw new Error('Invalid data format');
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching reservations:', err);
+        setError('Could not load reservations.');
+      });
+  }, []);
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -57,12 +79,12 @@ const UserRecords = () => {
         <body>
           <h2>Institutional Lasallian Formation Office</h2>
           <table>
-            <tr><td>Requestor:</td><td>${reservation.organization || 'N/A'}</td></tr>
-            <tr><td>Event Name:</td><td>${reservation.eventName || 'N/A'}</td></tr>
+            <tr><td>Requestor:</td><td>${reservation.whoReserved || 'N/A'}</td></tr>
+            <tr><td>Event Name:</td><td>${reservation.nameOfProgram || 'N/A'}</td></tr>
             <tr><td>Nature of Activity:</td><td>${reservation.natureOfActivity || 'N/A'}</td></tr>
-            <tr><td>Date:</td><td>${reservation.date || 'N/A'}</td></tr>
-            <tr><td>Time:</td><td>${reservation.time || 'N/A'}</td></tr>
-            <tr><td>Number of Participants:</td><td>${reservation.participants || 'N/A'}</td></tr>
+            <tr><td>Date:</td><td>${reservation.startDate || 'N/A'} to ${reservation.endDate || 'N/A'}</td></tr>
+            <tr><td>Time:</td><td>${reservation.time?.start || '—'} - ${reservation.time?.end || '—'}</td></tr>
+            <tr><td>Number of Participants:</td><td>${reservation.numberOfParticipants || 'N/A'}</td></tr>
             <tr><td>Facility:</td><td>${reservation.venue || 'N/A'}</td></tr>
           </table>
           <script>window.print();</script>
@@ -130,17 +152,17 @@ const UserRecords = () => {
               <tr>
                 <th>Venue</th>
                 <th>Date</th>
-                <th>Activity</th>
+                <th>Time</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               ${reservations.map(r => `
                 <tr>
-                  <td>${r.organization || '—'}</td>
-                  <td>${r.date}</td>
-                  <td>${r.time || '—'}</td>
-                  <td><span class="status-pill ${r.status}">${r.status}</span></td>
+                  <td>${r.venue || '—'}</td>
+                  <td>${r.startDate || '—'} to ${r.endDate || '—'}</td>
+                  <td>${r.time?.start || '—'} - ${r.time?.end || '—'}</td>
+                  <td><span class="status-pill ${getStatusStyle(r.status)}">${r.status}</span></td>
                 </tr>
               `).join('')}
             </tbody>
@@ -157,57 +179,59 @@ const UserRecords = () => {
     <div className="records-wrapper">
       <h2 className="records-title">My Reservation</h2>
 
-    <div className="table-container">
-      <table className="records-table">
-        <thead>
-          <tr>
-            <th>Venue</th>
-            <th>Date</th>
-            <th>Activity</th>
-            <th>Status</th>
-            <th>View</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {reservations.map((reservation) => (
-            <tr key={reservation.id}>
-              <td>{reservation.venue || '—'}</td>
-              <td>{reservation.date}</td>
-              <td>{reservation.natureOfActivity || '—'}</td>
-              <td>
-                <span className={`status-pill ${getStatusStyle(reservation.status)}`}>
-                  {reservation.status}
-                </span>
-              </td>
-              <td>
-                <button
-                  className="view-details-btn"
-                  onClick={() =>
-                    navigate(`/reservation/${reservation.id}`, {
-                      state: { reservation },
-                    })
-                  }
-                >
-                  View Details
-                </button>
-              </td>
-              <td>
-                <img
-                  src={fileIcon}
-                  alt="Generate Report"
-                  title="Generate Report"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    generateReport(reservation);
-                  }}
-                  className="file-icon"
-                />
-              </td>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <div className="table-container">
+        <table className="records-table">
+          <thead>
+            <tr>
+              <th>Venue</th>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Status</th>
+              <th>View</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {reservations.map((reservation) => (
+              <tr key={reservation.reservation_id}>
+                <td>{reservation.venue || '—'}</td>
+                <td>{reservation.startDate || '—'} to {reservation.endDate || '—'}</td>
+                <td>{reservation.natureOfActivity || '—'}</td>
+                <td>
+                  <span className={`status-pill ${getStatusStyle(reservation.status)}`}>
+                    {reservation.status}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    className="view-details-btn"
+                    onClick={() =>
+                      navigate(`/reservation/${reservation.reservation_id}`, {
+                        state: { reservation },
+                      })
+                    }
+                  >
+                    View Details
+                  </button>
+                </td>
+                <td>
+                  <img
+                    src={fileIcon}
+                    alt="Generate Report"
+                    title="Generate Report"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      generateReport(reservation);
+                    }}
+                    className="file-icon"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div className="bottom-buttons">
