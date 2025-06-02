@@ -12,27 +12,42 @@ const Settings = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [venueToDelete, setVenueToDelete] = useState(null);
 
-  // Fetch venues on component mount
+  const apiUrl = "http://localhost/reserveit-ilfo/backend/api/venues.php";
+
+  // Debug-friendly fetch wrapper
+  const fetchWithDebug = async (url, options = {}) => {
+    try {
+      const res = await fetch(url, options);
+      const text = await res.text();
+      try {
+        const json = JSON.parse(text);
+        return json;
+      } catch (err) {
+        console.error("❌ Failed to parse JSON. Raw response:", text);
+        throw new Error("Invalid JSON response");
+      }
+    } catch (err) {
+      console.error("❌ Fetch error:", err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
-    fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
-      credentials: "include",
-    })
-      .then((res) => res.json())
+    fetchWithDebug(apiUrl, { credentials: "include" })
       .then((data) => {
         if (data.status === "success") {
           setVenues(data.data);
         } else {
-          console.error("Failed to fetch venues");
+          console.error("❌ Failed to fetch venues:", data.message);
         }
       })
-      .catch((err) => console.error("Error fetching venues:", err));
+      .catch((err) => console.error("❌ Error loading venues:", err));
   }, []);
 
-  // Handle adding a new venue
   const handleAddVenue = () => {
     if (newVenue.trim() === "") return;
 
-    fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
+    fetchWithDebug(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -42,60 +57,57 @@ const Settings = () => {
         max_capacity: 10,
         description: "",
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "success") {
-          setVenues([...venues, data.data]);
-          setNewVenue("");
-          setShowAddPopup(false);
-        } else {
-          alert("Failed to add venue: " + data.message);
-        }
-      });
+    }).then((data) => {
+      if (data.status === "success") {
+        setVenues([...venues, data.data]);
+        setNewVenue("");
+        setShowAddPopup(false);
+      } else {
+        alert("Failed to add venue: " + data.message);
+      }
+    });
   };
 
-  // Handle saving all changes (PUT all updated venues)
   const handleSaveChanges = async () => {
-    for (const venue of venues) {
-      await fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          venue_id: venue.venue_id,
-          venue_name: venue.venue_name,
-          min_capacity: venue.min_capacity,
-          max_capacity: venue.max_capacity,
-          description: venue.description || "",
-        }),
-      });
+    try {
+      for (const venue of venues) {
+        await fetchWithDebug(apiUrl, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            venue_id: venue.venue_id,
+            venue_name: venue.venue_name,
+            min_capacity: venue.min_capacity,
+            max_capacity: venue.max_capacity,
+            description: venue.description || "",
+          }),
+        });
+      }
+      setShowSavePopup(false);
+      alert("Changes saved!");
+    } catch (err) {
+      alert("Error saving changes.");
     }
-
-    setShowSavePopup(false);
-    alert("Changes saved!");
   };
 
-  // Handle confirmed deletion of a venue
   const handleDeleteVenueConfirmed = () => {
     if (!venueToDelete) return;
 
-    fetch("http://localhost/reserveit-ilfo/backend/api/venues.php", {
+    fetchWithDebug(apiUrl, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ venue_id: venueToDelete.venue_id }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "success") {
-          setVenues(venues.filter((v) => v.venue_id !== venueToDelete.venue_id));
-        } else {
-          alert("Failed to delete venue: " + data.message);
-        }
-        setShowDeletePopup(false);
-        setVenueToDelete(null);
-      });
+    }).then((data) => {
+      if (data.status === "success") {
+        setVenues(venues.filter((v) => v.venue_id !== venueToDelete.venue_id));
+      } else {
+        alert("Failed to delete venue: " + data.message);
+      }
+      setShowDeletePopup(false);
+      setVenueToDelete(null);
+    });
   };
 
   return (

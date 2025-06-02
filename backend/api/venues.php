@@ -1,20 +1,24 @@
 <?php
+// Error handling (safe for production)
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../logs/php_errors.log');  // Make sure this exists
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
+// Response headers
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Content-Type: application/json');
 
-require_once '../config/db.php';
-
-// Handle CORS preflight
+// Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+require_once '../config/db.php';
 
 session_start();
 
@@ -28,9 +32,13 @@ function jsonResponse($status, $message, $data = null) {
     exit;
 }
 
+// TEMP: debug session
+error_log("SESSION: " . print_r($_SESSION, true));
+
+
 // Admin-only check
 function requireAdmin() {
-    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
         http_response_code(403);
         jsonResponse('error', 'Unauthorized access');
     }
