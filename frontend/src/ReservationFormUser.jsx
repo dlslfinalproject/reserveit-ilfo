@@ -251,7 +251,7 @@ const ReservationForm = () => {
             value={formData.numberOfParticipants}
             onChange={(e) => handleChange("numberOfParticipants", e.target.value)}
             className={errors.numberOfParticipants ? "error" : ""}
-            placeholder="Enter Number of Participants (1-200)"
+            placeholder="Enter Number of Participants (15-200)"
           />
           {errors.numberOfParticipants && <small className="error-message">{errors.numberOfParticipants}</small>}
         </div>
