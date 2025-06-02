@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
 header('Content-Type: application/json');
 
 // Handle preflight
@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+
 require_once '../config/db.php';
 
 session_start();
@@ -35,7 +36,6 @@ function jsonResponse($status, $message, $data = null) {
 // TEMP: debug session
 error_log("SESSION: " . print_r($_SESSION, true));
 
-
 // Admin-only check
 function requireAdmin() {
     if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
@@ -50,7 +50,6 @@ $input = json_decode(file_get_contents("php://input"), true);
 
 switch ($method) {
     case 'GET':
-        // Fetch active venues
         $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE is_active = 1 ORDER BY venue_name ASC");
         $stmt->execute();
         $venues = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -130,6 +129,27 @@ switch ($method) {
         ]);
 
         jsonResponse('success', 'Venue deleted successfully');
+        break;
+
+    case 'PATCH':
+        requireAdmin();
+
+        if (!isset($input['venue_id'])) {
+            http_response_code(400);
+            jsonResponse('error', 'Venue ID required for reactivation');
+        }
+
+        $stmt = $conn->prepare("UPDATE tblvenues SET is_active = 1, updated_by = ? WHERE venue_id = ?");
+        $stmt->execute([
+            $_SESSION['user_id'] ?? null,
+            $input['venue_id']
+        ]);
+
+        $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE venue_id = ?");
+        $stmt->execute([$input['venue_id']]);
+        $reactivatedVenue = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        jsonResponse('success', 'Venue reactivated successfully', $reactivatedVenue);
         break;
 
     default:
