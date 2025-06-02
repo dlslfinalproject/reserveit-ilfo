@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2025 at 04:16 AM
+-- Generation Time: Jun 02, 2025 at 03:26 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -134,7 +134,13 @@ INSERT INTO `tblreservations` (`reservation_id`, `user_id`, `event_name`, `activ
 (7, 1, 'akdjalk', 6, NULL, '2025-06-17', '2025-06-18', 1, '16:20:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:29:37', '2025-06-02 00:29:37', NULL),
 (8, 1, 'Prayer', NULL, NULL, '2025-06-24', '2025-06-24', 11, '18:20:00', '19:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:44:32', '2025-06-02 00:44:32', 'Prayer'),
 (9, 1, 'Taize Prayer', 3, NULL, '2025-06-20', '2025-06-26', 1, '07:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:51:54', '2025-06-02 00:51:54', NULL),
-(10, 1, 'Prayer', NULL, NULL, '2025-06-12', '2025-06-13', 12, '07:00:00', '12:00:00', 1, NULL, NULL, '', '', '2025-06-02 01:47:31', '2025-06-02 01:47:31', 'Prayer');
+(10, 1, 'Prayer', NULL, NULL, '2025-06-12', '2025-06-13', 12, '07:00:00', '12:00:00', 1, NULL, NULL, '', '', '2025-06-02 01:47:31', '2025-06-02 01:47:31', 'Prayer'),
+(11, 1, 'Taize', NULL, NULL, '2025-06-19', '2025-06-19', 15, '07:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 02:18:29', '2025-06-02 02:18:29', 'Taize'),
+(12, 9, 'Taize Prayer', 11, NULL, '2025-06-05', '2025-06-05', 15, '15:15:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 02:53:01', '2025-06-02 02:53:01', NULL),
+(13, 9, 'Birthday', 10, NULL, '2025-06-12', '2025-06-12', 15, '15:15:00', '16:15:00', 1, NULL, NULL, '', '', '2025-06-02 03:23:31', '2025-06-02 03:23:31', NULL),
+(14, 9, 'Taize Prayer', 4, NULL, '2025-06-05', '2025-06-05', 15, '14:00:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 07:52:08', '2025-06-02 07:52:08', NULL),
+(15, 9, 'Taize Prayer', 2, NULL, '2025-06-05', '2025-06-05', 15, '13:00:00', '14:00:00', 1, NULL, NULL, '', '', '2025-06-02 08:05:39', '2025-06-02 08:05:39', NULL),
+(16, 9, 'JPCS NITE', 5, NULL, '2025-06-19', '2025-06-19', 16, '07:00:00', '11:00:00', 1, NULL, NULL, '', '', '2025-06-02 08:38:08', '2025-06-02 08:38:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -159,11 +165,11 @@ CREATE TABLE `tblusers` (
 --
 
 INSERT INTO `tblusers` (`id`, `google_id`, `email`, `first_name`, `last_name`, `profile_picture`, `role`, `created_at`, `updated_at`) VALUES
-(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-02 01:42:03'),
+(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-02 12:45:56'),
 (2, NULL, 'mary.ann.lumban@dlsl.edu.ph\r\n', 'Mary Ann', 'Lumban', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (3, '', 'ilfo.office@dlsl.edu.ph', 'ILFO', 'Office', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (4, NULL, 'ilfo.manager@dlsl.edu.ph\r\n', 'ILFO', ' Manager', NULL, 'admin', '2025-05-28 23:27:06', '2025-05-28 23:27:06'),
-(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-02 01:57:50');
+(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-02 11:59:37');
 
 -- --------------------------------------------------------
 
@@ -176,7 +182,6 @@ CREATE TABLE `tblvenues` (
   `venue_name` varchar(255) NOT NULL,
   `min_capacity` int(11) NOT NULL,
   `max_capacity` int(11) NOT NULL,
-  `description` text DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -188,12 +193,13 @@ CREATE TABLE `tblvenues` (
 -- Dumping data for table `tblvenues`
 --
 
-INSERT INTO `tblvenues` (`venue_id`, `venue_name`, `min_capacity`, `max_capacity`, `description`, `is_active`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
-(1, 'Mess Hall', 50, 200, NULL, 1, '2025-05-29 19:40:49', '2025-05-29 19:40:49', NULL, NULL),
-(2, 'Cabana 1', 15, 45, NULL, 1, '2025-05-29 19:40:49', '2025-05-29 19:40:49', NULL, NULL),
-(3, 'Cabana 2', 15, 45, NULL, 1, '2025-05-29 19:40:49', '2025-05-29 19:40:49', NULL, NULL),
-(4, 'Cabana 3', 15, 45, NULL, 1, '2025-05-29 19:40:49', '2025-05-29 19:40:49', NULL, NULL),
-(5, 'Cabana 4', 15, 45, NULL, 1, '2025-05-29 19:40:49', '2025-05-29 19:40:49', NULL, NULL);
+INSERT INTO `tblvenues` (`venue_id`, `venue_name`, `min_capacity`, `max_capacity`, `is_active`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+(1, 'Mess Hall', 50, 200, 0, '2025-05-29 19:40:49', '2025-06-02 12:28:24', NULL, 1),
+(2, 'Cabana 1', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:27:44', NULL, 1),
+(3, 'Cabana 2', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:27:51', NULL, 1),
+(4, 'Cabana 3', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:28:04', NULL, 1),
+(5, 'Cabana 4', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:28:22', NULL, 1),
+(25, 'Cabana 6', 1, 10, 0, '2025-06-02 13:20:04', '2025-06-02 13:22:09', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -274,7 +280,7 @@ ALTER TABLE `tblrejection_reasons`
 -- AUTO_INCREMENT for table `tblreservations`
 --
 ALTER TABLE `tblreservations`
-  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `tblusers`
@@ -286,7 +292,7 @@ ALTER TABLE `tblusers`
 -- AUTO_INCREMENT for table `tblvenues`
 --
 ALTER TABLE `tblvenues`
-  MODIFY `venue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `venue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables

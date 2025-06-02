@@ -1,7 +1,6 @@
 <?php
 // backend/api/auth.php
 
-// Turn off display errors to avoid HTML output to frontend (important for JSON API)
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
@@ -17,7 +16,6 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Content-Type: application/json');
 
-// Allow CORS preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -31,13 +29,10 @@ if (!$input || empty($input['id_token'])) {
 }
 
 $idToken = $input['id_token'];
-
 $client = new Client(['client_id' => '849806952511-hcdtjmtl769ihmjdeqcgdkr11tbp007o.apps.googleusercontent.com']);
 
 try {
-    // Wrap token verification in try/catch to avoid fatal errors
     $payload = $client->verifyIdToken($idToken);
-
     if (!$payload) {
         http_response_code(401);
         echo json_encode(['success' => false, 'message' => 'Invalid ID token']);
@@ -63,6 +58,7 @@ if (!str_ends_with($email, '@dlsl.edu.ph')) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized email domain']);
     exit();
 }
+
 // Admin override list
 $adminEmails = [
     'ilfo.office@dlsl.edu.ph',
@@ -71,7 +67,7 @@ $adminEmails = [
     'jane_allyson_paray@dlsl.edu.ph',
 ];
 
-// Assign role based on override
+// Assign role
 $assignedRole = in_array($email, $adminEmails) ? 'admin' : 'general_user';
 
 try {
@@ -98,9 +94,15 @@ try {
     $_SESSION['user_role'] = $userRole;
     $_SESSION['email'] = $email;
 
+    // ⏩ Set redirect URL based on role
+    $redirectUrl = ($userRole === 'admin')
+        ? 'http://localhost:5173/admin' // Replace with your actual admin route
+        : 'https://mail.google.com/mail/u/0/#inbox';
+
     echo json_encode([
         'success' => true,
         'message' => 'Authentication successful',
+        'redirect' => $redirectUrl,
         'user' => [
             'id' => $userId,
             'email' => $email,

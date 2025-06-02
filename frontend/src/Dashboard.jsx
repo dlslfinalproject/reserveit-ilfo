@@ -66,7 +66,6 @@ const Dashboard = ({ onSignOut }) => {
         console.log("Fetched user reservations:", data.reservations)
 
         if (response.ok && data.reservations) {
-          // No need to filter by email since backend returns only user's reservations
           let loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
 
           if (filterStatus !== "All") {
@@ -148,7 +147,10 @@ const Dashboard = ({ onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/general-user/reservations")}>
             <FaListAlt /> My Reservations
           </button>
-          <button className="dashboard-button">
+          <button
+            className="dashboard-button"
+            onClick={() => window.open("https://mail.google.com", "_blank")}
+          >
             <FaEnvelope /> Gmail
           </button>
           <div className="profile-dropdown">
