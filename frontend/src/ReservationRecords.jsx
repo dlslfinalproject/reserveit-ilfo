@@ -7,6 +7,7 @@ import { FaPrint } from "react-icons/fa"
 function ReservationRecords() {
   const navigate = useNavigate()
   const [reservations, setReservations] = useState([])
+  const [selectedReservation, setSelectedReservation] = useState(null)
 
   useEffect(() => {
     async function fetchReservations() {
@@ -63,24 +64,20 @@ function ReservationRecords() {
               </tr>
             </thead>
             <tbody>
-              ${reservations
-                .map(
-                  (r) => `
-                  <tr>
-                    <td>${r.reservation_id}</td>
-                    <td>${r.whoReserved}</td>
-                    <td>${r.nameOfProgram}</td>
-                    <td>${r.natureOfActivity}</td>
-                    <td>${r.venue}</td>
-                    <td>${r.numberOfParticipants}</td>
-                    <td>${r.startDate}</td>
-                    <td>${r.endDate}</td>
-                    <td>${r.time.start} - ${r.time.end}</td>
-                    <td>${r.status}</td>
-                  </tr>
-              `
-                )
-                .join("")}
+              ${reservations.map(r => `
+                <tr>
+                  <td>${r.reservation_id}</td>
+                  <td>${r.whoReserved}</td>
+                  <td>${r.nameOfProgram}</td>
+                  <td>${r.natureOfActivity}</td>
+                  <td>${r.venue}</td>
+                  <td>${r.numberOfParticipants}</td>
+                  <td>${r.startDate}</td>
+                  <td>${r.endDate}</td>
+                  <td>${r.time.start} - ${r.time.end}</td>
+                  <td>${r.status}</td>
+                </tr>
+              `).join("")}
             </tbody>
           </table>
         </body>
@@ -88,44 +85,6 @@ function ReservationRecords() {
     `
 
     printWindow.document.write(summaryTable)
-    printWindow.document.close()
-    printWindow.print()
-  }
-
-  const generateIndividualReport = (reservation) => {
-    const printWindow = window.open("", "_blank")
-    const date = new Date().toLocaleDateString()
-
-    const individualReport = `
-      <html>
-        <head>
-          <title>Reservation Report - ${reservation.nameOfProgram}</title>
-          <style>
-            body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1f2937; }
-            h1 { text-align: center; color: #374151; }
-            p { margin: 8px 0; }
-            .label { font-weight: bold; }
-          </style>
-        </head>
-        <body>
-          <h1>Reservation Report</h1>
-          <p><span class="label">Generated on:</span> ${date}</p>
-          <hr />
-          <p><span class="label">Reservation ID:</span> ${reservation.reservation_id}</p>
-          <p><span class="label">Requester:</span> ${reservation.whoReserved}</p>
-          <p><span class="label">Program Name:</span> ${reservation.nameOfProgram}</p>
-          <p><span class="label">Nature of Activity:</span> ${reservation.natureOfActivity}</p>
-          <p><span class="label">Venue:</span> ${reservation.venue}</p>
-          <p><span class="label">Participants:</span> ${reservation.numberOfParticipants}</p>
-          <p><span class="label">Start Date:</span> ${reservation.startDate}</p>
-          <p><span class="label">End Date:</span> ${reservation.endDate}</p>
-          <p><span class="label">Time:</span> ${reservation.time.start} - ${reservation.time.end}</p>
-          <p><span class="label">Status:</span> ${reservation.status}</p>
-        </body>
-      </html>
-    `
-
-    printWindow.document.write(individualReport)
     printWindow.document.close()
     printWindow.print()
   }
@@ -158,34 +117,64 @@ function ReservationRecords() {
               <thead>
                 <tr>
                   <th>Requester</th>
-                  <th>Program Name</th>
-                  <th>Nature of Activity</th>
-                  <th>Venue</th>
-                  <th>Participants</th>
                   <th>Date</th>
                   <th>Time</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {reservations.map((r) => (
                   <tr key={r.reservation_id}>
                     <td>{r.whoReserved}</td>
-                    <td>{r.nameOfProgram}</td>
-                    <td>{r.natureOfActivity}</td>
-                    <td>{r.venue}</td>
-                    <td>{r.numberOfParticipants}</td>
                     <td>{r.startDate} to {r.endDate}</td>
                     <td>{r.time.start} - {r.time.end}</td>
                     <td>
                       <span className={getStatusClass(r.status)}>{r.status}</span>
                     </td>
                     <td>
+                      <button className="view-btn" onClick={() => setSelectedReservation(r)}>
+                        View Details
+                      </button>
                       <button
                         className="generate-icon-btn"
                         title="Generate Report"
-                        onClick={() => generateIndividualReport(r)}
+                        onClick={() => {
+                          const printWindow = window.open("", "_blank")
+                          const date = new Date().toLocaleDateString()
+
+                          const individualReport = `
+                            <html>
+                              <head>
+                                <title>Reservation Report - ${r.nameOfProgram}</title>
+                                <style>
+                                  body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1f2937; }
+                                  h1 { text-align: center; color: #374151; }
+                                  p { margin: 8px 0; }
+                                  .label { font-weight: bold; }
+                                </style>
+                              </head>
+                              <body>
+                                <h1>Reservation Report</h1>
+                                <p><span class="label">Generated on:</span> ${date}</p>
+                                <hr />
+                                <p><span class="label">Reservation ID:</span> ${r.reservation_id}</p>
+                                <p><span class="label">Requester:</span> ${r.whoReserved}</p>
+                                <p><span class="label">Program Name:</span> ${r.nameOfProgram}</p>
+                                <p><span class="label">Nature of Activity:</span> ${r.natureOfActivity}</p>
+                                <p><span class="label">Venue:</span> ${r.venue}</p>
+                                <p><span class="label">Participants:</span> ${r.numberOfParticipants}</p>
+                                <p><span class="label">Start Date:</span> ${r.startDate}</p>
+                                <p><span class="label">End Date:</span> ${r.endDate}</p>
+                                <p><span class="label">Time:</span> ${r.time.start} - ${r.time.end}</p>
+                                <p><span class="label">Status:</span> ${r.status}</p>
+                              </body>
+                            </html>
+                          `
+                          printWindow.document.write(individualReport)
+                          printWindow.document.close()
+                          printWindow.print()
+                        }}
                       >
                         <FaPrint />
                       </button>
@@ -194,6 +183,22 @@ function ReservationRecords() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {selectedReservation && (
+          <div className="modal-overlay" onClick={() => setSelectedReservation(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h2>Reservation Details</h2>
+              <p><strong>Requester:</strong> {selectedReservation.whoReserved}</p>
+              <p><strong>Program Name:</strong> {selectedReservation.nameOfProgram}</p>
+              <p><strong>Nature of Activity:</strong> {selectedReservation.natureOfActivity}</p>
+              <p><strong>Date:</strong> {selectedReservation.startDate} to {selectedReservation.endDate}</p>
+              <p><strong>Time:</strong> {selectedReservation.time.start} - {selectedReservation.time.end}</p>
+              <p><strong>Participants:</strong> {selectedReservation.numberOfParticipants}</p>
+              <p><strong>Facility:</strong> {selectedReservation.venue}</p>
+              <button onClick={() => setSelectedReservation(null)}>Close</button>
+            </div>
           </div>
         )}
 
