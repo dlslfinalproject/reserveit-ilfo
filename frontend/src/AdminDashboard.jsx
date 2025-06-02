@@ -213,7 +213,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
               <option value="All">All Status</option>
               <option value="Approved">Approved</option>
               <option value="Pending">Pending</option>
-              <option value="Rejected">Rejected</option>
             </select>
           </div>
           <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>
