@@ -198,7 +198,6 @@ function App() {
         
         <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
         <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
-        <Route path="/ilfo-designs" element={session ? <ILFO /> : <Navigate to="/" />} />
         <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
 
         {/* Optional: Catch-all for unmatched routes */}
