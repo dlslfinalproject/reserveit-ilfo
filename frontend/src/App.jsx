@@ -5,6 +5,7 @@ import './App.css';
 import AdminDashboard from './AdminDashboard';
 import Dashboard from './Dashboard';
 import ReservationForm from './ReservationForm';
+import ReservationFormUser from './ReservationFormUser';
 import LoginPage from './LoginPage';
 import UserRecords from './UserRecords';
 import ReservationDetails from './ReservationDetails';
@@ -151,7 +152,29 @@ function App() {
           }
         />
 
-        <Route path="/new-reservation" element={session ? <ReservationForm /> : <Navigate to="/" />} />
+        <Route
+          path="/admin/new-reservation"
+          element={
+            session?.user?.role === 'admin' ? (
+              <ReservationForm />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
+        <Route
+          path="/general_user/new-reservation"
+          element={
+            session?.user?.role === 'general_user' ? (
+              <ReservationFormUser />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
+
         <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
         <Route path="/reservation/:id" element={session ? <ReservationDetails /> : <Navigate to="/" />} />
         <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />

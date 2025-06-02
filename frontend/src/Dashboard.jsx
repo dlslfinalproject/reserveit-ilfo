@@ -128,7 +128,7 @@ const Dashboard = ({ onSignOut }) => {
         </div>
 
         <div className="dashboard-actions">
-          <button className="dashboard-button" onClick={() => navigate("/new-reservation")}>
+          <button className="dashboard-button" onClick={() => navigate("/general_user/new-reservation")}>
             <FaPlus /> Make a Reservation
           </button>
           <button className="dashboard-button" onClick={() => navigate("/user-records")}>
