@@ -305,3 +305,38 @@
     justify-content: center;
   }
 }
+
+.venue-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.venue-input {
+  flex: 1;
+  margin-right: 8px;
+}
+
+.delete-venue-button {
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-venue-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: scale(1.1);
+}
+
+.trash-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
