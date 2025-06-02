@@ -442,9 +442,9 @@ body {
 .close-modal-btn {
   margin-top: 2rem;
   padding: 10px 24px;
-  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   border: none;
-  color: white;
+  color: #374151;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -453,8 +453,9 @@ body {
 }
 
 .close-modal-btn:hover {
-  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
   transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 /* View Button */
