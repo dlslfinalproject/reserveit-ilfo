@@ -1,52 +1,74 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import "./Settings.css"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Settings.css";
+import trashLogo from "../src/assets/trash-icon.png"; // ✅ Make sure this path is correct
 
 const Settings = () => {
-  const navigate = useNavigate()
-  const [venues, setVenues] = useState(["Cabana 1", "Cabana 2", "Cabana 3", "Cabana 4", "Mess Hall"])
-  const [newVenue, setNewVenue] = useState("")
-  const [showAddPopup, setShowAddPopup] = useState(false)
-  const [showSavePopup, setShowSavePopup] = useState(false)
+  const navigate = useNavigate();
+  const [venues, setVenues] = useState(["Cabana 1", "Cabana 2", "Cabana 3", "Cabana 4", "Mess Hall"]);
+  const [newVenue, setNewVenue] = useState("");
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showSavePopup, setShowSavePopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [venueToDeleteIndex, setVenueToDeleteIndex] = useState(null);
 
   const handleAddVenue = () => {
     if (newVenue.trim() !== "") {
-      setVenues([...venues, newVenue])
-      setNewVenue("")
-      setShowAddPopup(false)
+      setVenues([...venues, newVenue]);
+      setNewVenue("");
+      setShowAddPopup(false);
     }
-  }
+  };
 
   const handleSaveChanges = () => {
-    setShowSavePopup(false)
-    // Save logic (e.g., API call) can be added here
-    alert("Changes saved!")
-  }
+    setShowSavePopup(false);
+    alert("Changes saved!");
+  };
+
+  const handleDeleteVenueConfirmed = () => {
+    if (venueToDeleteIndex !== null) {
+      const updatedVenues = venues.filter((_, index) => index !== venueToDeleteIndex);
+      setVenues(updatedVenues);
+      setVenueToDeleteIndex(null);
+    }
+    setShowDeletePopup(false);
+  };
 
   return (
     <div className="settings-container">
       <div className="settings-card">
-      <div className="settings-header">
-      <h2 className="settings-title">VENUE</h2>
-      </div>
+        <div className="settings-header">
+          <h2 className="settings-title">VENUE</h2>
+        </div>
 
         <h3 className="edit-venues-title">Edit Venue</h3>
 
         <div className="venue-list">
           {venues.map((venue, index) => (
-            <input
-              key={index}
-              type="text"
-              className="venue-input"
-              value={venue}
-              onChange={(e) => {
-                const updatedVenues = [...venues]
-                updatedVenues[index] = e.target.value
-                setVenues(updatedVenues)
-              }}
-            />
+            <div key={index} className="venue-item">
+              <input
+                type="text"
+                className="venue-input"
+                value={venue}
+                onChange={(e) => {
+                  const updatedVenues = [...venues];
+                  updatedVenues[index] = e.target.value;
+                  setVenues(updatedVenues);
+                }}
+              />
+              <button
+                className="delete-venue-button"
+                onClick={() => {
+                  setVenueToDeleteIndex(index);
+                  setShowDeletePopup(true);
+                }}
+                title="Delete Venue"
+              >
+                <img src={trashLogo} alt="Delete" className="trash-icon" />
+              </button>
+            </div>
           ))}
         </div>
 
@@ -88,7 +110,7 @@ const Settings = () => {
         </div>
       )}
 
-      {/* Save Changes Confirmation */}
+      {/* Save Confirmation */}
       {showSavePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
@@ -104,8 +126,31 @@ const Settings = () => {
           </div>
         </div>
       )}
-    </div>
-  )
-}
 
-export default Settings
+      {/* Delete Confirmation */}
+      {showDeletePopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>Are you sure you want to delete this venue?</h3>
+            <div className="popup-buttons">
+              <button
+                className="cancel-button"
+                onClick={() => {
+                  setShowDeletePopup(false);
+                  setVenueToDeleteIndex(null);
+                }}
+              >
+                No
+              </button>
+              <button className="confirm-add-button" onClick={handleDeleteVenueConfirmed}>
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Settings;
