@@ -1,8 +1,12 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow all origins
-header("Access-Control-Allow-Methods: POST, OPTIONS"); // Allow specific methods
-header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+
+require_once '../config/db.php';
+
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -33,12 +37,8 @@ if (!in_array($status, $allowedStatuses)) {
     exit;
 }
 
-require_once '../config/db.php';
-
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
+    $pdo = getDbConnection(); // ✅ Use correct DB connection function
 
     $stmt = $pdo->prepare('SELECT status_id FROM tblapproval_status WHERE status_name = :status');
     $stmt->execute(['status' => $status]);
