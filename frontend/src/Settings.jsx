@@ -46,33 +46,46 @@ const Settings = () => {
   }, []);
 
   const handleAddVenue = () => {
-    if (newVenue.trim() === "" || minCapacity === "" || maxCapacity === "") {
-      alert("Please fill out all fields.");
-      return;
-    }
+  if (newVenue.trim() === "" || minCapacity === "" || maxCapacity === "") {
+    alert("Please fill out all fields.");
+    return;
+  }
 
-    fetchWithDebug(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        venue_name: newVenue,
-        min_capacity: parseInt(minCapacity),
-        max_capacity: parseInt(maxCapacity),
-        description: "",
-      }),
-    }).then((data) => {
-      if (data.status === "success") {
-        setVenues([...venues, data.data]);
-        setNewVenue("");
-        setMinCapacity("");
-        setMaxCapacity("");
-        setShowAddPopup(false);
-      } else {
-        alert("Failed to add venue: " + data.message);
-      }
-    });
-  };
+  const min = parseInt(minCapacity);
+  const max = parseInt(maxCapacity);
+
+  if (isNaN(min) || isNaN(max) || min < 1 || max < 1) {
+    alert("Capacity values must be valid positive numbers.");
+    return;
+  }
+
+  if (max < min) {
+    alert("Maximum capacity must be greater than or equal to minimum capacity.");
+    return;
+  }
+
+  fetchWithDebug(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      venue_name: newVenue,
+      min_capacity: min,
+      max_capacity: max,
+      description: "",
+    }),
+  }).then((data) => {
+    if (data.status === "success") {
+      setVenues([...venues, data.data]);
+      setNewVenue("");
+      setMinCapacity("");
+      setMaxCapacity("");
+      setShowAddPopup(false);
+    } else {
+      alert("Failed to add venue: " + data.message);
+    }
+  });
+};
 
   const handleSaveChanges = async () => {
     try {
