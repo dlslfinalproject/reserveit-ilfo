@@ -27,8 +27,11 @@ const ReservationFormUser = () => {
   const navigate = useNavigate()
 
   const storedUser = JSON.parse(localStorage.getItem("user_data"))
+  const userId = storedUser?.id;
+
 
   const [formData, setFormData] = useState({
+    user_id: userId,
     eventName: "",
     natureOfActivity: "",
     customActivity: "",
