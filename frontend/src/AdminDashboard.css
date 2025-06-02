@@ -733,3 +733,9 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.rbc-event {
+  background: rgba(139, 169, 109, 0) !important;
+  background: rgba(139, 169, 109, 0) !important; /* Optional: to change the border color too */
+  color: white !important; /* Optional: to change the text color if needed */
+}
