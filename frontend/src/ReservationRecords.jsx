@@ -96,6 +96,48 @@ function ReservationRecords() {
     printWindow.print();
   };
 
+  const generateIndividualReport = (r) => {
+    const printWindow = window.open("", "_blank");
+    const date = new Date().toLocaleDateString();
+
+    const reportHTML = `
+      <html>
+        <head>
+          <title>Reservation Report - ${r.reservation_id}</title>
+          <style>
+            body { font-family: 'Inter', Arial, sans-serif; padding: 20px; }
+            .report-header { text-align: center; margin-bottom: 20px; }
+            .report-header img { max-width: 150px; height: auto; margin-bottom: 10px; }
+            h1 { text-align: center; color: #374151; }
+            .section { margin-bottom: 16px; }
+            .section span { font-weight: bold; display: block; margin-bottom: 4px; }
+          </style>
+        </head>
+        <body>
+          <div class="report-header">
+            <img src="${logo}" alt="ILFO Logo" />
+            <h1>Reservation Report</h1>
+            <p>Generated on: ${date}</p>
+          </div>
+
+          <div class="section"><span>Reservation ID:</span> ${r.reservation_id}</div>
+          <div class="section"><span>Requester:</span> ${r.whoReserved}</div>
+          <div class="section"><span>Event Name:</span> ${r.nameOfProgram}</div>
+          <div class="section"><span>Participants:</span> ${r.numberOfParticipants}</div>
+          <div class="section"><span>Nature of Activity:</span> ${r.natureOfActivity}</div>
+          <div class="section"><span>Date:</span> ${r.startDate} to ${r.endDate}</div>
+          <div class="section"><span>Time:</span> ${r.time.start} - ${r.time.end}</div>
+          <div class="section"><span>Venue:</span> ${r.venue}</div>
+          <div class="section"><span>Status:</span> ${r.status}</div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(reportHTML);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
   const getStatusClass = (status) => {
     switch (status.toLowerCase()) {
       case "approved": return "status-pill approved";
@@ -142,7 +184,7 @@ function ReservationRecords() {
                     </td>
                     <td>
                       <button className="view-btn" onClick={() => handleViewDetails(r)}>View Details</button>
-                      <button className="generate-icon-btn" title="Generate Report">
+                      <button className="generate-icon-btn" title="Generate Individual Report" onClick={() => generateIndividualReport(r)}>
                         <FaPrint />
                       </button>
                     </td>
@@ -182,7 +224,7 @@ function ReservationRecords() {
               <div className="modal-body">
                 {activeTab === "details" ? (
                 <>
-                <div className="modal-content-item">
+                  <div className="modal-content-item">
                     <span>Event Name</span>
                     <p>{selectedReservation.nameOfProgram}</p>
                   </div>
@@ -196,27 +238,23 @@ function ReservationRecords() {
                   </div>
                   <div className="modal-content-item">
                     <span>Date</span>
-                    <p>
-                      {selectedReservation.startDate} to {selectedReservation.endDate}
-                    </p>
+                    <p>{selectedReservation.startDate} to {selectedReservation.endDate}</p>
                   </div>
                   <div className="modal-content-item">
                     <span>Venue</span>
                     <p>{selectedReservation.venue}</p>
                   </div>
-                   <div className="modal-content-item">
+                  <div className="modal-content-item">
                     <span>Time</span>
-                    <p>
-                      {selectedReservation.time.start} - {selectedReservation.time.end}
-                    </p>
+                    <p>{selectedReservation.time.start} - {selectedReservation.time.end}</p>
                   </div>
                 </>
-              ) : (
-                <div className="modal-content-item">
-                  <span>POA (Program of Activities)</span>
-                  <p>{selectedReservation.poa || "No POA uploaded."}</p>
-                </div>
-              )}
+                ) : (
+                  <div className="modal-content-item">
+                    <span>POA (Program of Activities)</span>
+                    <p>{selectedReservation.poa || "No POA uploaded."}</p>
+                  </div>
+                )}
               </div>
 
               <button className="close-modal-btn" onClick={() => setSelectedReservation(null)}>Close</button>
