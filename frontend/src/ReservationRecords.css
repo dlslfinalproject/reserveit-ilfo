@@ -459,10 +459,10 @@ body {
 
 /* View Button */
 .view-btn {
-  background-color: #f8f8f8;
-  color: #000;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
   padding: 3px 16px;
-  border: 0.5px solid #000;
+  border: 0.5px solid #d1d5db;
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 500;
@@ -471,7 +471,9 @@ body {
 }
 
 .view-btn:hover {
-  background-color: #d1dfbb;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 /* Animations */
