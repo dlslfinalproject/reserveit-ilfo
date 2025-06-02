@@ -1,4 +1,4 @@
-.ilfo-container {
+.assign-container {
   max-width: 1000px;
   margin: 100px auto;
   padding: 24px;
@@ -10,20 +10,20 @@
   border: 0.5px solid #000;
 }
 
-.ilfo-header {
+.assign-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
-.ilfo-subtext {
+.assign-subtext {
   font-size: 15px; 
   color: #555;
   margin-top: 4px;
 }
 
-.ilfo-status {
+.assign-status {
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 15px;
@@ -31,11 +31,11 @@
   color: white;
 }
 
-.ilfo-status.approved {
+.assign-status.approved {
   background-color: #4B6B42;
 }
 
-.ilfo-tabs {
+.assign-tabs {
   display: flex;
   margin-bottom: 24px;
   border: 0.2px solid black;
@@ -43,7 +43,7 @@
   overflow: hidden;
 }
 
-.ilfo-tab {
+.assign-tab {
   flex: 1;
   padding: 12px;
   background: #f5f5f5;
@@ -55,19 +55,19 @@
   transition: background 0.3s ease;
 }
 
-.ilfo-tab.active {
+.assign-tab.active {
   background-color: #d4e6ce;
   font-weight: 600;
 }
 
-.ilfo-details {
+.assign-details {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px 32px;
   color: #333;
 }
 
-.ilfo-label {
+.assign-label {
   font-weight: 600;
   font-size: 15px; 
   margin-bottom: 4px;
@@ -75,17 +75,17 @@
   color: #222;
 }
 
-.ilfo-value {
+.assign-value {
   font-size: 16px; 
   color: #222;
   margin-top: 4px;
 }
 
-.ilfo-row {
+.assign-row {
   display: contents;
 }
 
-.ilfo-link {
+.assign-link {
   display: inline;
   padding: 0;
   background: none;
@@ -97,7 +97,7 @@
   margin-top: 6px;
 }
 
-.ilfo-note-box {
+.assign-note-box {
   padding: 0;
   background: none;
   border: none;
@@ -107,17 +107,17 @@
   line-height: 1.6;
 }
 
-.ilfo-container {
+.assign-container {
   position: relative; /* Add this so the absolute child can position relative to this */
 }
 
-.ilfo-back-button {
+.assign-back-button {
   position: absolute;
   bottom: 24px;
   right: 24px;
 }
 
-.ilfo-back-button .btn {
+.assign-back-button .btn {
   background-color: #e5e5e5; /* light gray background */
   color: #000; /* black text */
   font-weight: 700; /* bold text */
@@ -130,7 +130,7 @@
   transition: background 0.2s ease;
 }
 
-.ilfo-back-button .btn:hover {
+.assign-back-button .btn:hover {
   background-color: #d4d4d4; /* slightly darker on hover */
 }
 
