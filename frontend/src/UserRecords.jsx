@@ -1,249 +1,161 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import fileIcon from './assets/file-icon.png';
-import './UserRecords.css';
+// UserRecords.jsx
+"use client"
+import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { FaPrint } from "react-icons/fa"
+import "./ReservationRecords.css"
+import logo from './assets/ilfo-logo.png'
 
-const UserRecords = () => {
-  const navigate = useNavigate();
-  const [reservations, setReservations] = useState([]);
-  const [error, setError] = useState(null);
+function UserRecords() {
+  const navigate = useNavigate()
+  const [reservations, setReservations] = useState([])
+  const [selectedReservation, setSelectedReservation] = useState(null)
 
   useEffect(() => {
-    fetch('http://localhost/reserveit-ilfo/backend/api/get_all_reservation.php')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch reservations');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data.reservations)) {
-          setReservations(data.reservations);
+    async function fetchUserReservations() {
+      try {
+        const response = await fetch("http://localhost/reserveit-ilfo/backend/api/get_user_reservations.php", {
+          method: "GET",
+          credentials: "include",
+        })
+        const data = await response.json()
+        if (response.ok && data.reservations) {
+          setReservations(data.reservations)
         } else {
-          throw new Error('Invalid data format');
+          console.error("Failed to fetch reservations:", data.message)
         }
-      })
-      .catch((err) => {
-        console.error('Error fetching reservations:', err);
-        setError('Could not load reservations.');
-      });
-  }, []);
-
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case 'Approved':
-        return 'Approved';
-      case 'Rejected':
-        return 'Rejected';
-      case 'Pending':
-        return 'Pending';
-      default:
-        return '';
+      } catch (error) {
+        console.error("Error fetching user reservations:", error)
+      }
     }
-  };
 
-  const generateReport = (reservation) => {
-    const reportWindow = window.open('', '_blank');
-    const reportContent = `
+    fetchUserReservations()
+  }, [])
+
+  const getStatusClass = (status) => {
+    switch (status.toLowerCase()) {
+      case "approved": return "status-pill approved"
+      case "rejected": return "status-pill rejected"
+      case "pending": return "status-pill pending"
+      default: return "status-pill pending"
+    }
+  }
+
+  const printReservation = (r) => {
+    const printWindow = window.open("", "_blank")
+    const date = new Date().toLocaleDateString()
+
+    const individualReport = `
       <html>
         <head>
-          <title>Reservation Report</title>
+          <title>Reservation Report - ${r.nameOfProgram}</title>
           <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 40px;
-              background-color: #ffffff;
-            }
-            h2 {
-              font-size: 22px;
+            body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1f2937; }
+            .report-header {
+              text-align: center;
               margin-bottom: 20px;
-              color: #111827;
             }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              font-size: 16px;
-              color: #333;
+            .report-header img {
+              max-width: 150px;
+              height: auto;
+              margin-bottom: 10px;
             }
-            td {
-              padding: 10px 0;
-              border-bottom: 1px solid #ccc;
-            }
-            td:first-child {
-              font-weight: bold;
-              width: 220px;
-              vertical-align: top;
-            }
+            h1 { text-align: center; color: #374151; }
+            p { margin: 8px 0; }
+            .label { font-weight: bold; }
           </style>
         </head>
         <body>
-          <h2>Institutional Lasallian Formation Office</h2>
-          <table>
-            <tr><td>Requestor:</td><td>${reservation.whoReserved || 'N/A'}</td></tr>
-            <tr><td>Event Name:</td><td>${reservation.nameOfProgram || 'N/A'}</td></tr>
-            <tr><td>Nature of Activity:</td><td>${reservation.natureOfActivity || 'N/A'}</td></tr>
-            <tr><td>Date:</td><td>${reservation.startDate || 'N/A'} to ${reservation.endDate || 'N/A'}</td></tr>
-            <tr><td>Time:</td><td>${reservation.time?.start || '—'} - ${reservation.time?.end || '—'}</td></tr>
-            <tr><td>Number of Participants:</td><td>${reservation.numberOfParticipants || 'N/A'}</td></tr>
-            <tr><td>Facility:</td><td>${reservation.venue || 'N/A'}</td></tr>
-          </table>
-          <script>window.print();</script>
+          <div class="report-header">
+            <img src="${logo}" alt="Company Logo" />
+            <h1>Reservation Report</h1>
+          </div>
+          <p><span class="label">Generated on:</span> ${date}</p>
+          <hr />
+          <p><span class="label">Reservation ID:</span> ${r.reservation_id}</p>
+          <p><span class="label">Program Name:</span> ${r.nameOfProgram}</p>
+          <p><span class="label">Nature of Activity:</span> ${r.natureOfActivity}</p>
+          <p><span class="label">Venue:</span> ${r.venue}</p>
+          <p><span class="label">Participants:</span> ${r.numberOfParticipants}</p>
+          <p><span class="label">Start Date:</span> ${r.startDate}</p>
+          <p><span class="label">End Date:</span> ${r.endDate}</p>
+          <p><span class="label">Time:</span> ${r.time.start} - ${r.time.end}</p>
+          <p><span class="label">Status:</span> ${r.status}</p>
         </body>
       </html>
-    `;
-    reportWindow.document.write(reportContent);
-    reportWindow.document.close();
-  };
-
-  const generateSummaryReport = () => {
-    const summaryWindow = window.open('', '_blank');
-    const reportContent = `
-      <html>
-        <head>
-          <title>Reservation Summary</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 40px;
-              background-color: #ffffff;
-              color: #111827;
-            }
-            h2 {
-              font-size: 24px;
-              margin-bottom: 30px;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              font-size: 16px;
-            }
-            th, td {
-              padding: 12px;
-              text-align: left;
-              border-bottom: 1px solid #ccc;
-            }
-            th {
-              background-color: #E8F0E1;
-            }
-            .status-pill {
-              display: inline-block;
-              padding: 6px 14px;
-              border-radius: 20px;
-              font-weight: bold;
-            }
-            .Approved {
-              background-color: #3A5B22;
-              color: white;
-            }
-            .Rejected {
-              background-color: #B7410E;
-              color: white;
-            }
-            .Pending {
-              background-color: #D69E5E;
-              color: white;
-            }
-          </style>
-        </head>
-        <body>
-          <h2>All Reservation Status Summary</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Venue</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${reservations.map(r => `
-                <tr>
-                  <td>${r.venue || '—'}</td>
-                  <td>${r.startDate || '—'} to ${r.endDate || '—'}</td>
-                  <td>${r.time?.start || '—'} - ${r.time?.end || '—'}</td>
-                  <td><span class="status-pill ${getStatusStyle(r.status)}">${r.status}</span></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-          <script>window.print();</script>
-        </body>
-      </html>
-    `;
-    summaryWindow.document.write(reportContent);
-    summaryWindow.document.close();
-  };
+    `
+    printWindow.document.write(individualReport)
+    printWindow.document.close()
+    printWindow.print()
+  }
 
   return (
-    <div className="records-wrapper">
-      <h2 className="records-title">My Reservation</h2>
+    <div className="reservation-records-container">
+      <div className="records-header">My Reservation Records</div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <div className="records-content">
+        {reservations.length === 0 ? (
+          <div className="no-records">
+            <p>You have no reservation records yet.</p>
+          </div>
+        ) : (
+          <div className="records-table-wrapper">
+            <table className="records-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reservations.map((r) => (
+                  <tr key={r.reservation_id}>
+                    <td>{r.startDate} to {r.endDate}</td>
+                    <td>{r.time.start} - {r.time.end}</td>
+                    <td><span className={getStatusClass(r.status)}>{r.status}</span></td>
+                    <td>
+                      <button className="view-btn" onClick={() => setSelectedReservation(r)}>View</button>
+                      <button className="generate-icon-btn" title="Print" onClick={() => printReservation(r)}>
+                        <FaPrint />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-      <div className="table-container">
-        <table className="records-table">
-          <thead>
-            <tr>
-              <th>Venue</th>
-              <th>Date</th>
-              <th>Activity</th>
-              <th>Status</th>
-              <th>View</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservations.map((reservation) => (
-              <tr key={reservation.reservation_id}>
-                <td>{reservation.venue || '—'}</td>
-                <td>{reservation.startDate || '—'} to {reservation.endDate || '—'}</td>
-                <td>{reservation.natureOfActivity || '—'}</td>
-                <td>
-                  <span className={`status-pill ${getStatusStyle(reservation.status)}`}>
-                    {reservation.status}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="view-details-btn"
-                    onClick={() =>
-                      navigate(`/reservation/${reservation.reservation_id}`, {
-                        state: { reservation },
-                      })
-                    }
-                  >
-                    View Details
-                  </button>
-                </td>
-                <td>
-                  <img
-                    src={fileIcon}
-                    alt="Generate Report"
-                    title="Generate Report"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      generateReport(reservation);
-                    }}
-                    className="file-icon"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        {selectedReservation && (
+          <div className="reservation-modal-overlay" onClick={() => setSelectedReservation(null)}>
+            <div className="reservation-modal" onClick={(e) => e.stopPropagation()}>
+              <h2>Reservation Details</h2>
+              <div className="modal-content">
+                <p><strong>Reservation ID:</strong> {selectedReservation.reservation_id}</p>
+                <p><strong>Program Name:</strong> {selectedReservation.nameOfProgram}</p>
+                <p><strong>Nature of Activity:</strong> {selectedReservation.natureOfActivity}</p>
+                <p><strong>Venue:</strong> {selectedReservation.venue}</p>
+                <p><strong>Participants:</strong> {selectedReservation.numberOfParticipants}</p>
+                <p><strong>Start Date:</strong> {selectedReservation.startDate}</p>
+                <p><strong>End Date:</strong> {selectedReservation.endDate}</p>
+                <p><strong>Time:</strong> {selectedReservation.time.start} - {selectedReservation.time.end}</p>
+                <p><strong>Status:</strong> <span className={getStatusClass(selectedReservation.status)}>{selectedReservation.status}</span></p>
+              </div>
+              <button className="close-modal-btn" onClick={() => setSelectedReservation(null)}>Close</button>
+            </div>
+          </div>
+        )}
 
-      <div className="bottom-buttons">
-        <button className="print-summary-btn" onClick={generateSummaryReport}>
-          Print Summary
-        </button>
-        <button className="back-dashboard-btn" onClick={() => navigate('/dashboard')}>
-          Back to Dashboard
-        </button>
+        <div className="records-actions">
+          <button className="back-dashboard-btn" onClick={() => navigate("/user-dashboard")}>
+            Back to Dashboard
+          </button>
+        </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserRecords;
+export default UserRecords

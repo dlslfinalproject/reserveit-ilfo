@@ -59,16 +59,15 @@ const Dashboard = ({ onSignOut }) => {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservation.php"
+        const url = "http://localhost/reserveit-ilfo/backend/api/get_user_reservations.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
 
-        console.log("Fetched reservations:", data.reservations)
+        console.log("Fetched user reservations:", data.reservations)
 
         if (response.ok && data.reservations) {
-          const userReservations = data.reservations.filter((r) => r.email?.toLowerCase() === userEmail.toLowerCase())
-
-          let loadedEvents = userReservations.flatMap(splitReservationIntoDays)
+          // No need to filter by email since backend returns only user's reservations
+          let loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
 
           if (filterStatus !== "All") {
             loadedEvents = loadedEvents.filter((ev) => ev.status.toLowerCase() === filterStatus.toLowerCase())
