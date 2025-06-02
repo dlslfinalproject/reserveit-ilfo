@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import "./ReservationRecords.css"
-import { FaPrint, FaEye } from "react-icons/fa"
+import { FaPrint } from "react-icons/fa"
 
 function ReservationRecords() {
   const navigate = useNavigate()
@@ -92,6 +92,44 @@ function ReservationRecords() {
     printWindow.print()
   }
 
+  const generateIndividualReport = (reservation) => {
+    const printWindow = window.open("", "_blank")
+    const date = new Date().toLocaleDateString()
+
+    const individualReport = `
+      <html>
+        <head>
+          <title>Reservation Report - ${reservation.nameOfProgram}</title>
+          <style>
+            body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1f2937; }
+            h1 { text-align: center; color: #374151; }
+            p { margin: 8px 0; }
+            .label { font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <h1>Reservation Report</h1>
+          <p><span class="label">Generated on:</span> ${date}</p>
+          <hr />
+          <p><span class="label">Reservation ID:</span> ${reservation.reservation_id}</p>
+          <p><span class="label">Requester:</span> ${reservation.whoReserved}</p>
+          <p><span class="label">Program Name:</span> ${reservation.nameOfProgram}</p>
+          <p><span class="label">Nature of Activity:</span> ${reservation.natureOfActivity}</p>
+          <p><span class="label">Venue:</span> ${reservation.venue}</p>
+          <p><span class="label">Participants:</span> ${reservation.numberOfParticipants}</p>
+          <p><span class="label">Start Date:</span> ${reservation.startDate}</p>
+          <p><span class="label">End Date:</span> ${reservation.endDate}</p>
+          <p><span class="label">Time:</span> ${reservation.time.start} - ${reservation.time.end}</p>
+          <p><span class="label">Status:</span> ${reservation.status}</p>
+        </body>
+      </html>
+    `
+
+    printWindow.document.write(individualReport)
+    printWindow.document.close()
+    printWindow.print()
+  }
+
   const getStatusClass = (status) => {
     switch (status.toLowerCase()) {
       case "approved":
@@ -127,7 +165,7 @@ function ReservationRecords() {
                   <th>Date</th>
                   <th>Time</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -144,9 +182,12 @@ function ReservationRecords() {
                       <span className={getStatusClass(r.status)}>{r.status}</span>
                     </td>
                     <td>
-                      <button className="view-details-btn">
-                        <FaEye style={{ marginRight: "6px" }} />
-                        View Details
+                      <button
+                        className="generate-icon-btn"
+                        title="Generate Report"
+                        onClick={() => generateIndividualReport(r)}
+                      >
+                        <FaPrint />
                       </button>
                     </td>
                   </tr>

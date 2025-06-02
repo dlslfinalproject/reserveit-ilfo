@@ -4,11 +4,7 @@ import { useState, useEffect } from "react"
 import "./AdminDashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import { 
-  FaPlus, FaListAlt, FaEnvelope, FaUserCircle, 
-  FaChevronLeft, FaChevronRight, FaCog, 
-  FaCheck, FaTimes 
-} from "react-icons/fa"
+import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight, FaCog, FaCheck, FaTimes } from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 

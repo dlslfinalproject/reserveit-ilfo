@@ -30,24 +30,31 @@ $requiredFields = [
     'reservation_enddate', 'number_of_participants', 'start_time', 'end_time'
 ];
 
-// Check required fields
+// Check for required fields
 foreach ($requiredFields as $field) {
-    if (!isset($data[$field]) || $data[$field] === '') {
+    if (!isset($data[$field]) || trim($data[$field]) === '') {
         http_response_code(400);
         echo json_encode(["error" => "Missing or empty field: $field"]);
         exit();
     }
 }
 
-// Optional fields with defaults
+// Ensure either activity_id or custom_activity_name is provided
+if (empty($data['activity_id']) && empty($data['custom_activity_name'])) {
+    http_response_code(400);
+    echo json_encode(["error" => "Either activity_id or custom_activity_name is required."]);
+    exit();
+}
+
+// Optional fields with default handling
 $activity_id = !empty($data['activity_id']) ? $data['activity_id'] : null;
 $custom_activity_name = !empty($data['custom_activity_name']) ? $data['custom_activity_name'] : null;
 $notes = isset($data['notes']) ? $data['notes'] : '';
 $link_to_csao_approved_poa = isset($data['link_to_csao_approved_poa']) ? $data['link_to_csao_approved_poa'] : '';
-$status_id = 1; // Pending
+$status_id = 1; // Default to "Pending"
 
 try {
-    $pdo = getDbConnection(); // ✅ Use PDO connection
+    $pdo = getDbConnection();
 
     $query = "INSERT INTO tblreservations (
         user_id, who_reserved, event_name, activity_id, custom_activity_name,

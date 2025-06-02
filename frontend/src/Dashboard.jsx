@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import "./Dashboard.css" // Change from App.css to Dashboard.css
+import "./Dashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa"
@@ -15,10 +15,10 @@ const Dashboard = ({ onSignOut }) => {
   const [showProfile, setShowProfile] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date())
   const [userEmail, setUserEmail] = useState("")
-  const [filterStatus, setFilterStatus] = useState("All Status")
+  const [filterStatus, setFilterStatus] = useState("All")
+  const [selectedEvent, setSelectedEvent] = useState(null)
   const navigate = useNavigate()
 
-  // Load user email from localStorage
   useEffect(() => {
     const userData = localStorage.getItem("user_data")
     if (userData) {
@@ -27,24 +27,38 @@ const Dashboard = ({ onSignOut }) => {
     }
   }, [])
 
-  // Fetch reservations with optional status filter
+  const splitReservationIntoDays = (reservation) => {
+    const start = moment(reservation.startDate)
+    const end = moment(reservation.endDate)
+    const days = []
+
+    for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
+      days.push({
+        id: reservation.id + "-" + m.format("YYYYMMDD"),
+        title: `${reservation.eventName}`,
+        whoReserved: reservation.whoReserved,
+        category: reservation.natureOfActivity,
+        status: reservation.status,
+        start: m.toDate(),
+        end: m.toDate(),
+        timeRange: `${reservation.startTime} - ${reservation.endTime}`,
+        raw: reservation,
+      })
+    }
+
+    return days
+  }
+
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const url = "http://localhost/reserveit-ilfo/backend/api/get_reservations.php"
+        const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
         if (response.ok && data.reservations) {
-          let loadedEvents = data.reservations.map((res) => ({
-            id: res.id,
-            title: `${res.eventName} (${res.status})`,
-            start: new Date(res.startDate + "T" + res.startTime),
-            end: new Date(res.endDate + "T" + res.endTime),
-            status: res.status,
-            raw: res,
-          }))
+          let loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
 
-          if (filterStatus !== "All Status") {
+          if (filterStatus !== "All") {
             loadedEvents = loadedEvents.filter((ev) => ev.status.toLowerCase() === filterStatus.toLowerCase())
           }
 
@@ -54,6 +68,7 @@ const Dashboard = ({ onSignOut }) => {
         console.error("Failed to load reservations", error)
       }
     }
+
     fetchReservations()
   }, [filterStatus])
 
@@ -64,15 +79,39 @@ const Dashboard = ({ onSignOut }) => {
     navigate("/")
   }
 
-  const goToPreviousMonth = () => {
-    setCurrentDate(moment(currentDate).subtract(1, "month").toDate())
+  const goToPreviousMonth = () => setCurrentDate(moment(currentDate).subtract(1, "month").toDate())
+  const goToNextMonth = () => setCurrentDate(moment(currentDate).add(1, "month").toDate())
+
+  const handleEventClick = (event) => {
+    setSelectedEvent(event)
   }
 
-  const goToNextMonth = () => {
-    setCurrentDate(moment(currentDate).add(1, "month").toDate())
-  }
+  const EventComponent = ({ event }) => {
+    const statusColor = {
+      Approved: "#C9E1B8",
+      Pending: "#FFB527",
+      Rejected: "#E78A8A",
+    }
 
-  const formattedMonthYear = moment(currentDate).format("MMMM YYYY")
+    return (
+      <div
+        style={{
+          backgroundColor: statusColor[event.status] || "#9E9E9E",
+          color: "#fff",
+          padding: "4px 6px",
+          borderRadius: "4px",
+          fontSize: "0.75rem",
+          lineHeight: "1.2",
+          overflow: "hidden",
+          whiteSpace: "normal",
+        }}
+      >
+        <div style={{ fontWeight: "bold" }}>{event.whoReserved}</div>
+        <div>{`${event.category} | ${event.timeRange}`}</div>
+        <div style={{ fontStyle: "italic", fontSize: "0.7rem" }}>{event.status}</div>
+      </div>
+    )
+  }
 
   return (
     <div className="dashboard-container">
@@ -92,15 +131,12 @@ const Dashboard = ({ onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/new-reservation")}>
             <FaPlus /> Make a Reservation
           </button>
-
           <button className="dashboard-button" onClick={() => navigate("/user-records")}>
             <FaListAlt /> Records
           </button>
-
           <button className="dashboard-button">
             <FaEnvelope /> Gmail
           </button>
-
           <div className="profile-dropdown">
             <button onClick={() => setShowProfile(!showProfile)}>
               <FaUserCircle size={24} />
@@ -115,7 +151,6 @@ const Dashboard = ({ onSignOut }) => {
         </div>
       </div>
 
-      {/* Calendar Navigation with integrated filter */}
       <div className="calendar-nav-container">
         <button onClick={goToPreviousMonth} className="calendar-nav-button">
           <FaChevronLeft />
@@ -132,12 +167,13 @@ const Dashboard = ({ onSignOut }) => {
               onChange={(e) => setFilterStatus(e.target.value)}
               className="filter-select"
             >
-              <option>All Status</option>
-              <option>Approved</option>
-              <option>Pending</option>
+              <option value="All">All Status</option>
+              <option value="Approved">Approved</option>
+              <option value="Pending">Pending</option>
+              <option value="Rejected">Rejected</option>
             </select>
           </div>
-          <span className="calendar-nav-month">{formattedMonthYear}</span>
+          <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>
         </div>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">
@@ -145,7 +181,6 @@ const Dashboard = ({ onSignOut }) => {
         </button>
       </div>
 
-      {/* Calendar */}
       <div className="calendar-wrapper">
         <Calendar
           localizer={localizer}
@@ -153,12 +188,38 @@ const Dashboard = ({ onSignOut }) => {
           startAccessor="start"
           endAccessor="end"
           date={currentDate}
-          onNavigate={setCurrentDate}
+          onNavigate={(date) => setCurrentDate(date)}
           view={Views.MONTH}
           toolbar={false}
           style={{ height: 500 }}
+          onSelectEvent={handleEventClick}
+          components={{ event: EventComponent }}
         />
       </div>
+
+      {selectedEvent && (
+        <div className="status-update-panel">
+          <div className="status-panel-header">
+            <h3>Details for: {selectedEvent.raw.eventName}</h3>
+            <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>×</button>
+          </div>
+
+          <div className="status-panel-content">
+            <div className="current-status">
+              <span className="status-label">Status:</span>
+              <span className={`status-badge ${selectedEvent.status.toLowerCase()}`}>
+                {selectedEvent.status}
+              </span>
+            </div>
+            <div className="reservation-info">
+              <p><strong>Reserved By:</strong> {selectedEvent.whoReserved}</p>
+              <p><strong>Category:</strong> {selectedEvent.category}</p>
+              <p><strong>Date:</strong> {moment(selectedEvent.start).format("MMMM D, YYYY")}</p>
+              <p><strong>Time:</strong> {selectedEvent.timeRange}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
