@@ -137,15 +137,15 @@ body {
 }
 
 .status-pill.approved {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: #d1dfbb;
 }
 
 .status-pill.rejected {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  background: #E78A8A;
 }
 
 .status-pill.pending {
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  background: #d2995e;
 }
 
 /* Action Buttons */
