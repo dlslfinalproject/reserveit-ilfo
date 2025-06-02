@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Settings.css'; 
+import './Settings.css'; // <-- We will style it separately for matching colors
 
 const Settings = () => {
   const navigate = useNavigate();
