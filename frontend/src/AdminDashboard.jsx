@@ -161,7 +161,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/admin/new-reservation")}>
             <FaPlus /> Make a Reservation
           </button>
-          <button className="dashboard-button" onClick={() => navigate("/reservation-records")}>
+          <button className="dashboard-button" onClick={() => navigate("/admin/reservation-records")}>
             <FaListAlt /> Reservation Records
           </button>
           <button className="dashboard-button">
