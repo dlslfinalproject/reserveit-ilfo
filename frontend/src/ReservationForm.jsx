@@ -62,7 +62,7 @@ const validate = () => {
   }
 
   const num = Number.parseInt(formData.numberOfParticipants, 10)
-  if (!num || num <= 0) newErrors.numberOfParticipants = "Enter a valid number > 0"
+  if (!num || num < 15) newErrors.numberOfParticipants = "Enter a valid number equal to or greater than 15"
 
   if (!formData.startDate) newErrors.startDate = "Start date required"
   if (!formData.endDate) newErrors.endDate = "End date required"
