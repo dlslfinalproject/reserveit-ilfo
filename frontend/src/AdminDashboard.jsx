@@ -4,11 +4,7 @@ import { useState, useEffect } from "react"
 import "./AdminDashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import { 
-  FaPlus, FaListAlt, FaEnvelope, FaUserCircle, 
-  FaChevronLeft, FaChevronRight, FaCog, 
-  FaCheck, FaTimes 
-} from "react-icons/fa"
+import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight, FaCog, FaCheck, FaTimes } from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 
@@ -124,9 +120,9 @@ const AdminDashboard = ({ session, onSignOut }) => {
   // ✅ Google Calendar-like Event Display
   const EventComponent = ({ event }) => {
     const statusColor = {
-      Approved: "#4CAF50",
-      Pending: "#FFA500",
-      Rejected: "#F44336",
+      Approved: "#C9E1B8",
+      Pending: "#FFB527",
+      Rejected: "#E78A8A",
     }
 
     return (
@@ -213,7 +209,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
               <option value="All">All Status</option>
               <option value="Approved">Approved</option>
               <option value="Pending">Pending</option>
-              <option value="Rejected">Rejected</option>
             </select>
           </div>
           <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>

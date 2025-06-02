@@ -31,7 +31,7 @@ const Dashboard = ({ onSignOut }) => {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const url = "http://localhost/reserveit-ilfo/backend/api/get_reservations.php"
+        const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
         if (response.ok && data.reservations) {
@@ -135,9 +135,10 @@ const Dashboard = ({ onSignOut }) => {
               <option>All Status</option>
               <option>Approved</option>
               <option>Pending</option>
+              <option>Rejected</option>
             </select>
           </div>
-          <span className="calendar-nav-month">{formattedMonthYear}</span>
+            <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>
         </div>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">

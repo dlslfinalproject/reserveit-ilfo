@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2025 at 11:09 AM
+-- Generation Time: Jun 02, 2025 at 02:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -105,7 +105,7 @@ CREATE TABLE `tblreservations` (
   `user_id` int(11) NOT NULL,
   `who_reserved` varchar(255) NOT NULL,
   `event_name` varchar(255) NOT NULL,
-  `activity_id` int(11) NOT NULL,
+  `activity_id` int(11) DEFAULT NULL,
   `venue_id` int(11) DEFAULT NULL,
   `reservation_startdate` date NOT NULL,
   `reservation_enddate` date NOT NULL,
@@ -121,6 +121,18 @@ CREATE TABLE `tblreservations` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `custom_activity_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblreservations`
+--
+
+INSERT INTO `tblreservations` (`reservation_id`, `user_id`, `who_reserved`, `event_name`, `activity_id`, `venue_id`, `reservation_startdate`, `reservation_enddate`, `number_of_participants`, `start_time`, `end_time`, `status_id`, `rejection_reason_id`, `rejection_other_notes`, `notes`, `link_to_csao_approved_poa`, `created_at`, `updated_at`, `custom_activity_name`) VALUES
+(2, 1, 'Jane', 'Kjkdja', 1, NULL, '2025-06-23', '2025-07-02', 10, '14:10:00', '15:10:00', 1, NULL, NULL, '', '', '2025-06-01 09:14:41', '2025-06-01 09:14:41', NULL),
+(3, 1, 'Jane', 'Jandsaj', 9, NULL, '2025-06-04', '2025-06-11', 1, '08:10:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-01 10:15:18', '2025-06-01 10:15:18', NULL),
+(4, 1, 'Jane', 'Taize Prayer', 9, NULL, '2025-06-03', '2025-06-03', 44, '11:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-01 10:17:21', '2025-06-01 10:17:21', NULL),
+(5, 1, 'Jane', 'dakjd', 10, NULL, '2025-06-04', '2025-06-04', 1, '15:15:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:24:47', '2025-06-02 00:24:47', NULL),
+(6, 1, 'jane', 'jandajdka', 8, NULL, '2025-06-17', '2025-06-17', 12, '15:05:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:28:13', '2025-06-02 00:28:13', NULL),
+(7, 1, 'JPCS', 'akdjalk', 6, NULL, '2025-06-17', '2025-06-18', 1, '16:20:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:29:37', '2025-06-02 00:29:37', NULL);
 
 -- --------------------------------------------------------
 
@@ -260,7 +272,7 @@ ALTER TABLE `tblrejection_reasons`
 -- AUTO_INCREMENT for table `tblreservations`
 --
 ALTER TABLE `tblreservations`
-  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tblusers`
