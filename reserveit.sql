@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2025 at 02:37 AM
+-- Generation Time: Jun 02, 2025 at 04:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -103,7 +103,6 @@ INSERT INTO `tblrejection_reasons` (`reason_id`, `reason_description`) VALUES
 CREATE TABLE `tblreservations` (
   `reservation_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `who_reserved` varchar(255) NOT NULL,
   `event_name` varchar(255) NOT NULL,
   `activity_id` int(11) DEFAULT NULL,
   `venue_id` int(11) DEFAULT NULL,
@@ -126,13 +125,16 @@ CREATE TABLE `tblreservations` (
 -- Dumping data for table `tblreservations`
 --
 
-INSERT INTO `tblreservations` (`reservation_id`, `user_id`, `who_reserved`, `event_name`, `activity_id`, `venue_id`, `reservation_startdate`, `reservation_enddate`, `number_of_participants`, `start_time`, `end_time`, `status_id`, `rejection_reason_id`, `rejection_other_notes`, `notes`, `link_to_csao_approved_poa`, `created_at`, `updated_at`, `custom_activity_name`) VALUES
-(2, 1, 'Jane', 'Kjkdja', 1, NULL, '2025-06-23', '2025-07-02', 10, '14:10:00', '15:10:00', 1, NULL, NULL, '', '', '2025-06-01 09:14:41', '2025-06-01 09:14:41', NULL),
-(3, 1, 'Jane', 'Jandsaj', 9, NULL, '2025-06-04', '2025-06-11', 1, '08:10:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-01 10:15:18', '2025-06-01 10:15:18', NULL),
-(4, 1, 'Jane', 'Taize Prayer', 9, NULL, '2025-06-03', '2025-06-03', 44, '11:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-01 10:17:21', '2025-06-01 10:17:21', NULL),
-(5, 1, 'Jane', 'dakjd', 10, NULL, '2025-06-04', '2025-06-04', 1, '15:15:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:24:47', '2025-06-02 00:24:47', NULL),
-(6, 1, 'jane', 'jandajdka', 8, NULL, '2025-06-17', '2025-06-17', 12, '15:05:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:28:13', '2025-06-02 00:28:13', NULL),
-(7, 1, 'JPCS', 'akdjalk', 6, NULL, '2025-06-17', '2025-06-18', 1, '16:20:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:29:37', '2025-06-02 00:29:37', NULL);
+INSERT INTO `tblreservations` (`reservation_id`, `user_id`, `event_name`, `activity_id`, `venue_id`, `reservation_startdate`, `reservation_enddate`, `number_of_participants`, `start_time`, `end_time`, `status_id`, `rejection_reason_id`, `rejection_other_notes`, `notes`, `link_to_csao_approved_poa`, `created_at`, `updated_at`, `custom_activity_name`) VALUES
+(2, 1, 'Kjkdja', 1, NULL, '2025-06-23', '2025-07-02', 10, '14:10:00', '15:10:00', 1, NULL, NULL, '', '', '2025-06-01 09:14:41', '2025-06-01 09:14:41', NULL),
+(3, 1, 'Jandsaj', 9, NULL, '2025-06-04', '2025-06-11', 1, '08:10:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-01 10:15:18', '2025-06-01 10:15:18', NULL),
+(4, 1, 'Taize Prayer', 9, NULL, '2025-06-03', '2025-06-03', 44, '11:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-01 10:17:21', '2025-06-01 10:17:21', NULL),
+(5, 1, 'dakjd', 10, NULL, '2025-06-04', '2025-06-04', 1, '15:15:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:24:47', '2025-06-02 00:24:47', NULL),
+(6, 1, 'jandajdka', 8, NULL, '2025-06-17', '2025-06-17', 12, '15:05:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:28:13', '2025-06-02 00:28:13', NULL),
+(7, 1, 'akdjalk', 6, NULL, '2025-06-17', '2025-06-18', 1, '16:20:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:29:37', '2025-06-02 00:29:37', NULL),
+(8, 1, 'Prayer', NULL, NULL, '2025-06-24', '2025-06-24', 11, '18:20:00', '19:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:44:32', '2025-06-02 00:44:32', 'Prayer'),
+(9, 1, 'Taize Prayer', 3, NULL, '2025-06-20', '2025-06-26', 1, '07:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:51:54', '2025-06-02 00:51:54', NULL),
+(10, 1, 'Prayer', NULL, NULL, '2025-06-12', '2025-06-13', 12, '07:00:00', '12:00:00', 1, NULL, NULL, '', '', '2025-06-02 01:47:31', '2025-06-02 01:47:31', 'Prayer');
 
 -- --------------------------------------------------------
 
@@ -157,11 +159,11 @@ CREATE TABLE `tblusers` (
 --
 
 INSERT INTO `tblusers` (`id`, `google_id`, `email`, `first_name`, `last_name`, `profile_picture`, `role`, `created_at`, `updated_at`) VALUES
-(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-01 06:28:19'),
+(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-02 01:42:03'),
 (2, NULL, 'mary.ann.lumban@dlsl.edu.ph\r\n', 'Mary Ann', 'Lumban', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (3, '', 'ilfo.office@dlsl.edu.ph', 'ILFO', 'Office', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (4, NULL, 'ilfo.manager@dlsl.edu.ph\r\n', 'ILFO', ' Manager', NULL, 'admin', '2025-05-28 23:27:06', '2025-05-28 23:27:06'),
-(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-01 06:26:03');
+(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-02 01:57:50');
 
 -- --------------------------------------------------------
 
@@ -272,7 +274,7 @@ ALTER TABLE `tblrejection_reasons`
 -- AUTO_INCREMENT for table `tblreservations`
 --
 ALTER TABLE `tblreservations`
-  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tblusers`

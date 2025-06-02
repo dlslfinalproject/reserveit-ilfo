@@ -26,7 +26,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 // Required fields
 $requiredFields = [
-    'user_id', 'who_reserved', 'event_name', 'reservation_startdate', 
+    'user_id', 'event_name', 'reservation_startdate', 
     'reservation_enddate', 'number_of_participants', 'start_time', 'end_time'
 ];
 
@@ -57,11 +57,11 @@ try {
     $pdo = getDbConnection();
 
     $query = "INSERT INTO tblreservations (
-        user_id, who_reserved, event_name, activity_id, custom_activity_name,
+        user_id, event_name, activity_id, custom_activity_name,
         reservation_startdate, reservation_enddate, number_of_participants,
         start_time, end_time, notes, link_to_csao_approved_poa, status_id
     ) VALUES (
-        :user_id, :who_reserved, :event_name, :activity_id, :custom_activity_name,
+        :user_id, :event_name, :activity_id, :custom_activity_name,
         :reservation_startdate, :reservation_enddate, :number_of_participants,
         :start_time, :end_time, :notes, :poa_link, :status
     )";
@@ -70,7 +70,6 @@ try {
 
     $stmt->execute([
         ':user_id' => $data['user_id'],
-        ':who_reserved' => $data['who_reserved'],
         ':event_name' => $data['event_name'],
         ':activity_id' => $activity_id,
         ':custom_activity_name' => $custom_activity_name,

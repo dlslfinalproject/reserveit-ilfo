@@ -29,7 +29,6 @@ const ReservationForm = () => {
   const storedUser = JSON.parse(localStorage.getItem("user_data"))
 
   const [formData, setFormData] = useState({
-    whoReserved: "",
     eventName: "",
     natureOfActivity: "",
     customActivity: "",
@@ -52,7 +51,6 @@ const ReservationForm = () => {
 const validate = () => {
   const newErrors = {}
 
-  if (!formData.whoReserved.trim()) newErrors.whoReserved = "Required"
   if (!formData.eventName.trim()) newErrors.eventName = "Required"
 
   if (!formData.natureOfActivity) {
@@ -62,7 +60,7 @@ const validate = () => {
   }
 
   const num = Number.parseInt(formData.numberOfParticipants, 10)
-  if (!num || num <= 0) newErrors.numberOfParticipants = "Enter a valid number > 0"
+  if (!num || num < 15) newErrors.numberOfParticipants = "Enter a valid number equal to or greater than 15"
 
   if (!formData.startDate) newErrors.startDate = "Start date required"
   if (!formData.endDate) newErrors.endDate = "End date required"
@@ -132,7 +130,6 @@ const validate = () => {
     // Prepare payload exactly matching PHP expected keys
     const payload = {
       user_id: storedUser.id,
-      who_reserved: formData.whoReserved.trim(),
       event_name: formData.eventName.trim(),
       activity_id:
         formData.natureOfActivity === "Others: Please specify"
@@ -185,20 +182,6 @@ reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
       <h2 className="form-header">Create New Reservation</h2>
 
       <form onSubmit={handleSubmit} className="reservation-form">
-        {/* ... The rest of your form inputs remain the same ... */}
-
-        {/* Who Reserved */}
-        <div className="form-group">
-          <label>Who Reserved:</label>
-          <input
-            type="text"
-            value={formData.whoReserved}
-            onChange={(e) => handleChange("whoReserved", e.target.value)}
-            className={errors.whoReserved ? "error" : ""}
-            placeholder="First Name MI. Last Name (ex: Juan D. Cruz)"
-          />
-          {errors.whoReserved && <small className="error-message">{errors.whoReserved}</small>}
-        </div>
 
         {/* Event Name */}
         <div className="form-group">
@@ -251,7 +234,7 @@ reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
             value={formData.numberOfParticipants}
             onChange={(e) => handleChange("numberOfParticipants", e.target.value)}
             className={errors.numberOfParticipants ? "error" : ""}
-            placeholder="Enter Number of Participants (1-200)"
+            placeholder="Enter Number of Participants (15-200)"
           />
           {errors.numberOfParticipants && <small className="error-message">{errors.numberOfParticipants}</small>}
         </div>
