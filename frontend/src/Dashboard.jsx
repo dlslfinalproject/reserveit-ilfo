@@ -4,7 +4,14 @@ import { useState, useEffect } from "react"
 import "./Dashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import {
+  FaPlus,
+  FaListAlt,
+  FaEnvelope,
+  FaUserCircle,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 
@@ -23,7 +30,13 @@ const Dashboard = ({ onSignOut }) => {
     const userData = localStorage.getItem("user_data")
     if (userData) {
       const parsed = JSON.parse(userData)
-      setUserEmail(parsed.email || "")
+      if (parsed.email) {
+        setUserEmail(parsed.email)
+      } else {
+        console.warn("Email not found in user_data")
+      }
+    } else {
+      navigate("/") // Redirect to login if no user data
     }
   }, [])
 
@@ -34,14 +47,15 @@ const Dashboard = ({ onSignOut }) => {
 
     for (let m = start.clone(); m.diff(end, "days") <= 0; m.add(1, "days")) {
       days.push({
-        id: reservation.id + "-" + m.format("YYYYMMDD"),
-        title: `${reservation.eventName}`,
+        id: reservation.reservation_id + "-" + m.format("YYYYMMDD"),
+        reservationId: reservation.reservation_id,
+        title: reservation.nameOfProgram,
         whoReserved: reservation.whoReserved,
         category: reservation.natureOfActivity,
         status: reservation.status,
         start: m.toDate(),
         end: m.toDate(),
-        timeRange: `${reservation.startTime} - ${reservation.endTime}`,
+        timeRange: `${reservation.time.start} - ${reservation.time.end}`,
         raw: reservation,
       })
     }
@@ -55,22 +69,34 @@ const Dashboard = ({ onSignOut }) => {
         const url = "http://localhost/reserveit-ilfo/backend/api/get_all_reservations.php"
         const response = await fetch(url, { credentials: "include" })
         const data = await response.json()
+
+        console.log("Fetched reservations:", data.reservations)
+
         if (response.ok && data.reservations) {
-          let loadedEvents = data.reservations.flatMap(splitReservationIntoDays)
+          let userReservations = data.reservations.filter(
+            (r) => r.email?.toLowerCase() === userEmail.toLowerCase()
+          )
+
+          let loadedEvents = userReservations.flatMap(splitReservationIntoDays)
 
           if (filterStatus !== "All") {
-            loadedEvents = loadedEvents.filter((ev) => ev.status.toLowerCase() === filterStatus.toLowerCase())
+            loadedEvents = loadedEvents.filter(
+              (ev) => ev.status.toLowerCase() === filterStatus.toLowerCase()
+            )
           }
 
           setEvents(loadedEvents)
+          console.log("User's Events:", loadedEvents)
         }
       } catch (error) {
         console.error("Failed to load reservations", error)
       }
     }
 
-    fetchReservations()
-  }, [filterStatus])
+    if (userEmail) {
+      fetchReservations()
+    }
+  }, [filterStatus, userEmail])
 
   const handleLogout = async () => {
     if (onSignOut) {
@@ -200,7 +226,7 @@ const Dashboard = ({ onSignOut }) => {
       {selectedEvent && (
         <div className="status-update-panel">
           <div className="status-panel-header">
-            <h3>Details for: {selectedEvent.raw.eventName}</h3>
+            <h3>Details for: {selectedEvent.raw.nameOfProgram}</h3>
             <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>×</button>
           </div>
 
