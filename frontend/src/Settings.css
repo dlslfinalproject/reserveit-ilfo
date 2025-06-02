@@ -1,164 +1,307 @@
+/* Import Google Fonts for better typography */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
 .settings-container {
-    width: 100%;
-    height: 100vh; /* FULL screen height */
-    background: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; 
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+}
+
+.settings-card {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 1000px;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.settings-header {
+  background: linear-gradient(135deg, #8ba96d 0%, #a2ba82 100%);
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.settings-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.025em;
+}
+
+.edit-venues-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #374151;
+  padding: 0 32px;
+  margin-top: 20px;
+}
+
+.venue-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 32px;
+}
+
+.venue-input {
+  width: 100%;
+  font-size: 1rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  box-sizing: border-box;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #fafafa;
+  font-family: "Inter", sans-serif;
+}
+
+.venue-input:focus {
+  border: 2px solid #8ba96d;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
+  background: white;
+}
+
+.venue-input:hover {
+  border-color: #d1d5db;
+  background: white;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: auto;
+  padding: 20px 32px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.back-button,
+.add-button,
+.save-button {
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.025em;
+  min-width: 120px;
+  text-transform: uppercase;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  border: 2px solid #d1d5db;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.add-button {
+  background: linear-gradient(135deg, #d1a05f 0%, #c4914d 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(209, 160, 95, 0.3);
+}
+
+.add-button:hover {
+  background: linear-gradient(135deg, #c4914d 0%, #b78240 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 12px -2px rgba(209, 160, 95, 0.4);
+}
+
+.save-button {
+  background: linear-gradient(135deg, #45612f 0%, #3a5227 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(69, 97, 47, 0.3);
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #3a5227 0%, #2f4420 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 12px -2px rgba(69, 97, 47, 0.4);
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.popup-content {
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 400px;
+  width: 90%;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(139, 169, 109, 0.2);
+}
+
+.popup-content h3 {
+  font-size: 1.25rem;
+  color: #374151;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.popup-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  font-family: "Inter", sans-serif;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.popup-input:focus {
+  border: 2px solid #8ba96d;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cancel-button,
+.confirm-add-button {
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  min-width: 100px;
+  text-transform: uppercase;
+}
+
+.cancel-button {
+  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
+  color: #ffffff;
+}
+
+.cancel-button:hover {
+  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(227, 93, 91, 0.3);
+}
+
+.confirm-add-button {
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.3);
+}
+
+.confirm-add-button:hover {
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .settings-card {
-    background: #ffffff;
-    border: 0.5px solid #000;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 1000px;
-    height: 70%;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 40px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* NO overflow */
+    width: 95%;
+    height: 80%;
   }
 
   .settings-header {
-  background-color: #d4e3c2;
-  padding: 20px 40px;
-  border-bottom: 1px solid #000;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  margin: -20px -40px 20px -40px;
-} 
-  
+    padding: 20px 24px;
+  }
+
   .settings-title {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #d4e3c2;
-    padding: 12px 20px;
-    border-radius: 8px;
-    text-align: left; 
-    margin-bottom: 20px;
+    font-size: 1.5rem;
   }
-  
-  .edit-facilities-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0 0 15px 0;
-    text-align: left; 
-  }  
-  
-  .facility-list {
-    flex: 1;
-    overflow-y: auto; 
-    overflow-x: hidden; 
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+
+  .edit-venues-title {
+    padding: 0 24px;
   }
-  
-  .facility-input {
-    width: 100%;
-    font-size: 16px;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box; 
+
+  .venue-list {
+    padding: 0 24px;
   }
-  
+
   .button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: auto; 
-    padding-top: 20px;
-    flex-wrap: nowrap;
-    flex-shrink: 0;
+    padding: 16px 24px;
+    flex-wrap: wrap;
   }
-  
-  
-  .back-button, .add-button, .save-button {
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: auto;
+
+  .back-button,
+  .add-button,
+  .save-button {
+    padding: 10px 16px;
     min-width: 100px;
   }
-  
-  .back-button {
-    background-color: #d3d3d3;
-    color: black;
+}
+
+@media (max-width: 480px) {
+  .settings-card {
+    height: 90%;
   }
-  
-  .add-button {
-    background-color: #d1a05f;
-    color: white;
-  }
-  
-  .save-button {
-    background-color: #45612f;
-    color: white;
-  }
-  
-  /* Popup Styles */
-  .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.4);
-    display: flex;
+
+  .button-group {
     justify-content: center;
-    align-items: center;
   }
-  
-  .popup-content {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    border: 1px solid #333;
-    width: 400px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  }  
-  
-  .popup-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 18px;
-    border: 1px solid #aaa;
-    border-radius: 10px;
-    box-sizing: border-box;
-  }  
-  
-  .popup-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }  
-  
-  .cancel-button, .confirm-add-button {
-    padding: 12px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    min-width: 120px;
-  }
-  
-  .cancel-button {
-    background-color: #999;
-    color: black;
-  }
-  
-  .confirm-add-button {
-    background-color: #d1dfbb;
-    color: black;
-  }
-  
-  
+}
