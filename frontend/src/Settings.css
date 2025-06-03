@@ -254,7 +254,7 @@ body {
 }
 
 .reactivate-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+ background: linear-gradient(135deg, #add287 0%, #81ac2b 100%);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -268,8 +268,8 @@ body {
 }
 
 .reactivate-btn:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #8aae6e 0%, #86b62d 100%);
+  transform: translateY(-1px);
 }
 
 /* Button Group */
@@ -441,4 +441,24 @@ body {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
+}
+
+.delete-confirm-button {
+  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px; /* This fixes the narrow width */
+}
+
+.delete-confirm-button:hover {
+  background: linear-gradient(135deg, #d14d4b 0%, #b51c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(220, 38, 38, 0.4);
 }
