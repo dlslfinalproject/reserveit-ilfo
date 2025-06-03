@@ -357,14 +357,6 @@ function ReservationRecords() {
                 )}
               </div>
 
-              <div className="status-actions">
-                <button className="status-btn reject-btn" onClick={() => updateStatus(selectedReservation.reservation_id, "Rejected")}>
-                  <FaTimes /> Reject
-                </button>
-                <button className="status-btn approve-btn" onClick={() => updateStatus(selectedReservation.reservation_id, "Approved")}>
-                  <FaCheck /> Approve
-                </button>
-              </div>
             </div>
           </div>
         )}
