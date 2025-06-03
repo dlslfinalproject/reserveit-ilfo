@@ -63,8 +63,8 @@ const ApprovalForm = ({ onClose }) => {
           <div className="modal-confirm">
             <p>Are you sure you want to approve this reservation?</p>
             <div className="modal-actions">
-              <button className="btn cancel" onClick={cancelApproval}>No</button>
-              <button className="btn approve" onClick={confirmApproval}>Yes</button>
+              <button className="btn cancel" onClick={cancelApproval}>Cancel</button>
+              <button className="btn approve" onClick={confirmApproval}>APPROVE</button>
             </div>
           </div>
         </div>
