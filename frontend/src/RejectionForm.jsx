@@ -2,11 +2,21 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './RejectionForm.css';
 
+const SuccessModal = ({ message, onClose }) => {
+  return (
+    <div className="success-modal-backdrop">
+      <div className="success-modal">
+        <h3>Success</h3>
+        <p>{message}</p>
+        <button className="success-button" onClick={onClose}>OK</button>
+      </div>
+    </div>
+  );
+};
+
 const RejectionForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // FIX: Extract reservation_id from the nested reservation object
   const reservation_id = location.state?.reservation?.reservation_id;
 
   const [showRejectConfirm, setShowRejectConfirm] = useState(false);
@@ -14,10 +24,10 @@ const RejectionForm = () => {
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState({});
   const [rejectionReasons, setRejectionReasons] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     if (!reservation_id) {
-      alert('No reservation specified for rejection.');
       navigate('/admin/reservation-records');
     }
   }, [reservation_id, navigate]);
@@ -74,9 +84,8 @@ const RejectionForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert("Reservation has been rejected.");
         setShowRejectConfirm(false);
-        navigate('/admin/reservation-records');
+        setShowSuccess(true);
       } else {
         setErrors({ rejection: data.message || 'Failed to reject reservation.' });
         setShowRejectConfirm(false);
@@ -91,7 +100,6 @@ const RejectionForm = () => {
     setShowRejectConfirm(false);
   };
 
-  // If no reservation_id, render nothing to avoid UI flash & multiple effects
   if (!reservation_id) return null;
 
   return (
@@ -151,6 +159,16 @@ const RejectionForm = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {showSuccess && (
+        <SuccessModal
+          message="Reservation has been rejected."
+          onClose={() => {
+            setShowSuccess(false);
+            navigate('/admin/reservation-records');
+          }}
+        />
       )}
     </div>
   );
