@@ -5,23 +5,26 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 require_once '../config/db.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
+$conn = getDbConnection();  // <-- get PDO connection from your db.php
+
 try {
     $stmt = $conn->prepare("SELECT reason_id, reason_description FROM tblrejection_reasons ORDER BY reason_description ASC");
     $stmt->execute();
-    $result = $stmt->get_result();
 
-    $reasons = [];
-    while ($row = $result->fetch_assoc()) {
-        $reasons[] = $row;
-    }
+    $reasons = $stmt->fetchAll(PDO::FETCH_ASSOC);  // <-- fetch all results as associative array
 
     echo json_encode(['success' => true, 'reasons' => $reasons]);
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Failed to fetch rejection reasons.', 'error' => $e->getMessage()]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Failed to fetch rejection reasons.',
+        'error' => $e->getMessage()
+    ]);
 }
 ?>

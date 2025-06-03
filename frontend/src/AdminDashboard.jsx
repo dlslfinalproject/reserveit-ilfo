@@ -25,10 +25,8 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All")
   const [activeStatusTab, setActiveStatusTab] = useState("details")
-  const [showRejectionForm, setShowRejectionForm] = useState(false)
   const navigate = useNavigate()
 
-  // *** ADD THESE REFS ***
   const profileMenuRef = useRef(null);
   const profileButtonRef = useRef(null);
 
@@ -74,10 +72,8 @@ const AdminDashboard = ({ session, onSignOut }) => {
     fetchReservations()
   }, [])
 
-  // *** ADD THIS useEffect for click-outside-to-close ***
   useEffect(() => {
     function handleClickOutside(event) {
-      // Close profile menu if click is outside the menu and outside the button
       if (
         profileMenuRef.current && !profileMenuRef.current.contains(event.target) &&
         profileButtonRef.current && !profileButtonRef.current.contains(event.target)
@@ -86,12 +82,11 @@ const AdminDashboard = ({ session, onSignOut }) => {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside); // Use mousedown for quicker response
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
-
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -114,6 +109,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
 
   const handleEventClick = (event) => setSelectedEvent(event)
 
+  // Update status through API and update calendar accordingly
   const updateStatus = async (id, newStatus) => {
     try {
       const response = await fetch("http://localhost/reserveit-ilfo/backend/api/update_reservation_status.php", {
@@ -144,15 +140,27 @@ const AdminDashboard = ({ session, onSignOut }) => {
     }
   }
 
+  // Approve handler: update status via API, then navigate success page
+  const handleApprove = async () => {
+    if (!selectedEvent) return
+    await updateStatus(selectedEvent.reservationId, "Approved")
+  }
+
+  // Reject handler: navigate to rejection form with reservation data
+  const handleReject = () => {
+    if (!selectedEvent) return
+    navigate("/admin/rejection-form", { state: { reservation: selectedEvent.raw } })
+  }
+
   const filteredEvents = filterStatus === "All"
     ? events
     : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
 
   const EventComponent = ({ event }) => {
     const statusColor = {
-      Approved: "#d1dfbb",
-      Pending: "#d2995e",
-      Rejected: "#E78A8A",
+      Approved: "#6b8e23",
+      Pending: "#cc5500",
+      Rejected: "#b22222",
     }
 
     return (
@@ -201,14 +209,12 @@ const AdminDashboard = ({ session, onSignOut }) => {
             <FaEnvelope /> Gmail
           </button>
           <div className="profile-dropdown">
-            {/* Attach ref to the button */}
             <button onClick={() => setShowProfile(!showProfile)} ref={profileButtonRef}>
               <FaUserCircle size={24} />
             </button>
-            {/* *** MODIFIED LINE BELOW: REMOVED showProfile && *** */}
             <div
               className={`profile-menu ${showProfile ? 'is-active' : ''}`}
-              ref={profileMenuRef} // Attach ref to the menu div
+              ref={profileMenuRef}
             >
               <p>{session?.user?.email || "Unknown User"}</p>
               <button onClick={() => {
@@ -245,7 +251,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
               <option value="Pending">Pending</option>
             </select>
           </div>
-          <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span> {/* Fixed format */}
+          <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>
         </div>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">
@@ -320,17 +326,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
             </div>
 
             <div className="status-actions">
-              <button className="status-btn reject-btn" onClick={() =>
-                navigate("/admin/rejection-form", { state: { reservation: selectedEvent.raw }
-                  })
-                }
-              >
+              <button className="status-btn reject-btn" onClick={handleReject}>
                 <FaTimes /> REJECT
               </button>
-              <button className="status-btn approve-btn" onClick={() => {
-                  navigate("/admin/approval-success", { state: { reservation: selectedEvent.raw } })
-                }}
-              >
+              <button className="status-btn approve-btn" onClick={handleApprove}>
                 <FaCheck /> APPROVE
               </button>
             </div>
