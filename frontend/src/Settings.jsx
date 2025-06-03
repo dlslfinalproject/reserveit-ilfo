@@ -386,7 +386,6 @@ const Settings = () => {
       {showSavePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Save Changes</h3>
             <p className="popup-message">
               Do you want to save all venue changes?
             </p>
@@ -406,9 +405,8 @@ const Settings = () => {
       {showDeletePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Delete Venue</h3>
             <p className="popup-message">
-              Are you sure you want to delete <strong>{venueToDelete?.venue_name}</strong>?
+              Are you sure you want to remove <strong>{venueToDelete?.venue_name}</strong>?
             </p>
             <div className="popup-buttons">
               <button
@@ -421,7 +419,7 @@ const Settings = () => {
                 Cancel
               </button>
               <button className="delete-confirm-button" onClick={handleDeleteVenueConfirmed}>
-                DELETE
+                REMOVE
               </button>
             </div>
           </div>
@@ -447,7 +445,6 @@ const Settings = () => {
         <div className="popup-overlay">
           <div className="popup-content success-modal">
             <div className="modal-icon success-icon"></div>
-            <h3>Success</h3>
             <p className="popup-message">{modalMessage}</p>
             <div className="popup-buttons">
               <button className="confirm-add-button" onClick={() => setShowSuccessModal(false)}>
