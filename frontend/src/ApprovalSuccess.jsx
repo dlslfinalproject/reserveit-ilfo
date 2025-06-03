@@ -105,7 +105,7 @@ const ApprovalSuccess = () => {
 
           <div className="approval-actions">
             <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
-            <button className="btn approve" onClick={handleApproveClick}>Confirm</button>
+            <button className="btn approve" onClick={handleApproveClick}>CONFIRM</button>
           </div>
         </div>
       </div>
