@@ -172,7 +172,8 @@ const AdminDashboard = ({ session, onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/admin/reservation-records")}>
             <FaListAlt /> Reservation Records
           </button>
-          <button className="dashboard-button">
+          <button className="dashboard-button" onClick={() => window.open("https://mail.google.com/mail/u/0/#inbox", "_blank")}
+          >
             <FaEnvelope /> Gmail
           </button>
           <div className="profile-dropdown">
