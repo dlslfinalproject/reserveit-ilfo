@@ -6,6 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 require_once '../config/db.php';
+require_once 'email_helper.php'; // Include email helper
 
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -38,9 +39,9 @@ if (!in_array($status, $allowedStatuses)) {
 }
 
 try {
-    $pdo = getDbConnection(); // ✅ Use correct DB connection function
+    $pdo = getDbConnection();
 
-    // Get status ID of the target status
+    // Get new status ID
     $stmt = $pdo->prepare('SELECT status_id FROM tblapproval_status WHERE status_name = :status');
     $stmt->execute(['status' => $status]);
     $statusRow = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,7 +56,7 @@ try {
 
     // Get current reservation's status
     $stmt = $pdo->prepare('
-        SELECT s.status_name 
+        SELECT r.status_id, s.status_name 
         FROM tblreservations r 
         JOIN tblapproval_status s ON r.status_id = s.status_id 
         WHERE r.reservation_id = :id
@@ -84,7 +85,7 @@ try {
         exit;
     }
 
-    // Proceed to update status
+    // Update reservation status
     $stmt = $pdo->prepare('UPDATE tblreservations SET status_id = :status_id WHERE reservation_id = :id');
     $stmt->execute(['status_id' => $statusId, 'id' => $id]);
 
@@ -93,7 +94,35 @@ try {
         exit;
     }
 
+    // 🔔 Fetch user email and reservation info for notification
+    $stmt = $pdo->prepare('
+        SELECT r.event_name, r.reservation_startdate, r.reservation_enddate, u.email, u.first_name
+        FROM tblreservations r
+        JOIN tblusers u ON r.user_id = u.user_id
+        WHERE r.reservation_id = :id
+    ');
+    $stmt->execute(['id' => $id]);
+    $reservationInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($reservationInfo && in_array($status, ['Approved', 'Rejected'])) {
+        $userEmail = $reservationInfo['email'];
+        $userName = $reservationInfo['first_name'];
+        $eventName = $reservationInfo['event_name'];
+        $start = $reservationInfo['reservation_startdate'];
+        $end = $reservationInfo['reservation_enddate'];
+
+        $subject = "Reservation {$status}";
+        $message = "
+            <h3>Hi {$userName},</h3>
+            <p>Your reservation for <strong>{$eventName}</strong> from <strong>{$start}</strong> to <strong>{$end}</strong> has been <strong>{$status}</strong>.</p>
+            <p>Thank you for using the ILFO reservation system.</p>
+        ";
+
+        sendEmail($userEmail, $subject, $message);
+    }
+
     echo json_encode(['success' => true]);
+
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
