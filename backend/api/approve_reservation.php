@@ -7,6 +7,8 @@ header("Access-Control-Allow-Methods: POST");
 session_start(); // Required to access $_SESSION
 
 require_once '../config/db.php';
+require_once 'email_helper.php'; // Include email helper for sending emails
+
 $pdo = getDbConnection();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -50,7 +52,34 @@ try {
     ");
     $stmt->execute([$venue_id, $notes, $reservation_id]);
 
-    echo json_encode(['status' => 'success', 'message' => 'Reservation approved.']);
+    // ✅ Fetch user email and reservation info
+    $stmt = $pdo->prepare("
+        SELECT u.email, u.first_name, r.event_name, r.reservation_startdate, r.reservation_enddate
+        FROM tblreservations r
+        JOIN tblusers u ON r.user_id = u.id
+        WHERE r.reservation_id = ?
+    ");
+    $stmt->execute([$reservation_id]);
+    $reservationInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($reservationInfo) {
+        $userEmail = $reservationInfo['email'];
+        $userName = $reservationInfo['first_name'];
+        $eventName = $reservationInfo['event_name'];
+        $start = $reservationInfo['reservation_startdate'];
+        $end = $reservationInfo['reservation_enddate'];
+
+        $subject = "Reservation Approved";
+        $message = "
+            <h3>Hi {$userName},</h3>
+            <p>Your reservation for <strong>{$eventName}</strong> from <strong>{$start}</strong> to <strong>{$end}</strong> has been <strong>Approved</strong>.</p>
+            <p>Thank you for using the ReserveIT reservation system.</p>
+        ";
+
+        sendEmail($userEmail, $subject, $message);
+    }
+
+    echo json_encode(['status' => 'success', 'message' => 'Reservation approved and email sent.']);
 } catch (PDOException $e) {
     error_log("Database error: " . $e->getMessage());
     echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);

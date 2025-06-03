@@ -27,7 +27,7 @@ $user_id = $_SESSION['user_id'];
 
 try {
     $query = "
-        SELECT 
+        SELECT
             r.reservation_id,
             u.first_name, u.last_name,
             r.event_name,
@@ -41,12 +41,15 @@ try {
             r.number_of_participants,
             s.status_name AS status,
             r.link_to_csao_approved_poa AS poa_link,
-            r.notes
+            r.notes,
+            rr.reason_description AS rejection_reason,
+            r.rejection_other_notes
         FROM tblreservations r
         JOIN tblusers u ON r.user_id = u.id
         LEFT JOIN tblactivities a ON r.activity_id = a.activity_id
         LEFT JOIN tblvenues v ON r.venue_id = v.venue_id
         LEFT JOIN tblapproval_status s ON r.status_id = s.status_id
+        LEFT JOIN tblrejection_reasons rr ON r.rejection_reason_id = rr.reason_id
         WHERE r.user_id = ?
         ORDER BY r.reservation_startdate DESC
     ";
@@ -73,6 +76,9 @@ try {
             'status' => $row['status'],
             'poaLink' => $row['poa_link'],
             'notes' => $row['notes'],
+            'rejection_reason' => $row['rejection_reason'],
+            'rejection_notes' => $row['rejection_other_notes'],
+            'poa' => $row['poa_link'] // Keeping this for consistency
         ];
     }, $reservations);
 
@@ -87,3 +93,4 @@ try {
         "message" => "Database error: " . $e->getMessage()
     ]);
 }
+?>
