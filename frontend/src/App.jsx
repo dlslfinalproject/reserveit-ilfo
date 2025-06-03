@@ -209,9 +209,17 @@ function App() {
           path="/request-form"
           element={session ? <RequestForm /> : <Navigate to="/" />}
         />
+
+        {/* ✅ Approval Success Route */}
         <Route
           path="/admin/approval-success"
-          element={<ApprovalSuccess />}
+          element={
+          session?.user?.role === 'admin' ? (
+          <ApprovalSuccess /> 
+          ) : (
+            <Navigate to="/" />
+          )
+        }
         />
 
         {/* ✅ Rejection Form Route */}
