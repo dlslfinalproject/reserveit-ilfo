@@ -7,23 +7,38 @@ const RejectionForm = () => {
   const [showRejectConfirm, setShowRejectConfirm] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
   const [notes, setNotes] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleRejectClick = () => {
     if (!selectedReason) {
-      alert("Please select a reason for rejection.");
+      setErrors({ reason: "Please select a reason for rejection." });
       return;
     }
+    setErrors({}); // Clear any previous errors
     setShowRejectConfirm(true);
   };
 
   const confirmRejection = () => {
+    // Clear previous errors
+    setErrors({});
+    
     // Placeholder: send data to backend
     console.log("Rejection reason:", selectedReason);
     console.log("Notes:", notes);
 
-    alert("Reservation has been rejected.");
-    setShowRejectConfirm(false);
-    navigate('/admin/dashboard');
+    // You can replace this with actual API call and error handling
+    try {
+      // Example: Replace with actual API call
+      // const response = await fetch('/api/reject-reservation', { ... });
+      // if (!response.ok) throw new Error('Failed to reject reservation');
+      
+      alert("Reservation has been rejected.");
+      setShowRejectConfirm(false);
+      navigate('/admin/dashboard');
+    } catch (error) {
+      setErrors({ rejection: 'An error occurred while rejecting the reservation.' });
+      setShowRejectConfirm(false);
+    }
   };
 
   const cancelRejection = () => {
@@ -45,6 +60,7 @@ const RejectionForm = () => {
               <option value="">-- Select Reason --</option>
               {/* Options will be dynamically loaded */}
             </select>
+            {errors.reason && <small className="error-message">{errors.reason}</small>}
           </div>
 
           <div className="form-group">
@@ -57,6 +73,12 @@ const RejectionForm = () => {
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
+
+          {errors.rejection && (
+            <div className="form-group">
+              <small className="error-message">{errors.rejection}</small>
+            </div>
+          )}
 
           <div className="approval-actions">
             <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
