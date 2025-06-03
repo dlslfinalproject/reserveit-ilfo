@@ -13,7 +13,7 @@ const ApprovalSuccess = () => {
   const [venues, setVenues] = useState([]);
   const [errors, setErrors] = useState({});
 
-  // Fetch active venues on component mount
+  // Fetch venues on mount
   useEffect(() => {
     fetch('http://localhost/reserveit-ilfo/backend/api/venues.php', {
       method: 'GET',
@@ -21,7 +21,7 @@ const ApprovalSuccess = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === 'success') {
+        if (data.status_name === 'success') {
           setVenues(data.data);
         } else {
           console.error('Failed to fetch venues:', data.message);
@@ -37,22 +37,21 @@ const ApprovalSuccess = () => {
       setErrors({ venue: 'Please select a venue before approving.' });
       return;
     }
-    setErrors({}); // Clear any previous errors
+    setErrors({});
     setShowApproveConfirm(true);
   };
 
   const confirmApproval = () => {
-    // Clear previous errors
     setErrors({});
-    
-    fetch('http://localhost/reserveit-ilfo/backend/api/get_approval_status.php', {
+
+    fetch('http://localhost/reserveit-ilfo/backend/api/approve_reservation.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
         reservation_id: reservationId,
         venue_id: selectedVenue,
-        admin_notes: notes,
+        notes: notes
       }),
     })
       .then((res) => res.json())
