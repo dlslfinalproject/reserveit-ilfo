@@ -56,7 +56,14 @@
 
 .btn.approve {
 background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
-color: white;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px; /* This fixes the narrow width */
 }
 
 .btn.approve:hover {
@@ -68,7 +75,12 @@ color: white;
 .btn.cancel {
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   color: #374151;
+  padding: 10px 20px;
   border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn.cancel:hover {
