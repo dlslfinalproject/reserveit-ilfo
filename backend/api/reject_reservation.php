@@ -16,16 +16,15 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 if (
     !isset($data['reservation_id']) ||
-    !isset($data['rejection_reason_id']) ||
-    !isset($data['rejection_other_notes'])
+    !isset($data['rejection_reason_id'])
 ) {
     echo json_encode(['success' => false, 'message' => 'Missing required fields.']);
     exit;
 }
 
 $reservation_id = $data['reservation_id'];
-$rejection_reason_id = $data['rejection_reason_id'];
-$rejection_other_notes = trim($data['rejection_other_notes']);
+$reason_id = $data['rejection_reason_id'];
+$rejection_other_notes = isset($data['rejection_other_notes']) ? trim($data['rejection_other_notes']) : null;
 
 try {
     $pdo = getDbConnection();
@@ -62,6 +61,13 @@ try {
 
     $rejected_status_id = $statusRow['status_id'];
 
+    // Get reason description
+    $stmt = $pdo->prepare("SELECT reason_description FROM tblrejection_reasons WHERE reason_id = ?");
+    $stmt->execute([$reason_id]);
+    $reasonRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $reasonDescription = $reasonRow ? $reasonRow['reason_description'] : 'Unspecified';
+
     // Update reservation status
     $stmt = $pdo->prepare("
         UPDATE tblreservations 
@@ -71,9 +77,9 @@ try {
             updated_at = NOW() 
         WHERE reservation_id = ?
     ");
-    $stmt->execute([$rejected_status_id, $rejection_reason_id, $rejection_other_notes, $reservation_id]);
+    $stmt->execute([$rejected_status_id, $reason_id, $rejection_other_notes, $reservation_id]);
 
-    // Fetch user info and reservation details for email
+    // Fetch user and reservation info for email
     $stmt = $pdo->prepare("
         SELECT u.email, u.first_name, r.event_name, r.reservation_startdate, r.reservation_enddate
         FROM tblreservations r
@@ -95,10 +101,14 @@ try {
             <h3>Hi {$userName},</h3>
             <p>We regret to inform you that your reservation for <strong>{$eventName}</strong> 
             from <strong>{$start}</strong> to <strong>{$end}</strong> has been <strong>Rejected</strong>.</p>
-            <p><strong>Reason:</strong> {$rejection_other_notes}</p>
-            <p>If you have any questions, please contact the administrator.</p>
-            <p>Thank you for using ReserveIT.</p>
-        ";
+            <p><strong>Reason:</strong> {$reasonDescription}</p>";
+
+        if (!empty($rejection_other_notes)) {
+            $message .= "<p><strong>Additional Notes:</strong> {$rejection_other_notes}</p>";
+        }
+
+        $message .= "<p>If you have any questions, please contact the administrator.</p>
+            <p>Thank you for using ReserveIT.</p>";
 
         sendEmail($userEmail, $subject, $message);
     }

@@ -1,8 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css';
-
 import LoginPage from './LoginPage';
 import AdminDashboard from './AdminDashboard';
 import Dashboard from './Dashboard';
@@ -210,7 +208,6 @@ function App() {
           element={session ? <RequestForm /> : <Navigate to="/" />}
         />
 
-        {/* ✅ Approval Success Route */}
         <Route
           path="/admin/approval-success"
           element={
@@ -222,7 +219,6 @@ function App() {
         }
         />
 
-        {/* ✅ Rejection Form Route */}
         <Route
           path="/admin/rejection-form"
           element={
@@ -234,7 +230,6 @@ function App() {
           }
         />
 
-        {/* Catch-all for unmatched routes */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
