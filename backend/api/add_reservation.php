@@ -9,6 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 require_once '../config/db.php';
+require_once 'email_helper.php'; // Include PHPMailer helper
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -82,6 +83,25 @@ try {
         ':poa_link' => $link_to_csao_approved_poa,
         ':status' => $status_id,
     ]);
+
+    // Email Notification to Admins
+    $adminEmails = ['jane_allyson_paray@dlsl.edu.ph'];
+    $eventName = htmlspecialchars($data['event_name']);
+    $startDate = htmlspecialchars($data['reservation_startdate']);
+    $endDate = htmlspecialchars($data['reservation_enddate']);
+    $userId = htmlspecialchars($data['user_id']);
+
+    foreach ($adminEmails as $adminEmail) {
+        sendEmail(
+            $adminEmail,
+            'New Reservation Submitted',
+            "<h3>New Reservation Request</h3>
+             <p><strong>Event:</strong> {$eventName}</p>
+             <p><strong>User ID:</strong> {$userId}</p>
+             <p><strong>Date:</strong> {$startDate} to {$endDate}</p>
+             <p>Please log in to the system to review and approve/reject this reservation.</p>"
+        );
+    }
 
     http_response_code(201);
     echo json_encode(["success" => true, "message" => "Reservation successfully created."]);
