@@ -1,0 +1,291 @@
+/* Import Google Fonts for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for centering */
+.login-container-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/retreat-tk7eQAJZyfUmnP3QhQulz4nxNwVfKm.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Lighter overlay with sage green tint to match logo */
+.login-container-centered::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(139, 169, 109, 0.4) 0%, rgba(107, 142, 35, 0.3) 100%);
+  z-index: 1;
+}
+
+/* Content wrapper - much lighter with sage green accent */
+.login-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 40px;
+  background: rgba(248, 250, 252, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(139, 169, 109, 0.2);
+  max-width: 480px;
+  width: 90%;
+  position: relative;
+  border: 2px solid rgba(139, 169, 109, 0.3);
+  z-index: 10;
+}
+
+/* Logo styling */
+.center-logo {
+  max-width: 280px;
+  height: auto;
+  margin-bottom: 32px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Description text - darker for better contrast on light background */
+.description-centered {
+  font-size: 1.125rem;
+  color: #374151;
+  margin-bottom: 40px;
+  text-align: center;
+  line-height: 1.6;
+  font-weight: 500;
+  max-width: 100%;
+  white-space: pre-wrap;
+  letter-spacing: -0.025em;
+}
+
+/* Social login container */
+.social-login-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Google Sign-in Button Enhancement with brand colors */
+.social-login-centered > div {
+  transform: scale(1.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 8px 16px -4px rgba(139, 169, 109, 0.2), 0 4px 8px -2px rgba(139, 169, 109, 0.1);
+}
+
+.social-login-centered > div:hover {
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 0 12px 20px -4px rgba(139, 169, 109, 0.3), 0 6px 12px -2px rgba(139, 169, 109, 0.15);
+}
+
+/* Custom Google button styling with brand accent */
+.google-signin-button-centered {
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px -4px rgba(139, 169, 109, 0.3), 0 4px 8px -2px rgba(139, 169, 109, 0.2);
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+.google-signin-button-centered:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  box-shadow: 0 12px 20px -4px rgba(139, 169, 109, 0.4), 0 6px 12px -2px rgba(139, 169, 109, 0.25);
+}
+
+.google-signin-button-centered:active {
+  transform: translateY(0);
+}
+
+.google-signin-button-centered:focus {
+  outline: none;
+  box-shadow: 
+    0 12px 20px -4px rgba(139, 169, 109, 0.4), 
+    0 6px 12px -2px rgba(139, 169, 109, 0.25),
+    0 0 0 3px rgba(139, 169, 109, 0.4);
+}
+
+/* Error message styling with brand colors */
+.error-message-centered {
+  color: #dc2626;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  text-align: center;
+  font-weight: 500;
+  padding: 12px 16px;
+  background: rgba(254, 226, 226, 0.8);
+  border: 1px solid rgba(252, 165, 165, 0.5);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-container-centered {
+    padding: 20px;
+    background-attachment: scroll;
+  }
+  
+  .login-content {
+    padding: 32px 24px;
+    border-radius: 20px;
+    width: 95%;
+    background: rgba(248, 250, 252, 0.97);
+  }
+  
+  .center-logo {
+    max-width: 240px;
+    margin-bottom: 24px;
+  }
+  
+  .description-centered {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+  
+  .social-login-centered > div {
+    transform: scale(1);
+  }
+  
+  .social-login-centered > div:hover {
+    transform: scale(1.05) translateY(-1px);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-content {
+    padding: 24px 20px;
+    border-radius: 16px;
+    background: rgba(248, 250, 252, 0.98);
+  }
+  
+  .center-logo {
+    max-width: 200px;
+    margin-bottom: 20px;
+  }
+  
+  .description-centered {
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+}
+
+/* Loading state animation */
+.login-content.loading {
+  pointer-events: none;
+}
+
+.login-content.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(248, 250, 252, 0.9);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .login-container-centered {
+    background-attachment: scroll;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .login-content {
+    background: white;
+    border: 2px solid #8ba96d;
+  }
+  
+  .description-centered {
+    color: black;
+  }
+  
+  .login-container-centered::before {
+    background: rgba(139, 169, 109, 0.6);
+  }
+}
+
+/* Dark mode support - maintaining brand colors */
+@media (prefers-color-scheme: dark) {
+  .login-container-centered::before {
+    background: linear-gradient(135deg, rgba(139, 169, 109, 0.3) 0%, rgba(107, 142, 35, 0.2) 100%);
+  }
+  
+  .login-content {
+    background: rgba(154, 125, 88, 0.344);
+    border: 2px solid rgba(153, 100, 31, 0.4);
+  }
+  
+  .description-centered {
+    color: #e2e8f0;
+  }
+}
+
+/* Focus visible for better accessibility */
+.google-signin-button-centered:focus-visible {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
+/* Parallax effect for larger screens */
+@media (min-width: 1024px) {
+  .login-container-centered {
+    background-attachment: fixed;
+  }
+}
+
+/* Ensure proper stacking context */
+.login-container-centered > * {
+  position: relative;
+  z-index: 10;
+}
