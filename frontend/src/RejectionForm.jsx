@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';  // <-- add useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import './RejectionForm.css';
 
 const RejectionForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Extract reservation_id from location state
-  const reservation_id = location.state?.reservation_id;
+  // FIX: Extract reservation_id from the nested reservation object
+  const reservation_id = location.state?.reservation?.reservation_id;
 
   const [showRejectConfirm, setShowRejectConfirm] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
@@ -17,14 +17,13 @@ const RejectionForm = () => {
 
   useEffect(() => {
     if (!reservation_id) {
-      // If no reservation_id passed, redirect away (or show error)
       alert('No reservation specified for rejection.');
       navigate('/admin/reservation-records');
     }
   }, [reservation_id, navigate]);
 
   useEffect(() => {
-    fetch('http://localhost/reserveit/api/get_rejection_reasons.php', {
+    fetch('http://localhost/reserveit-ilfo/backend/api/get_rejection_reasons.php', {
       method: 'GET',
       credentials: 'include',
     })
@@ -59,8 +58,7 @@ const RejectionForm = () => {
   const confirmRejection = async () => {
     setErrors({});
     try {
-      // Send rejection to backend
-      const response = await fetch('http://localhost/reserveit/api/reject_reservation.php', {
+      const response = await fetch('http://localhost/reserveit-ilfo/backend/api/reject_reservation.php', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -92,6 +90,9 @@ const RejectionForm = () => {
   const cancelRejection = () => {
     setShowRejectConfirm(false);
   };
+
+  // If no reservation_id, render nothing to avoid UI flash & multiple effects
+  if (!reservation_id) return null;
 
   return (
     <div className="approval-modal">
@@ -134,7 +135,7 @@ const RejectionForm = () => {
           )}
 
           <div className="approval-actions">
-            <button className="btn cancel" onClick={() => navigate('/admin/reservation-records')}>Cancel</button>
+            <button className="btn cancel" onClick={() => navigate('/admin')}>Cancel</button>
             <button className="btn reject" onClick={handleRejectClick}>REJECT</button>
           </div>
         </div>
