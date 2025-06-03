@@ -150,9 +150,9 @@ const AdminDashboard = ({ session, onSignOut }) => {
 
   const EventComponent = ({ event }) => {
     const statusColor = {
-      Approved: "#d1dfbb",
-      Pending: "#d2995e",
-      Rejected: "#E78A8A",
+      Approved: "#6b8e23",
+      Pending: "#cc5500",
+      Rejected: "#b22222",
     }
 
     return (
