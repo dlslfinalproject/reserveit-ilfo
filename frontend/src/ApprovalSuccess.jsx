@@ -138,7 +138,7 @@ const ApprovalSuccess = () => {
       {showSuccessModal && (
         <div className="modal-backdrop">
           <div className="modal-confirm">
-            <h3 className="modal-title">Success</h3>
+            <h3 className="modal-title"></h3>
             <p>Reservation successfully approved!</p>
             <div className="modal-actions">
               <button
