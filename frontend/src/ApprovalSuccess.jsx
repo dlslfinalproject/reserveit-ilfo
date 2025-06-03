@@ -1,25 +1,70 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './ApprovalForm.css';
 
 const ApprovalSuccess = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { reservationId } = location.state || {};
+
   const [showApproveConfirm, setShowApproveConfirm] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [notes, setNotes] = useState('');
+  const [venues, setVenues] = useState([]);
+
+  // Fetch active venues on component mount
+  useEffect(() => {
+    fetch('http://localhost/reserveit-ilfo/backend/api/venues.php', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 'success') {
+          setVenues(data.data);
+        } else {
+          console.error('Failed to fetch venues:', data.message);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching venues:', err);
+      });
+  }, []);
 
   const handleApproveClick = () => {
+    if (!selectedVenue) {
+      alert('Please select a venue before approving.');
+      return;
+    }
     setShowApproveConfirm(true);
   };
 
   const confirmApproval = () => {
-    // Placeholder for submitting to backend
-    console.log('Venue:', selectedVenue);
-    console.log('Admin Notes:', notes);
+    fetch('http://localhost/reserveit-ilfo/backend/api/get_approval_status.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        reservation_id: reservationId,
+        venue_id: selectedVenue,
+        admin_notes: notes,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 'success') {
+          alert('Reservation has been approved.');
+          navigate('/admin/dashboard', { state: { refresh: true } });
+        } else {
+          alert('Failed to approve reservation: ' + data.message);
+        }
+      })
+      .catch((err) => {
+        console.error('Error approving reservation:', err);
+        alert('An error occurred while approving the reservation.');
+      });
 
-    alert('Reservation has been approved.');
     setShowApproveConfirm(false);
-    navigate('/admin/dashboard');
   };
 
   const cancelApproval = () => {
@@ -39,7 +84,11 @@ const ApprovalSuccess = () => {
               onChange={(e) => setSelectedVenue(e.target.value)}
             >
               <option value="">-- Select Venue --</option>
-              {/* Options will be added dynamically via backend fetch in future */}
+              {venues.map((venue) => (
+                <option key={venue.venue_id} value={venue.venue_id}>
+                  {venue.venue_name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -56,7 +105,7 @@ const ApprovalSuccess = () => {
 
           <div className="approval-actions">
             <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
-            <button className="btn approve" onClick={handleApproveClick}>Approve</button>
+            <button className="btn approve" onClick={handleApproveClick}>Confirm</button>
           </div>
         </div>
       </div>
