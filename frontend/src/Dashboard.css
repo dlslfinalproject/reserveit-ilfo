@@ -489,6 +489,49 @@
   color: #94a3b8;
 }
 
+/* Horizontal event stack styling */
+.rbc-row-content {
+  z-index: 4;
+}
+
+.rbc-row-segment {
+  padding: 0 1px;
+}
+
+.rbc-event {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.rbc-event-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.7rem;
+}
+
+.rbc-events-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rbc-row-segment .rbc-event-content {
+  width: 100%;
+  text-align: left;
+}
+
+/* Make sure events don't get cut off */
+.rbc-month-view .rbc-month-row {
+  overflow: visible;
+}
+
+.rbc-month-row .rbc-row-content {
+  overflow: visible;
+}
+
 /* Background enhancement */
 .dashboard-container::before {
   content: "";
