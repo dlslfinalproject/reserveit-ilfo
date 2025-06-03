@@ -2,7 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Optional: log errors to file
 ini_set("log_errors", 1);
 ini_set("error_log", "php-error.log");
 
@@ -70,7 +69,7 @@ try {
             'notes' => $row['notes'],
             'rejection_reason' => $row['rejection_reason'],
             'rejection_notes' => $row['rejection_other_notes'],
-            'poa' => $row['poa_link'] // Adding this for consistency with frontend expectations
+            'poa' => $row['poa_link'] 
         ];
     }, $reservations);
 

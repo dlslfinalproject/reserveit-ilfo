@@ -6,9 +6,9 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 require_once '../config/db.php';
-require_once 'email_helper.php'; // Include email helper
+require_once 'email_helper.php'; 
 
-// Handle preflight OPTIONS request
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -54,7 +54,6 @@ try {
 
     $statusId = $statusRow['status_id'];
 
-    // Get current reservation's status
     $stmt = $pdo->prepare('
         SELECT r.status_id, s.status_name 
         FROM tblreservations r 
@@ -72,7 +71,6 @@ try {
 
     $currentStatus = $currentRow['status_name'];
 
-    // Prevent reversal logic
     if (strtolower($currentStatus) === 'rejected') {
         http_response_code(403);
         echo json_encode(['success' => false, 'message' => 'Cannot change status. Reservation has already been rejected.']);
@@ -85,7 +83,6 @@ try {
         exit;
     }
 
-    // Update reservation status
     $stmt = $pdo->prepare('UPDATE tblreservations SET status_id = :status_id WHERE reservation_id = :id');
     $stmt->execute(['status_id' => $statusId, 'id' => $id]);
 
@@ -94,7 +91,6 @@ try {
         exit;
     }
 
-    // 🔔 Fetch user email and reservation info for notification
     $stmt = $pdo->prepare('
         SELECT r.event_name, r.reservation_startdate, r.reservation_enddate, u.email, u.first_name
         FROM tblreservations r

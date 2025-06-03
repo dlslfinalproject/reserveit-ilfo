@@ -29,7 +29,6 @@ $rejection_other_notes = isset($data['rejection_other_notes']) ? trim($data['rej
 try {
     $pdo = getDbConnection();
 
-    // Check current reservation status
     $stmt = $pdo->prepare("
         SELECT s.status_name 
         FROM tblreservations r
@@ -49,7 +48,7 @@ try {
         exit;
     }
 
-    // Get status ID for "Rejected"
+  
     $stmt = $pdo->prepare("SELECT status_id FROM tblapproval_status WHERE LOWER(status_name) = 'rejected'");
     $stmt->execute();
     $statusRow = $stmt->fetch();
@@ -61,14 +60,12 @@ try {
 
     $rejected_status_id = $statusRow['status_id'];
 
-    // Get reason description
     $stmt = $pdo->prepare("SELECT reason_description FROM tblrejection_reasons WHERE reason_id = ?");
     $stmt->execute([$reason_id]);
     $reasonRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $reasonDescription = $reasonRow ? $reasonRow['reason_description'] : 'Unspecified';
 
-    // Update reservation status
     $stmt = $pdo->prepare("
         UPDATE tblreservations 
         SET status_id = ?, 
@@ -79,7 +76,6 @@ try {
     ");
     $stmt->execute([$rejected_status_id, $reason_id, $rejection_other_notes, $reservation_id]);
 
-    // Fetch user and reservation info for email
     $stmt = $pdo->prepare("
         SELECT u.email, u.first_name, r.event_name, r.reservation_startdate, r.reservation_enddate
         FROM tblreservations r
