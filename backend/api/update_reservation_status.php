@@ -40,6 +40,7 @@ if (!in_array($status, $allowedStatuses)) {
 try {
     $pdo = getDbConnection(); // ✅ Use correct DB connection function
 
+    // Get status ID of the target status
     $stmt = $pdo->prepare('SELECT status_id FROM tblapproval_status WHERE status_name = :status');
     $stmt->execute(['status' => $status]);
     $statusRow = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -52,11 +53,43 @@ try {
 
     $statusId = $statusRow['status_id'];
 
+    // Get current reservation's status
+    $stmt = $pdo->prepare('
+        SELECT s.status_name 
+        FROM tblreservations r 
+        JOIN tblapproval_status s ON r.status_id = s.status_id 
+        WHERE r.reservation_id = :id
+    ');
+    $stmt->execute(['id' => $id]);
+    $currentRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$currentRow) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Reservation not found']);
+        exit;
+    }
+
+    $currentStatus = $currentRow['status_name'];
+
+    // Prevent reversal logic
+    if (strtolower($currentStatus) === 'rejected') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Cannot change status. Reservation has already been rejected.']);
+        exit;
+    }
+
+    if (strtolower($currentStatus) === 'approved' && strtolower($status) !== 'approved') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Cannot change status. Reservation has already been approved.']);
+        exit;
+    }
+
+    // Proceed to update status
     $stmt = $pdo->prepare('UPDATE tblreservations SET status_id = :status_id WHERE reservation_id = :id');
     $stmt->execute(['status_id' => $statusId, 'id' => $id]);
 
     if ($stmt->rowCount() === 0) {
-        echo json_encode(['success' => false, 'message' => 'Reservation not found or status unchanged']);
+        echo json_encode(['success' => false, 'message' => 'Status unchanged.']);
         exit;
     }
 
