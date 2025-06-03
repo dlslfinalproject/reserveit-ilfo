@@ -9,13 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-try {
-    $pdo = getDbConnection();
-    $stmt = $pdo->query("SELECT reason_id, reason_description FROM tblrejection_reasons ORDER BY reason_id");
-    $reasons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    echo json_encode($reasons);
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(["error" => "Failed to fetch rejection reasons"]);
+try {
+    $stmt = $conn->prepare("SELECT reason_id, reason_description FROM tblrejection_reasons ORDER BY reason_description ASC");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $reasons = [];
+    while ($row = $result->fetch_assoc()) {
+        $reasons[] = $row;
+    }
+
+    echo json_encode(['success' => true, 'reasons' => $reasons]);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Failed to fetch rejection reasons.', 'error' => $e->getMessage()]);
 }
+?>

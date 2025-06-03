@@ -1,40 +1,86 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './RejectionForm.css';
 
 const RejectionForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Extract reservation_id from location state
+  const reservation_id = location.state?.reservation_id;
+
   const [showRejectConfirm, setShowRejectConfirm] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState({});
+  const [rejectionReasons, setRejectionReasons] = useState([]);
+
+  useEffect(() => {
+    if (!reservation_id) {
+      alert('No reservation specified for rejection.');
+      navigate('/admin/reservation-records');
+    }
+  }, [reservation_id, navigate]);
+
+  useEffect(() => {
+    fetch('http://localhost/reserveit/api/get_rejection_reasons.php', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch rejection reasons');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          setRejectionReasons(data.reasons);
+        } else {
+          setErrors({ fetch: 'Failed to load rejection reasons.' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching rejection reasons:', error);
+        setErrors({ fetch: 'Failed to load rejection reasons.' });
+      });
+  }, []);
 
   const handleRejectClick = () => {
     if (!selectedReason) {
       setErrors({ reason: "Please select a reason for rejection." });
       return;
     }
-    setErrors({}); // Clear any previous errors
+    setErrors({});
     setShowRejectConfirm(true);
   };
 
-  const confirmRejection = () => {
-    // Clear previous errors
+  const confirmRejection = async () => {
     setErrors({});
-    
-    // Placeholder: send data to backend
-    console.log("Rejection reason:", selectedReason);
-    console.log("Notes:", notes);
-
-    // You can replace this with actual API call and error handling
     try {
-      // Example: Replace with actual API call
-      // const response = await fetch('/api/reject-reservation', { ... });
-      // if (!response.ok) throw new Error('Failed to reject reservation');
-      
-      alert("Reservation has been rejected.");
-      setShowRejectConfirm(false);
-      navigate('/admin/dashboard');
+      const response = await fetch('http://localhost/reserveit/api/reject_reservation.php', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reservation_id,
+          rejection_reason_id: selectedReason,
+          rejection_other_notes: notes,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Reservation has been rejected.");
+        setShowRejectConfirm(false);
+        navigate('/admin/reservation-records');
+      } else {
+        setErrors({ rejection: data.message || 'Failed to reject reservation.' });
+        setShowRejectConfirm(false);
+      }
     } catch (error) {
       setErrors({ rejection: 'An error occurred while rejecting the reservation.' });
       setShowRejectConfirm(false);
@@ -58,9 +104,14 @@ const RejectionForm = () => {
               onChange={(e) => setSelectedReason(e.target.value)}
             >
               <option value="">-- Select Reason --</option>
-              {/* Options will be dynamically loaded */}
+              {rejectionReasons.map((reason) => (
+                <option key={reason.reason_id} value={reason.reason_id}>
+                  {reason.reason_description}
+                </option>
+              ))}
             </select>
             {errors.reason && <small className="error-message">{errors.reason}</small>}
+            {errors.fetch && <small className="error-message">{errors.fetch}</small>}
           </div>
 
           <div className="form-group">
@@ -81,8 +132,12 @@ const RejectionForm = () => {
           )}
 
           <div className="approval-actions">
-            <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
-            <button className="btn reject" onClick={handleRejectClick}>REJECT</button>
+            <button className="btn cancel" onClick={() => navigate('/admin/reservation-records')}>
+              Cancel
+            </button>
+            <button className="btn reject" onClick={handleRejectClick}>
+              REJECT
+            </button>
           </div>
         </div>
       </div>
