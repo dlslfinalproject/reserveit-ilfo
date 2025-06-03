@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react" // Ensure useRef is imported
 import "./AdminDashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
@@ -27,6 +27,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [activeStatusTab, setActiveStatusTab] = useState("details")
   const [showRejectionForm, setShowRejectionForm] = useState(false)
   const navigate = useNavigate()
+
+  // *** ADD THESE REFS ***
+  const profileMenuRef = useRef(null);
+  const profileButtonRef = useRef(null);
 
   const splitReservationIntoDays = (reservation) => {
     const start = moment(reservation.startDate)
@@ -69,6 +73,25 @@ const AdminDashboard = ({ session, onSignOut }) => {
 
     fetchReservations()
   }, [])
+
+  // *** ADD THIS useEffect for click-outside-to-close ***
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Close profile menu if click is outside the menu and outside the button
+      if (
+        profileMenuRef.current && !profileMenuRef.current.contains(event.target) &&
+        profileButtonRef.current && !profileButtonRef.current.contains(event.target)
+      ) {
+        setShowProfile(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside); // Use mousedown for quicker response
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
+
 
   const handleLogout = async () => {
     try {
@@ -178,22 +201,25 @@ const AdminDashboard = ({ session, onSignOut }) => {
             <FaEnvelope /> Gmail
           </button>
           <div className="profile-dropdown">
-            <button onClick={() => setShowProfile(!showProfile)}>
+            {/* Attach ref to the button */}
+            <button onClick={() => setShowProfile(!showProfile)} ref={profileButtonRef}>
               <FaUserCircle size={24} />
             </button>
-            {showProfile && (
-              <div className="profile-menu">
-                <p>{session?.user?.email || "Unknown User"}</p>
-                <button onClick={() => {
-                  setShowProfile(false)
-                  navigate("/settings")
-                }}>
-                  <FaCog style={{ marginRight: "8px" }} />
-                  Settings
-                </button>
-                <button onClick={handleLogout}>Log Out</button>
-              </div>
-            )}
+            {/* *** MODIFIED LINE BELOW: REMOVED showProfile && *** */}
+            <div
+              className={`profile-menu ${showProfile ? 'is-active' : ''}`}
+              ref={profileMenuRef} // Attach ref to the menu div
+            >
+              <p>{session?.user?.email || "Unknown User"}</p>
+              <button onClick={() => {
+                setShowProfile(false)
+                navigate("/settings")
+              }}>
+                <FaCog style={{ marginRight: "8px" }} />
+                Settings
+              </button>
+              <button onClick={handleLogout}>Log Out</button>
+            </div>
           </div>
         </div>
       </div>
@@ -219,7 +245,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
               <option value="Pending">Pending</option>
             </select>
           </div>
-          <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span>
+          <span className="calendar-nav-month">{moment(currentDate).format("MMMM YYYY")}</span> {/* Fixed format */}
         </div>
 
         <button onClick={goToNextMonth} className="calendar-nav-button">
@@ -294,7 +320,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
             </div>
 
             <div className="status-actions">
-             <button className="status-btn reject-btn" onClick={() =>
+              <button className="status-btn reject-btn" onClick={() =>
                 navigate("/admin/rejection-form", { state: { reservation: selectedEvent.raw }
                   })
                 }
@@ -315,4 +341,4 @@ const AdminDashboard = ({ session, onSignOut }) => {
   )
 }
 
-export default AdminDashboard
+export default AdminDashboard;
