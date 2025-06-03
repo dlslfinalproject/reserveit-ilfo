@@ -31,7 +31,7 @@ body {
 .settings-header {
   background: linear-gradient(135deg, #8ba96d 0%, #a2ba82 100%);
   padding: 24px 32px;
-  text-align: center;
+  text-align: left;
 }
 
 .settings-title {
@@ -130,8 +130,8 @@ body {
 }
 
 .delete-venue-button {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  border: 1px solid #fca5a5;
+ background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 0.5px solid #d1d5db;
   border-radius: 8px;
   padding: 8px;
   cursor: pointer;
@@ -142,8 +142,9 @@ body {
 }
 
 .delete-venue-button:hover {
-  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .trash-icon {
@@ -253,7 +254,7 @@ body {
 }
 
 .reactivate-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+ background: linear-gradient(135deg, #add287 0%, #81ac2b 100%);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -267,14 +268,14 @@ body {
 }
 
 .reactivate-btn:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #8aae6e 0%, #86b62d 100%);
+  transform: translateY(-1px);
 }
 
 /* Button Group */
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
   padding-top: 24px;
   border-top: 1px solid #e5e7eb;
@@ -300,7 +301,7 @@ body {
 }
 
 .add-button {
-  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  background: linear-gradient(135deg, #d2995e 0%, #c57927 100%);
   color: white;
   padding: 12px 24px;
   border: none;
@@ -314,13 +315,13 @@ body {
 }
 
 .add-button:hover {
-  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  background: linear-gradient(135deg, #c78e52 0%, #ac6a24 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
+  box-shadow: 0 8px 12px -2px rgba(169, 141, 109, 0.4);
 }
 
 .save-button {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
   color: white;
   padding: 12px 24px;
   border: none;
@@ -334,9 +335,9 @@ body {
 }
 
 .save-button:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 12px -2px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
 }
 
 /* Popup Styles */
@@ -399,14 +400,31 @@ body {
 .popup-buttons {
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: space-around;
+}
+
+.confirm-add-button {
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px; /* This fixes the narrow width */
+}
+
+.confirm-add-button:hover {
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  transform: translateY(-1px);
 }
 
 .cancel-button {
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   color: #374151;
   padding: 10px 20px;
-  border: 1px solid #d1d5db;
+  border: 2px solid #d1d5db;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
@@ -414,5 +432,33 @@ body {
 }
 
 .cancel-button:hover {
-  background: linear-gradient(135deg)
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.add-venue-popup-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.delete-confirm-button {
+  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px; /* This fixes the narrow width */
+}
+
+.delete-confirm-button:hover {
+  background: linear-gradient(135deg, #d14d4b 0%, #b51c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(220, 38, 38, 0.4);
 }
