@@ -76,7 +76,6 @@ const ReservationFormUser = () => {
   if (!formData.startTime) newErrors.startTime = "Start time required"
   if (!formData.endTime) newErrors.endTime = "End time required"
 
-  // Time range limits: 7:00 AM to 5:00 PM
   const minHour = 7
   const maxHour = 17
 
@@ -94,7 +93,6 @@ const ReservationFormUser = () => {
     }
   }
 
-  // Start time must be before end time (only if same day)
   if (
     formData.startDate &&
     formData.endDate &&
@@ -130,7 +128,6 @@ const ReservationFormUser = () => {
 
     if (Object.keys(validationErrors).length > 0) return
 
-    // Prepare payload exactly matching PHP expected keys
     const payload = {
       user_id: storedUser.id,
       event_name: formData.eventName.trim(),
@@ -149,7 +146,7 @@ const ReservationFormUser = () => {
       end_time: formData.endTime.toTimeString().split(" ")[0],
       notes: formData.notes.trim(),
       link_to_csao_approved_poa: formData.poaLink.trim(),
-      venue_id: null, // Adjust or remove if needed
+      venue_id: null, 
     }
 
     try {
@@ -199,7 +196,6 @@ const ReservationFormUser = () => {
           {errors.eventName && <small className="error-message">{errors.eventName}</small>}
         </div>
 
-        {/* Nature of Activity */}
         <div className="form-group">
           <label>Nature of Activity:</label>
           <select
@@ -227,7 +223,6 @@ const ReservationFormUser = () => {
           {errors.customActivity && <small className="error-message">{errors.customActivity}</small>}
         </div>
 
-        {/* Number of Participants */}
         <div className="form-group">
           <label>Number of Participants:</label>
           <input
@@ -242,8 +237,6 @@ const ReservationFormUser = () => {
           {errors.numberOfParticipants && <small className="error-message">{errors.numberOfParticipants}</small>}
         </div>
 
-        {/* Dates and times (same as your original) */}
-        {/* Start Date */}
         <div className="form-group">
           <label>Start Date:</label>
           <DatePicker
@@ -258,7 +251,6 @@ const ReservationFormUser = () => {
           {errors.startDate && <small className="error-message">{errors.startDate}</small>}
         </div>
 
-        {/* End Date */}
         <div className="form-group">
           <label>End Date:</label>
           <DatePicker
@@ -272,7 +264,6 @@ const ReservationFormUser = () => {
           {errors.endDate && <small className="error-message">{errors.endDate}</small>}
         </div>
 
-        {/* Start Time */}
         <div className="form-group">
           <label>Start Time:</label>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -285,7 +276,6 @@ const ReservationFormUser = () => {
           {errors.startTime && <small className="error-message">{errors.startTime}</small>}
         </div>
 
-        {/* End Time */}
         <div className="form-group">
           <label>End Time:</label>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -298,7 +288,6 @@ const ReservationFormUser = () => {
           {errors.endTime && <small className="error-message">{errors.endTime}</small>}
         </div>
 
-        {/* Notes */}
         <div className="form-group">
           <label>Notes (Optional):</label>
           <textarea
@@ -308,7 +297,6 @@ const ReservationFormUser = () => {
           />
         </div>
 
-        {/* POA Link */}
         <div className="form-group">
           <label>Program of Activity(POA) Link:</label>
           <input

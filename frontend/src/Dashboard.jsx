@@ -250,7 +250,7 @@ const Dashboard = ({ onSignOut }) => {
           onNavigate={(date) => setCurrentDate(date)}
           view={Views.MONTH}
           toolbar={false}
-          popup={true} // ✅ Added here
+          popup={true} 
           style={{ height: 500 }}
           onSelectEvent={handleEventClick}
           components={calendarComponents}

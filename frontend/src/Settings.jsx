@@ -29,38 +29,35 @@ const Settings = () => {
         const json = JSON.parse(text);
         return json;
       } catch (err) {
-        console.error("❌ Failed to parse JSON. Raw response:", text);
+        console.error("Failed to parse JSON. Raw response:", text);
         throw new Error("Invalid JSON response");
       }
     } catch (err) {
-      console.error("❌ Fetch error:", err);
+      console.error("Fetch error:", err);
       throw err;
     }
   };
 
-  // Show error modal instead of alert
   const showError = (message) => {
     setModalMessage(message);
     setShowErrorModal(true);
   };
 
-  // Show success modal instead of alert
   const showSuccess = (message) => {
     setModalMessage(message);
     setShowSuccessModal(true);
   };
 
-  // Fetch active venues
   const fetchActiveVenues = () => {
     fetchWithDebug(apiUrl, { credentials: "include" })
       .then((data) => {
         if (data.status === "success") {
           setVenues(data.data);
         } else {
-          console.error("❌ Failed to fetch venues:", data.message);
+          console.error(" Failed to fetch venues:", data.message);
         }
       })
-      .catch((err) => console.error("❌ Error loading venues:", err));
+      .catch((err) => console.error("Error loading venues:", err));
   };
 
   // Fetch deleted venues
@@ -70,10 +67,10 @@ const Settings = () => {
         if (data.status === "success") {
           setDeletedVenues(data.data);
         } else {
-          console.error("❌ Failed to fetch deleted venues:", data.message);
+          console.error("Failed to fetch deleted venues:", data.message);
         }
       })
-      .catch((err) => console.error("❌ Error loading deleted venues:", err));
+      .catch((err) => console.error("Error loading deleted venues:", err));
   };
 
   useEffect(() => {
@@ -446,8 +443,6 @@ const Settings = () => {
           </div>
         </div>
       )}
-
-      {/* Success Modal */}
       {showSuccessModal && (
         <div className="popup-overlay">
           <div className="popup-content success-modal">
