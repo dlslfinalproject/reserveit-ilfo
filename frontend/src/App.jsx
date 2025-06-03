@@ -208,7 +208,6 @@ function App() {
           element={session ? <RequestForm /> : <Navigate to="/" />}
         />
 
-        {/* ✅ Approval Success Route */}
         <Route
           path="/admin/approval-success"
           element={
@@ -220,7 +219,6 @@ function App() {
         }
         />
 
-        {/* ✅ Rejection Form Route */}
         <Route
           path="/admin/rejection-form"
           element={
@@ -232,7 +230,6 @@ function App() {
           }
         />
 
-        {/* Catch-all for unmatched routes */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
