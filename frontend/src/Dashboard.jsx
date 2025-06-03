@@ -120,7 +120,6 @@ const Dashboard = ({ onSignOut }) => {
           whiteSpace: "nowrap",
           textOverflow: "ellipsis",
           margin: "1px 0",
-          display: "inline-block",
           maxWidth: "100%",
           border: "1px solid rgba(0,0,0,0.1)",
         }}

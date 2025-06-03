@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './ApprovalForm.css';
+import './ApprovalSuccess.css';
 
 const ApprovalSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { reservationId } = location.state || {};
+  
+    const reservation_id = location.state?.reservation?.reservation_id;
 
   const [showApproveConfirm, setShowApproveConfirm] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState('');
@@ -21,7 +22,7 @@ const ApprovalSuccess = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status_name === 'success') {
+        if (data.status === 'success') {
           setVenues(data.data);
         } else {
           console.error('Failed to fetch venues:', data.message);
@@ -49,7 +50,7 @@ const ApprovalSuccess = () => {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
-        reservation_id: reservationId,
+        reservation_id: reservation_id,
         venue_id: selectedVenue,
         notes: notes
       }),
@@ -82,7 +83,7 @@ const ApprovalSuccess = () => {
 
         <div className="approval-form">
           <div className="form-group">
-            <label>Facility</label>
+            <label>Venue</label>
             <select
               value={selectedVenue}
               onChange={(e) => setSelectedVenue(e.target.value)}
