@@ -166,7 +166,7 @@ const RejectionForm = () => {
           message="Reservation has been rejected."
           onClose={() => {
             setShowSuccess(false);
-            navigate('/admin/reservation-records');
+            navigate('/admin');
           }}
         />
       )}
