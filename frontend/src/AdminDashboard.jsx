@@ -326,13 +326,27 @@ const AdminDashboard = ({ session, onSignOut }) => {
                   <div className="modal-content-item"><span>Venue</span><p>{selectedEvent.raw.venue}</p></div>
                   <div className="modal-content-item"><span>Time</span><p>{selectedEvent.raw.time.start} - {selectedEvent.raw.time.end}</p></div>
                 </>
-              ) : (
-                <div className="modal-content-item">
-                  <span>POA (Program of Activities)</span>
-                  <p>{selectedEvent.raw.poa || "No POA uploaded."}</p>
+               ) : (
+                <>
+                  <div className="modal-content-item">
+                    <span>Notes</span>
+                    <p>{selectedEvent.raw.notes || "No notes provided."}</p>
+                  </div>
+                  <div className="modal-content-item">
+                    <span>POA (Program of Activities)</span>
+                    {selectedEvent.raw.poa ? (
+                      <p>
+                        <a href={selectedEvent.raw.poa} target="_blank" rel="noopener noreferrer">
+                          View POA Document
+                        </a>
+                      </p>
+                    ) : (
+                      <p>No POA uploaded.</p>
+                    )}
+                  </div>
+                    </>
+                  )}
                 </div>
-              )}
-            </div>
 
             {/* Only show action buttons for pending reservations */}
             {isPendingStatus && (
