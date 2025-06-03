@@ -11,6 +11,7 @@ const ApprovalSuccess = () => {
   const [selectedVenue, setSelectedVenue] = useState('');
   const [notes, setNotes] = useState('');
   const [venues, setVenues] = useState([]);
+  const [errors, setErrors] = useState({});
 
   // Fetch active venues on component mount
   useEffect(() => {
@@ -33,13 +34,17 @@ const ApprovalSuccess = () => {
 
   const handleApproveClick = () => {
     if (!selectedVenue) {
-      alert('Please select a venue before approving.');
+      setErrors({ venue: 'Please select a venue before approving.' });
       return;
     }
+    setErrors({}); // Clear any previous errors
     setShowApproveConfirm(true);
   };
 
   const confirmApproval = () => {
+    // Clear previous errors
+    setErrors({});
+    
     fetch('http://localhost/reserveit-ilfo/backend/api/get_approval_status.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -56,15 +61,15 @@ const ApprovalSuccess = () => {
           alert('Reservation has been approved.');
           navigate('/admin/dashboard', { state: { refresh: true } });
         } else {
-          alert('Failed to approve reservation: ' + data.message);
+          setErrors({ approval: data.message || 'Failed to approve reservation' });
+          setShowApproveConfirm(false);
         }
       })
       .catch((err) => {
         console.error('Error approving reservation:', err);
-        alert('An error occurred while approving the reservation.');
+        setErrors({ approval: 'An error occurred while approving the reservation.' });
+        setShowApproveConfirm(false);
       });
-
-    setShowApproveConfirm(false);
   };
 
   const cancelApproval = () => {
@@ -90,6 +95,7 @@ const ApprovalSuccess = () => {
                 </option>
               ))}
             </select>
+            {errors.venue && <small className="error-message">{errors.venue}</small>}
           </div>
 
           <div className="form-group">
@@ -102,6 +108,12 @@ const ApprovalSuccess = () => {
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
+
+          {errors.approval && (
+            <div className="form-group">
+              <small className="error-message">{errors.approval}</small>
+            </div>
+          )}
 
           <div className="approval-actions">
             <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
