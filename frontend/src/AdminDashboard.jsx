@@ -294,18 +294,23 @@ const AdminDashboard = ({ session, onSignOut }) => {
             </div>
 
             <div className="status-actions">
+<<<<<<< HEAD
              <button className="status-btn reject-btn" onClick={() =>
                 navigate("/admin/rejection-form", { state: { reservation: selectedEvent.raw }
                   })
                 }
               >
                 <FaTimes /> Reject
+=======
+              <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
+                <FaTimes /> REJECT
+>>>>>>> dad8f940f82c6a542a7bb31bfa78d85b8c492e7b
               </button>
               <button className="status-btn approve-btn" onClick={() => {
                   navigate("/admin/approval-success", { state: { reservation: selectedEvent.raw } })
                 }}
               >
-                <FaCheck /> Approve
+                <FaCheck /> APPROVE
               </button>
             </div>
           </div>

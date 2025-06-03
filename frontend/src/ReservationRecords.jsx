@@ -357,26 +357,19 @@ function ReservationRecords() {
                 )}
               </div>
 
-              <div className="status-actions">
-                <button className="status-btn reject-btn" onClick={() => updateStatus(selectedReservation.reservation_id, "Rejected")}>
-                  <FaTimes /> Reject
-                </button>
-                <button className="status-btn approve-btn" onClick={() => updateStatus(selectedReservation.reservation_id, "Approved")}>
-                  <FaCheck /> Approve
-                </button>
-              </div>
             </div>
           </div>
         )}
 
         <div className="records-actions">
-          <button className="print-summary-btn" onClick={generateSummaryReport}>
-            <FaPrint style={{ marginRight: "8px" }} />
-            Print Summary
-          </button>
           <button className="back-dashboard-btn" onClick={() => navigate("/admin-dashboard")}>
             Back to Dashboard
           </button>
+          <button className="print-summary-btn" onClick={generateSummaryReport}>
+            <FaPrint style={{ marginRight: "8px" }} />
+            PRINT SUMMARY
+          </button>
+          
         </div>
       </div>
     </div>

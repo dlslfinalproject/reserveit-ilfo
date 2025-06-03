@@ -176,9 +176,9 @@ const Settings = () => {
         setVenues(venues.filter((v) => v.venue_id !== venueToDelete.venue_id));
         // Add to deleted venues list
         setDeletedVenues([...deletedVenues, venueToDelete]);
-        showSuccess("Venue deleted successfully!");
+        showSuccess("Venue removed successfully!");
       } else {
-        showError("Failed to delete venue: " + data.message);
+        showError("Failed to remove venue: " + data.message);
       }
       setShowDeletePopup(false);
       setVenueToDelete(null);
@@ -327,10 +327,10 @@ const Settings = () => {
               Back
             </button>
             <button className="add-button" onClick={() => setShowAddPopup(true)}>
-              Add Venue
+              ADD VENUE
             </button>
             <button className="save-button" onClick={() => setShowSavePopup(true)}>
-              Save Changes
+              SAVE CHANGES
             </button>
           </div>
         </div>
@@ -378,7 +378,7 @@ const Settings = () => {
                 Cancel
               </button>
               <button className="confirm-add-button" onClick={handleAddVenue}>
-                Add
+                ADD
               </button>
             </div>
           </div>
@@ -398,7 +398,7 @@ const Settings = () => {
                 Cancel
               </button>
               <button className="confirm-add-button" onClick={handleSaveChanges}>
-                Save
+                SAVE
               </button>
             </div>
           </div>
@@ -411,7 +411,7 @@ const Settings = () => {
           <div className="popup-content">
             <h3>Delete Venue</h3>
             <p className="popup-message">
-              Are you sure you want to delete "<strong>{venueToDelete?.venue_name}</strong>"? This action cannot be undone.
+              Are you sure you want to delete <strong>{venueToDelete?.venue_name}</strong>?
             </p>
             <div className="popup-buttons">
               <button
@@ -424,7 +424,7 @@ const Settings = () => {
                 Cancel
               </button>
               <button className="delete-confirm-button" onClick={handleDeleteVenueConfirmed}>
-                Delete
+                DELETE
               </button>
             </div>
           </div>
@@ -451,7 +451,7 @@ const Settings = () => {
       {showSuccessModal && (
         <div className="popup-overlay">
           <div className="popup-content success-modal">
-            <div className="modal-icon success-icon">✅</div>
+            <div className="modal-icon success-icon"></div>
             <h3>Success</h3>
             <p className="popup-message">{modalMessage}</p>
             <div className="popup-buttons">
