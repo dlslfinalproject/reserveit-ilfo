@@ -114,16 +114,16 @@ const Dashboard = ({ onSignOut }) => {
 
   const EventComponent = ({ event }) => {
     const statusColor = {
-      Approved: "#C9E1B8",
-      Pending: "#FFB527",
-      Rejected: "#E78A8A",
+      Approved: "#6b8e23",
+      Pending: "#ff8c00",
+      Rejected: "#b22222",
     }
 
     return (
       <div
         style={{
           backgroundColor: statusColor[event.status] || "#9E9E9E",
-          color: "#000",
+          color: "#fff",
           padding: "2px 4px",
           borderRadius: "4px",
           fontSize: "0.7rem",
