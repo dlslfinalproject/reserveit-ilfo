@@ -7,9 +7,10 @@ header("Access-Control-Allow-Methods: POST");
 session_start(); // Required to access $_SESSION
 
 require_once '../config/db.php';
+$pdo = getDbConnection();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['status_name' => 'error', 'message' => 'Invalid request method.']);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
     exit;
 }
 
@@ -20,38 +21,37 @@ $reservation_id = $input['reservation_id'] ?? null;
 $venue_id = $input['venue_id'] ?? null;
 $notes = $input['notes'] ?? null;
 
-
 if (!$reservation_id || !$venue_id) {
-    echo json_encode(['status_name' => 'error', 'message' => 'Missing reservation ID or venue ID.']);
+    echo json_encode(['status' => 'error', 'message' => 'Missing reservation ID or venue ID.']);
     exit;
 }
 
 try {
     // Verify reservation exists and is pending
-    $stmt = $pdo->prepare("SELECT * FROM tblreservations WHERE reservation_id = ?");
+    $stmt = $pdo->prepare("SELECT status_id FROM tblreservations WHERE reservation_id = ?");
     $stmt->execute([$reservation_id]);
     $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$reservation) {
-        echo json_encode(['status_name' => 'error', 'message' => 'Reservation not found.']);
+        echo json_encode(['status' => 'error', 'message' => 'Reservation not found.']);
         exit;
     }
 
-    if ($reservation['status_name'] !== 'pending') {
-        echo json_encode(['status_name' => 'error', 'message' => 'Reservation is not pending.']);
+    if ((int)$reservation['status_id'] !== 1) { // 1 = Pending
+        echo json_encode(['status' => 'error', 'message' => 'Reservation is not pending.']);
         exit;
     }
 
-    // Update reservation with approved status and assigned venue
+    // Approve reservation (status_id = 2 for Approved)
     $stmt = $pdo->prepare("
         UPDATE tblreservations
-        SET status_name = 'approved', venue_id = ?, approved_at = NOW(),  admin_notes = ?
+        SET status_id = 2, venue_id = ?, admin_notes = ?
         WHERE reservation_id = ?
     ");
     $stmt->execute([$venue_id, $notes, $reservation_id]);
 
-    echo json_encode(['status_name' => 'success', 'message' => 'Reservation approved.']);
+    echo json_encode(['status' => 'success', 'message' => 'Reservation approved.']);
 } catch (PDOException $e) {
     error_log("Database error: " . $e->getMessage());
-    echo json_encode(['status_name' => 'error', 'message' => 'Database error.']);
+    echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
 }
