@@ -1,8 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css';
-
 import LoginPage from './LoginPage';
 import AdminDashboard from './AdminDashboard';
 import Dashboard from './Dashboard';
