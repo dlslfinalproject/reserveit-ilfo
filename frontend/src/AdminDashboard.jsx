@@ -299,7 +299,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
                   })
                 }
               >
-                <FaTimes /> Reject
+                <FaTimes /> REJECT
               </button>
               <button className="status-btn approve-btn" onClick={() => {
                   navigate("/admin/approval-success", { state: { reservation: selectedEvent.raw } })
