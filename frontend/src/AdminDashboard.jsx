@@ -39,7 +39,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
       days.push({
         id: reservation.reservation_id + "-" + m.format("YYYYMMDD"),
         reservationId: reservation.reservation_id,
-        title: reservation.nameOfProgram,
+        title: reservation.nameOfProgram, // This is the property that holds the event name
         whoReserved: reservation.whoReserved,
         category: reservation.natureOfActivity,
         status: reservation.status,
@@ -156,6 +156,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
     ? events
     : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
 
+  // MODIFIED EventComponent to only display event.title
   const EventComponent = ({ event }) => {
     const statusColor = {
       Approved: "#6b8e23",
@@ -168,17 +169,18 @@ const AdminDashboard = ({ session, onSignOut }) => {
         style={{
           backgroundColor: statusColor[event.status] || "#9E9E9E",
           color: "#fff",
-          padding: "4px 6px",
+          padding: "2px 4px", // Adjusted padding for smaller text
           borderRadius: "4px",
           fontSize: "0.75rem",
           lineHeight: "1.2",
-          overflow: "hidden",
-          whiteSpace: "normal",
+          overflow: "hidden", // Keep hidden for ellipsis if needed
+          whiteSpace: "nowrap", // Keep nowrap for ellipsis, or change to normal for wrapping
+          textOverflow: "ellipsis", // Ensure ellipsis works
+          cursor: "pointer", // Indicate it's clickable
+          display: "block", // Ensure it takes full width
         }}
       >
-        <div style={{ fontWeight: "bold" }}>{event.whoReserved}</div>
-        <div>{`${event.category} | ${event.timeRange}`}</div>
-        <div style={{ fontStyle: "italic", fontSize: "0.7rem" }}>{event.status}</div>
+        {event.title}
       </div>
     )
   }
@@ -272,6 +274,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
           style={{ height: 500 }}
           onSelectEvent={handleEventClick}
           components={{ event: EventComponent }}
+          popup={true}
         />
       </div>
 
