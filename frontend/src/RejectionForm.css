@@ -24,7 +24,7 @@
   border-top-right-radius: 16px;
   font-size: 1.25rem;
   font-weight: bold;
-  color: #333;
+  color: #f7f4f4;
   text-align: left;
   border: 1px solid #ccc;
   border-bottom: none;
@@ -91,6 +91,13 @@
 }
 
 .btn.reject {
-  background-color: #cc3d2c;
-  color: #fff;
+  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+}
+
+.btn.reject:hover {
+  background: linear-gradient(135deg, #d14d4b 0%, #b51c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(220, 38, 38, 0.4);
 }
