@@ -11,6 +11,7 @@ import ReservationRecords from './ReservationRecords';
 import UserRecords from './UserRecords';
 import Settings from './Settings';
 import RequestForm from './RequestForm';
+import ApprovalSuccess from './ApprovalSuccess';
 
 const PHP_API_BASE_URL = 'http://localhost/reserveit-ilfo/backend/api';
 
@@ -199,6 +200,7 @@ function App() {
         <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
         <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
         <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
+        <Route path="/admin/approval-success" element={<ApprovalSuccess />} />
 
         {/* Optional: Catch-all for unmatched routes */}
         <Route path="*" element={<Navigate to="/" />} />

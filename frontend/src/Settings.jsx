@@ -365,7 +365,7 @@ const Settings = () => {
               className="popup-input"
               min={1}
             />
-            <div className="popup-buttons">
+            <div className="add-venue-popup-buttons">
               <button
                 className="cancel-button"
                 onClick={() => {
