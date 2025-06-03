@@ -134,7 +134,7 @@ function ReservationRecords() {
               <th>Requestor</th>
               <th>Program Name</th>
               <th>Activity</th>
-              <th>Venue</th>
+              <th>Venue/Reason</th>
               <th>Participants</th>
               <th>Start Date</th>
               <th>End Date</th>
@@ -149,7 +149,9 @@ function ReservationRecords() {
                 <td>${r.whoReserved}</td>
                 <td>${r.nameOfProgram}</td>
                 <td>${r.natureOfActivity}</td>
-                <td>${r.venue}</td>
+                <td>${r.status.toLowerCase() === 'rejected' 
+                     ? (r.rejection_reason || 'Reason not specified')
+                     : r.venue}</td>
                 <td>${r.numberOfParticipants}</td>
                 <td>${r.startDate}</td>
                 <td>${r.endDate}</td>
@@ -222,7 +224,10 @@ function ReservationRecords() {
         <div class="section"><span>Nature of Activity:</span> ${r.natureOfActivity}</div>
         <div class="section"><span>Date:</span> ${r.startDate} to ${r.endDate}</div>
         <div class="section"><span>Time:</span> ${r.time.start} - ${r.time.end}</div>
-        <div class="section"><span>Venue:</span> ${r.venue}</div>
+        ${r.status.toLowerCase() === 'rejected' 
+          ? `<div class="section"><span>Rejection Reason:</span> ${r.rejection_reason || 'Reason not specified'}</div>
+             ${r.rejection_notes ? `<div class="section"><span>Rejection Notes:</span> ${r.rejection_notes}</div>` : ''}`
+          : `<div class="section"><span>Venue:</span> ${r.venue}</div>`}
         <div class="section"><span>Status:</span> ${r.status}</div>
       </body>
     </html>
@@ -340,10 +345,25 @@ function ReservationRecords() {
                       <span>Date</span>
                       <p>{selectedReservation.startDate} to {selectedReservation.endDate}</p>
                     </div>
-                    <div className="modal-content-item">
-                      <span>Venue</span>
-                      <p>{selectedReservation.venue}</p>
-                    </div>
+                    {selectedReservation.status.toLowerCase() === 'rejected' ? (
+                      <>
+                        <div className="modal-content-item">
+                          <span>Rejection Reason</span>
+                          <p>{selectedReservation.rejection_reason || 'Reason not specified'}</p>
+                        </div>
+                        {selectedReservation.rejection_notes && (
+                          <div className="modal-content-item">
+                            <span>Rejection Notes</span>
+                            <p>{selectedReservation.rejection_notes}</p>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="modal-content-item">
+                        <span>Venue</span>
+                        <p>{selectedReservation.venue}</p>
+                      </div>
+                    )}
                     <div className="modal-content-item">
                       <span>Time</span>
                       <p>{selectedReservation.time.start} - {selectedReservation.time.end}</p>
