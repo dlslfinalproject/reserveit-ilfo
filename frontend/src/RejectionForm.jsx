@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';  // <-- add useLocation
 import './RejectionForm.css';
 
 const RejectionForm = () => {
@@ -17,6 +17,7 @@ const RejectionForm = () => {
 
   useEffect(() => {
     if (!reservation_id) {
+      // If no reservation_id passed, redirect away (or show error)
       alert('No reservation specified for rejection.');
       navigate('/admin/reservation-records');
     }
@@ -58,6 +59,7 @@ const RejectionForm = () => {
   const confirmRejection = async () => {
     setErrors({});
     try {
+      // Send rejection to backend
       const response = await fetch('http://localhost/reserveit/api/reject_reservation.php', {
         method: 'POST',
         credentials: 'include',
@@ -132,12 +134,8 @@ const RejectionForm = () => {
           )}
 
           <div className="approval-actions">
-            <button className="btn cancel" onClick={() => navigate('/admin/reservation-records')}>
-              Cancel
-            </button>
-            <button className="btn reject" onClick={handleRejectClick}>
-              REJECT
-            </button>
+            <button className="btn cancel" onClick={() => navigate('/admin/reservation-records')}>Cancel</button>
+            <button className="btn reject" onClick={handleRejectClick}>REJECT</button>
           </div>
         </div>
       </div>
