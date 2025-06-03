@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2025 at 03:26 PM
+-- Generation Time: Jun 03, 2025 at 05:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -92,7 +92,7 @@ INSERT INTO `tblrejection_reasons` (`reason_id`, `reason_description`) VALUES
 (1, 'No Approved POA'),
 (7, 'Others: Please specify'),
 (3, 'Unavailable Date'),
-(6, 'Unavailable Facilities');
+(6, 'Unavailable Venues');
 
 -- --------------------------------------------------------
 
@@ -126,21 +126,20 @@ CREATE TABLE `tblreservations` (
 --
 
 INSERT INTO `tblreservations` (`reservation_id`, `user_id`, `event_name`, `activity_id`, `venue_id`, `reservation_startdate`, `reservation_enddate`, `number_of_participants`, `start_time`, `end_time`, `status_id`, `rejection_reason_id`, `rejection_other_notes`, `notes`, `link_to_csao_approved_poa`, `created_at`, `updated_at`, `custom_activity_name`) VALUES
-(2, 1, 'Kjkdja', 1, NULL, '2025-06-23', '2025-07-02', 10, '14:10:00', '15:10:00', 1, NULL, NULL, '', '', '2025-06-01 09:14:41', '2025-06-01 09:14:41', NULL),
-(3, 1, 'Jandsaj', 9, NULL, '2025-06-04', '2025-06-11', 1, '08:10:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-01 10:15:18', '2025-06-01 10:15:18', NULL),
-(4, 1, 'Taize Prayer', 9, NULL, '2025-06-03', '2025-06-03', 44, '11:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-01 10:17:21', '2025-06-01 10:17:21', NULL),
-(5, 1, 'dakjd', 10, NULL, '2025-06-04', '2025-06-04', 1, '15:15:00', '16:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:24:47', '2025-06-02 00:24:47', NULL),
-(6, 1, 'jandajdka', 8, NULL, '2025-06-17', '2025-06-17', 12, '15:05:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:28:13', '2025-06-02 00:28:13', NULL),
-(7, 1, 'akdjalk', 6, NULL, '2025-06-17', '2025-06-18', 1, '16:20:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:29:37', '2025-06-02 00:29:37', NULL),
+(4, 1, 'Taize Prayer', 9, NULL, '2025-06-03', '2025-06-03', 44, '11:00:00', '17:00:00', 2, NULL, NULL, '', '', '2025-06-01 10:17:21', '2025-06-03 00:16:44', NULL),
 (8, 1, 'Prayer', NULL, NULL, '2025-06-24', '2025-06-24', 11, '18:20:00', '19:20:00', 1, NULL, NULL, '', '', '2025-06-02 00:44:32', '2025-06-02 00:44:32', 'Prayer'),
-(9, 1, 'Taize Prayer', 3, NULL, '2025-06-20', '2025-06-26', 1, '07:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 00:51:54', '2025-06-02 00:51:54', NULL),
-(10, 1, 'Prayer', NULL, NULL, '2025-06-12', '2025-06-13', 12, '07:00:00', '12:00:00', 1, NULL, NULL, '', '', '2025-06-02 01:47:31', '2025-06-02 01:47:31', 'Prayer'),
-(11, 1, 'Taize', NULL, NULL, '2025-06-19', '2025-06-19', 15, '07:00:00', '17:00:00', 1, NULL, NULL, '', '', '2025-06-02 02:18:29', '2025-06-02 02:18:29', 'Taize'),
-(12, 9, 'Taize Prayer', 11, NULL, '2025-06-05', '2025-06-05', 15, '15:15:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 02:53:01', '2025-06-02 02:53:01', NULL),
+(9, 1, 'Taize Prayer', 3, NULL, '2025-06-20', '2025-06-26', 1, '07:00:00', '17:00:00', 2, NULL, NULL, '', '', '2025-06-02 00:51:54', '2025-06-03 01:42:21', NULL),
+(10, 1, 'Prayer', NULL, NULL, '2025-06-12', '2025-06-13', 12, '07:00:00', '12:00:00', 2, NULL, NULL, '', '', '2025-06-02 01:47:31', '2025-06-03 00:17:53', 'Prayer'),
+(11, 1, 'Taize', NULL, NULL, '2025-06-19', '2025-06-19', 15, '07:00:00', '17:00:00', 3, NULL, NULL, '', '', '2025-06-02 02:18:29', '2025-06-03 01:14:11', 'Taize'),
+(12, 9, 'Taize Prayer', 11, NULL, '2025-06-05', '2025-06-05', 15, '15:15:00', '16:00:00', 3, NULL, NULL, '', '', '2025-06-02 02:53:01', '2025-06-03 02:05:25', NULL),
 (13, 9, 'Birthday', 10, NULL, '2025-06-12', '2025-06-12', 15, '15:15:00', '16:15:00', 1, NULL, NULL, '', '', '2025-06-02 03:23:31', '2025-06-02 03:23:31', NULL),
 (14, 9, 'Taize Prayer', 4, NULL, '2025-06-05', '2025-06-05', 15, '14:00:00', '16:00:00', 1, NULL, NULL, '', '', '2025-06-02 07:52:08', '2025-06-02 07:52:08', NULL),
 (15, 9, 'Taize Prayer', 2, NULL, '2025-06-05', '2025-06-05', 15, '13:00:00', '14:00:00', 1, NULL, NULL, '', '', '2025-06-02 08:05:39', '2025-06-02 08:05:39', NULL),
-(16, 9, 'JPCS NITE', 5, NULL, '2025-06-19', '2025-06-19', 16, '07:00:00', '11:00:00', 1, NULL, NULL, '', '', '2025-06-02 08:38:08', '2025-06-02 08:38:08', NULL);
+(16, 9, 'JPCS NITE', 5, NULL, '2025-06-19', '2025-06-19', 16, '07:00:00', '11:00:00', 1, NULL, NULL, '', '', '2025-06-02 08:38:08', '2025-06-02 08:38:08', NULL),
+(17, 10, 'Taize Prayer', 11, NULL, '2025-06-18', '2025-06-18', 15, '07:00:00', '12:00:00', 1, NULL, NULL, '', '', '2025-06-03 01:17:19', '2025-06-03 01:17:19', NULL),
+(18, 10, 'JPCS NITE', 8, NULL, '2025-06-09', '2025-06-09', 16, '07:00:00', '12:00:00', 2, NULL, NULL, '', '', '2025-06-03 01:26:35', '2025-06-03 01:36:11', NULL),
+(19, 1, 'Taize Prayer', 3, NULL, '2025-07-03', '2025-07-03', 15, '14:10:00', '16:00:00', 2, NULL, NULL, '', '', '2025-06-03 01:44:01', '2025-06-03 01:44:22', NULL),
+(20, 1, 'Taize Prayer', 5, NULL, '2025-07-03', '2025-07-15', 15, '12:00:00', '17:00:00', 3, NULL, NULL, '', '', '2025-06-03 01:46:39', '2025-06-03 01:47:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -165,11 +164,12 @@ CREATE TABLE `tblusers` (
 --
 
 INSERT INTO `tblusers` (`id`, `google_id`, `email`, `first_name`, `last_name`, `profile_picture`, `role`, `created_at`, `updated_at`) VALUES
-(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-02 12:45:56'),
+(1, '113541399770488302308', 'jane_allyson_paray@dlsl.edu.ph', 'JANE ALLYSON', 'PARAY', 'https://lh3.googleusercontent.com/a/ACg8ocKglLLzDtrZfSiWq67cQrk0r8n51Np9TNTTDTKzsUYCc8cE3A8=s96-c', 'admin', '2025-05-28 21:24:29', '2025-06-03 01:36:00'),
 (2, NULL, 'mary.ann.lumban@dlsl.edu.ph\r\n', 'Mary Ann', 'Lumban', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (3, '', 'ilfo.office@dlsl.edu.ph', 'ILFO', 'Office', NULL, 'admin', '2025-05-28 23:26:21', '2025-05-28 23:26:21'),
 (4, NULL, 'ilfo.manager@dlsl.edu.ph\r\n', 'ILFO', ' Manager', NULL, 'admin', '2025-05-28 23:27:06', '2025-05-28 23:27:06'),
-(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-02 11:59:37');
+(9, '101794583600979248508', 'jpcs@dlsl.edu.ph', 'Junior Philippine', 'Computer Society', 'https://lh3.googleusercontent.com/a/ACg8ocJNZT8u6eVgUCFAOdIOuRZFv5t0CUIrBjcQWg8vSxhTNaa7ecqg=s96-c', 'general_user', '2025-05-28 23:50:54', '2025-06-02 11:59:37'),
+(10, '117522485736868523953', 'jhenelle_alonzo@dlsl.edu.ph', 'JHENELLE', 'ALONZO', 'https://lh3.googleusercontent.com/a/ACg8ocJ_JgmLps3F6boR1zAFfTRBbhFw2j6beM9sdhvUAXEupldplA=s96-c', 'general_user', '2025-06-03 01:16:30', '2025-06-03 01:16:30');
 
 -- --------------------------------------------------------
 
@@ -194,12 +194,13 @@ CREATE TABLE `tblvenues` (
 --
 
 INSERT INTO `tblvenues` (`venue_id`, `venue_name`, `min_capacity`, `max_capacity`, `is_active`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
-(1, 'Mess Hall', 50, 200, 0, '2025-05-29 19:40:49', '2025-06-02 12:28:24', NULL, 1),
-(2, 'Cabana 1', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:27:44', NULL, 1),
-(3, 'Cabana 2', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:27:51', NULL, 1),
-(4, 'Cabana 3', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:28:04', NULL, 1),
-(5, 'Cabana 4', 15, 45, 0, '2025-05-29 19:40:49', '2025-06-02 12:28:22', NULL, 1),
-(25, 'Cabana 6', 1, 10, 0, '2025-06-02 13:20:04', '2025-06-02 13:22:09', 1, 1);
+(1, 'Mess Hall', 50, 200, 1, '2025-05-29 19:40:49', '2025-06-03 00:27:28', NULL, 1),
+(2, 'Cabana 1', 15, 45, 1, '2025-05-29 19:40:49', '2025-06-03 00:28:44', NULL, 1),
+(3, 'Cabana 2', 15, 45, 1, '2025-05-29 19:40:49', '2025-06-03 00:27:15', NULL, 1),
+(4, 'Cabana 3', 15, 45, 1, '2025-05-29 19:40:49', '2025-06-03 00:27:18', NULL, 1),
+(5, 'Cabana 4', 15, 45, 1, '2025-05-29 19:40:49', '2025-06-03 00:27:22', NULL, 1),
+(25, 'Cabana 6', 1, 10, 0, '2025-06-02 13:20:04', '2025-06-02 13:22:09', 1, 1),
+(26, 'Cabana 16', 15, 100, 1, '2025-06-02 23:20:54', '2025-06-03 01:58:26', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -280,19 +281,19 @@ ALTER TABLE `tblrejection_reasons`
 -- AUTO_INCREMENT for table `tblreservations`
 --
 ALTER TABLE `tblreservations`
-  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tblusers`
 --
 ALTER TABLE `tblusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tblvenues`
 --
 ALTER TABLE `tblvenues`
-  MODIFY `venue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `venue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Constraints for dumped tables
