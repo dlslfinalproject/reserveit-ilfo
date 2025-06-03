@@ -115,7 +115,7 @@ try {
         $message = "
             <h3>Hi {$userName},</h3>
             <p>Your reservation for <strong>{$eventName}</strong> from <strong>{$start}</strong> to <strong>{$end}</strong> has been <strong>{$status}</strong>.</p>
-            <p>Thank you for using the ILFO reservation system.</p>
+            <p>Thank you for using the ReserveIT reservation system.</p>
         ";
 
         sendEmail($userEmail, $subject, $message);
