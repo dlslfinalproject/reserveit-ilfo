@@ -42,7 +42,10 @@ const ReservationForm = () => {
   })
 
   const [errors, setErrors] = useState({})
-  const [message, setMessage] = useState("")
+  // Remove the message state and add modal states
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState("")
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -113,11 +116,24 @@ const validate = () => {
   return newErrors
 }
 
+  // Modal close handlers
+  const handleSuccessModalClose = () => {
+    setShowSuccessModal(false)
+    setModalMessage("")
+    navigate("/dashboard")
+  }
+
+  const handleErrorModalClose = () => {
+    setShowErrorModal(false)
+    setModalMessage("")
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!storedUser) {
-      setMessage("You must be logged in to submit a reservation.")
+      setModalMessage("You must be logged in to submit a reservation.")
+      setShowErrorModal(true)
       return
     }
 
@@ -162,16 +178,15 @@ reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
       const data = await response.json()
 
       if (response.ok && data.success) {
-        setMessage("Reservation submitted successfully!")
-        setTimeout(() => {
-          setMessage("")
-          navigate("/dashboard")
-        }, 2000)
+        setModalMessage("Reservation submitted successfully!")
+        setShowSuccessModal(true)
       } else {
-        setMessage("Failed to submit reservation: " + (data.error || data.message || "Unknown error"))
+        setModalMessage("Failed to submit reservation: " + (data.error || data.message || "Unknown error"))
+        setShowErrorModal(true)
       }
     } catch (err) {
-      setMessage("Error submitting reservation: " + err.message)
+      setModalMessage("Error submitting reservation: " + err.message)
+      setShowErrorModal(true)
     }
   }
 
@@ -305,7 +320,36 @@ reservation_enddate: formData.endDate.toLocaleDateString("en-CA"),
         </div>
       </form>
 
-      {message && <div className="form-message">{message}</div>}
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="popup-overlay">
+          <div className="popup-content success-modal">
+            <div className="modal-icon success-icon"></div>
+            <p className="popup-message">{modalMessage}</p>
+            <div className="popup-buttons">
+              <button className="confirm-add-button" onClick={handleSuccessModalClose}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Modal */}
+      {showErrorModal && (
+        <div className="popup-overlay">
+          <div className="popup-content error-modal">
+            <div className="modal-icon error-icon"></div>
+            <h3>Error</h3>
+            <p className="popup-message">{modalMessage}</p>
+            <div className="popup-buttons">
+              <button className="confirm-add-button" onClick={handleErrorModalClose}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
