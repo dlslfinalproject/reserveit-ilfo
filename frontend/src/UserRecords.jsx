@@ -1,16 +1,15 @@
-// UserRecords.jsx
 "use client"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { FaPrint } from "react-icons/fa" // Keep FaPrint import if used elsewhere, otherwise remove
-import "./ReservationRecords.css" // Assuming this CSS file is shared
-import logo from './assets/ilfo-logo.png' // Assuming this path is correct
+import { FaTimes } from "react-icons/fa"
+import "./ReservationRecords.css"
+import logo from './assets/ilfo-logo.png'
 
 function UserRecords() {
   const navigate = useNavigate()
   const [reservations, setReservations] = useState([])
   const [selectedReservation, setSelectedReservation] = useState(null)
-  const [activeTab, setActiveTab] = useState("details") // Added activeTab state
+  const [activeTab, setActiveTab] = useState("details")
 
   useEffect(() => {
     async function fetchUserReservations() {
@@ -20,6 +19,7 @@ function UserRecords() {
           credentials: "include",
         })
         const data = await response.json()
+        console.log("API Response:", data) // Debug log
         if (response.ok && data.reservations) {
           setReservations(data.reservations)
         } else {
@@ -34,7 +34,7 @@ function UserRecords() {
   }, [])
 
   const getStatusClass = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "approved": return "status-pill approved"
       case "rejected": return "status-pill rejected"
       case "pending": return "status-pill pending"
@@ -42,60 +42,10 @@ function UserRecords() {
     }
   }
 
-  // The printReservation function is kept as it's used in the modal for individual report,
-  // but the button to trigger it from the main table is removed.
-  const printReservation = (r) => {
-    const printWindow = window.open("", "_blank")
-    const date = new Date().toLocaleDateString()
-
-    const individualReport = `
-      <html>
-        <head>
-          <title>Reservation Report - ${r.nameOfProgram}</title>
-          <style>
-            body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1f2937; }
-            .report-header {
-              text-align: center;
-              margin-bottom: 20px;
-            }
-            .report-header img {
-              max-width: 150px;
-              height: auto;
-              margin-bottom: 10px;
-            }
-            h1 { text-align: center; color: #374151; }
-            p { margin: 8px 0; }
-            .label { font-weight: bold; }
-          </style>
-        </head>
-        <body>
-          <div class="report-header">
-            <img src="${logo}" alt="Company Logo" />
-            <h1>Reservation Report</h1>
-          </div>
-          <p><span class="label">Generated on:</span> ${date}</p>
-          <hr />
-          <p><span class="label">Reservation ID:</span> ${r.reservation_id}</p>
-          <p><span class="label">Program Name:</span> ${r.nameOfProgram}</p>
-          <p><span class="label">Nature of Activity:</span> ${r.natureOfActivity}</p>
-          <p><span class="label">Venue:</span> ${r.venue}</p>
-          <p><span class="label">Participants:</span> ${r.numberOfParticipants}</p>
-          <p><span class="label">Start Date:</span> ${r.startDate}</p>
-          <p><span class="label">End Date:</span> ${r.endDate}</p>
-          <p><span class="label">Time:</span> ${r.time.start} - ${r.time.end}</p>
-          <p><span class="label">Status:</span> ${r.status}</p>
-        </body>
-      </html>
-    `
-    printWindow.document.write(individualReport)
-    printWindow.document.close()
-    printWindow.print()
-  }
-
-  // Function to handle opening the modal and setting the active tab
   const handleViewDetails = (reservation) => {
+    console.log("Selected reservation:", reservation) // Debug log
     setSelectedReservation(reservation);
-    setActiveTab("details"); // Always start with the 'details' tab
+    setActiveTab("details");
   };
 
   return (
@@ -112,7 +62,7 @@ function UserRecords() {
             <table className="records-table">
               <thead>
                 <tr>
-                  <th>Venue</th>
+                  <th>Venue/Reason</th>
                   <th>Date</th>
                   <th>Time</th>
                   <th>Status</th>
@@ -122,9 +72,13 @@ function UserRecords() {
               <tbody>
                 {reservations.map((r) => (
                   <tr key={r.reservation_id}>
-                    <td>{r.venue}</td>
+                    <td>
+                      {r.status && r.status.toLowerCase() === 'rejected' 
+                        ? (r.rejection_reason || 'Reason not specified')
+                        : (r.venue || 'N/A')}
+                    </td>
                     <td>{r.startDate} to {r.endDate}</td>
-                    <td>{r.time.start} - {r.time.end}</td>
+                    <td>{r.time?.start || 'N/A'} - {r.time?.end || 'N/A'}</td>
                     <td><span className={getStatusClass(r.status)}>{r.status}</span></td>
                     <td>
                       <button className="view-btn" onClick={() => handleViewDetails(r)}>View</button>
@@ -141,11 +95,16 @@ function UserRecords() {
             <div className="reservation-modal" onClick={(e) => e.stopPropagation()}>
               {/* Modal Header */}
               <div className="modal-header">
+                <button className="close-panel-btn top-right" onClick={() => setSelectedReservation(null)}>
+                  <FaTimes />
+                </button>
                 <div>
                   <div className="modal-header-title">Reservation ID {selectedReservation.reservation_id}</div>
-                  <div className="modal-header-sub">{selectedReservation.whoReserved}</div> {/* Assuming whoReserved exists in user records */}
+                  <div className="modal-header-sub">{selectedReservation.whoReserved}</div>
                 </div>
-                <span className={getStatusClass(selectedReservation.status)}>{selectedReservation.status}</span>
+                <span className={getStatusClass(selectedReservation.status)}>
+                  {selectedReservation.status}
+                </span>
               </div>
 
               {/* Tab Navigation */}
@@ -170,38 +129,70 @@ function UserRecords() {
                   <>
                     <div className="modal-content-item">
                       <span>Event Name</span>
-                      <p>{selectedReservation.nameOfProgram}</p>
+                      <p>{selectedReservation.nameOfProgram || 'N/A'}</p>
                     </div>
                     <div className="modal-content-item">
                       <span>Participants</span>
-                      <p>{selectedReservation.numberOfParticipants}</p>
+                      <p>{selectedReservation.numberOfParticipants || 'N/A'}</p>
                     </div>
                     <div className="modal-content-item">
                       <span>Nature of Activity</span>
-                      <p>{selectedReservation.natureOfActivity}</p>
+                      <p>{selectedReservation.natureOfActivity || 'N/A'}</p>
                     </div>
                     <div className="modal-content-item">
                       <span>Date</span>
                       <p>{selectedReservation.startDate} to {selectedReservation.endDate}</p>
                     </div>
-                    <div className="modal-content-item">
-                      <span>Venue</span>
-                      <p>{selectedReservation.venue}</p>
-                    </div>
+                    {selectedReservation.status && selectedReservation.status.toLowerCase() === 'rejected' ? (
+                      <>
+                        <div className="modal-content-item">
+                          <span>Rejection Reason</span>
+                          <p>{selectedReservation.rejection_reason || 'Reason not specified'}</p>
+                        </div>
+                        {selectedReservation.rejection_notes && (
+                          <div className="modal-content-item">
+                            <span>Additional Notes</span>
+                            <p>{selectedReservation.rejection_notes}</p>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="modal-content-item">
+                        <span>Venue</span>
+                        <p>{selectedReservation.venue || 'N/A'}</p>
+                      </div>
+                    )}
                     <div className="modal-content-item">
                       <span>Time</span>
-                      <p>{selectedReservation.time.start} - {selectedReservation.time.end}</p>
+                      <p>{selectedReservation.time?.start || 'N/A'} - {selectedReservation.time?.end || 'N/A'}</p>
                     </div>
+                    {selectedReservation.notes && (
+                      <div className="modal-content-item">
+                        <span>Notes</span>
+                        <p>{selectedReservation.notes}</p>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div className="modal-content-item">
                     <span>POA (Program of Activities)</span>
-                    <p>{selectedReservation.poa || "No POA uploaded."}</p>
+                    {selectedReservation.poa || selectedReservation.poaLink ? (
+                      <div>
+                        <a 
+                          href={selectedReservation.poa || selectedReservation.poaLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="poa-link"
+                        >
+                          View POA Document
+                        </a>
+                      </div>
+                    ) : (
+                      <p>No POA uploaded.</p>
+                    )}
                   </div>
                 )}
               </div>
-
-              <button className="close-modal-btn" onClick={() => setSelectedReservation(null)}>Close</button>
             </div>
           </div>
         )}
