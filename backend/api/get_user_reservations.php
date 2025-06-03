@@ -20,7 +20,6 @@ if (!isset($_SESSION['user_id'])) {
 
 include_once "../config/db.php";
 
-// Get the PDO connection
 $conn = getDbConnection();
 
 $user_id = $_SESSION['user_id'];
@@ -78,7 +77,7 @@ try {
             'notes' => $row['notes'],
             'rejection_reason' => $row['rejection_reason'],
             'rejection_notes' => $row['rejection_other_notes'],
-            'poa' => $row['poa_link'] // Keeping this for consistency
+            'poa' => $row['poa_link'] 
         ];
     }, $reservations);
 

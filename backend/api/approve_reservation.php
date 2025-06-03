@@ -4,10 +4,10 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
 
-session_start(); // Required to access $_SESSION
+session_start(); 
 
 require_once '../config/db.php';
-require_once 'email_helper.php'; // Include email helper for sending emails
+require_once 'email_helper.php';
 
 $pdo = getDbConnection();
 
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Decode the raw JSON body
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 $reservation_id = $input['reservation_id'] ?? null;
@@ -52,7 +52,7 @@ try {
     ");
     $stmt->execute([$venue_id, $notes, $reservation_id]);
 
-    // ✅ Fetch user email and reservation info
+    // Fetch user email and reservation info
     $stmt = $pdo->prepare("
         SELECT u.email, u.first_name, r.event_name, r.reservation_startdate, r.reservation_enddate
         FROM tblreservations r

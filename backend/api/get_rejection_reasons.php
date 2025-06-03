@@ -11,13 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$conn = getDbConnection();  // <-- get PDO connection from your db.php
+$conn = getDbConnection(); 
 
 try {
     $stmt = $conn->prepare("SELECT reason_id, reason_description FROM tblrejection_reasons ORDER BY reason_description ASC");
     $stmt->execute();
 
-    $reasons = $stmt->fetchAll(PDO::FETCH_ASSOC);  // <-- fetch all results as associative array
+    $reasons = $stmt->fetchAll(PDO::FETCH_ASSOC);  
 
     echo json_encode(['success' => true, 'reasons' => $reasons]);
 } catch (Exception $e) {

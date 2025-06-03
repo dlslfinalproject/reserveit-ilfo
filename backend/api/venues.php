@@ -1,19 +1,16 @@
 <?php
-// Error handling (safe for production)
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../logs/php_errors.log');  // Make sure this exists
+ini_set('error_log', __DIR__ . '/../logs/php_errors.log');  
 error_reporting(E_ALL);
 
-// Response headers
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
 header('Content-Type: application/json');
 
-// Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -23,7 +20,6 @@ require_once '../config/db.php';
 
 session_start();
 
-// JSON response helper
 function jsonResponse($status, $message, $data = null) {
     echo json_encode([
         'status' => $status,
@@ -33,10 +29,6 @@ function jsonResponse($status, $message, $data = null) {
     exit;
 }
 
-// TEMP: debug session
-error_log("SESSION: " . print_r($_SESSION, true));
-
-// Admin-only check
 function requireAdmin() {
     if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
         http_response_code(403);
@@ -44,17 +36,16 @@ function requireAdmin() {
     }
 }
 
-$conn = getDbConnection();  // <-- Use function from db.php to get PDO connection
+$conn = getDbConnection();  
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents("php://input"), true);
 
 switch ($method) {
     case 'GET':
-        // Check if we want to show deleted venues
         $showDeleted = isset($_GET['show_deleted']) && $_GET['show_deleted'] == '1';
         
         if ($showDeleted) {
-            requireAdmin(); // Only admins can see deleted venues
+            requireAdmin(); 
             $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE is_active = 0 ORDER BY venue_name ASC");
         } else {
             $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE is_active = 1 ORDER BY venue_name ASC");
@@ -133,7 +124,6 @@ switch ($method) {
             jsonResponse('error', 'Venue ID required');
         }
 
-        // Soft delete - mark as inactive
         $stmt = $conn->prepare("UPDATE tblvenues SET is_active = 0, updated_by = ? WHERE venue_id = ?");
         $stmt->execute([
             $_SESSION['user_id'] ?? null,
@@ -151,14 +141,13 @@ switch ($method) {
             jsonResponse('error', 'Venue ID required for reactivation');
         }
 
-        // Reactivate venue
+
         $stmt = $conn->prepare("UPDATE tblvenues SET is_active = 1, updated_by = ? WHERE venue_id = ?");
         $stmt->execute([
             $_SESSION['user_id'] ?? null,
             $input['venue_id']
         ]);
 
-        // Fetch the reactivated venue
         $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE venue_id = ?");
         $stmt->execute([$input['venue_id']]);
         $reactivatedVenue = $stmt->fetch(PDO::FETCH_ASSOC);

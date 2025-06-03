@@ -1,6 +1,4 @@
 <?php
-// backend/api/auth.php
-
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
@@ -94,9 +92,9 @@ try {
     $_SESSION['user_role'] = $userRole;
     $_SESSION['email'] = $email;
 
-    // ⏩ Set redirect URL based on role
+    // Set redirect URL based on role
     $redirectUrl = ($userRole === 'admin')
-        ? 'http://localhost:5173/admin' // Replace with your actual admin route
+        ? 'http://localhost:5173/admin' 
         : 'https://mail.google.com/mail/u/0/#inbox';
 
     echo json_encode([
