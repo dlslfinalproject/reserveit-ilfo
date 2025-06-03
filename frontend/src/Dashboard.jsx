@@ -17,7 +17,7 @@ const Dashboard = ({ onSignOut }) => {
   const [userEmail, setUserEmail] = useState("")
   const [filterStatus, setFilterStatus] = useState("All")
   const [selectedEvent, setSelectedEvent] = useState(null)
-  const [activeStatusTab, setActiveStatusTab] = useState("details");
+  const [activeStatusTab, setActiveStatusTab] = useState("details")
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -111,20 +111,49 @@ const Dashboard = ({ onSignOut }) => {
       <div
         style={{
           backgroundColor: statusColor[event.status] || "#9E9E9E",
-          color: "#fff",
-          padding: "4px 6px",
+          color: "#000",
+          padding: "2px 4px",
           borderRadius: "4px",
-          fontSize: "0.75rem",
-          lineHeight: "1.2",
+          fontSize: "0.7rem",
+          lineHeight: "1",
           overflow: "hidden",
-          whiteSpace: "normal",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          margin: "1px 0",
+          display: "inline-block",
+          maxWidth: "100%",
+          border: "1px solid rgba(0,0,0,0.1)",
         }}
       >
-        <div style={{ fontWeight: "bold" }}>{event.whoReserved}</div>
-        <div>{`${event.category} | ${event.timeRange}`}</div>
-        <div style={{ fontStyle: "italic", fontSize: "0.7rem" }}>{event.status}</div>
+        {event.title}
       </div>
     )
+  }
+
+  const dayPropGetter = (date) => {
+    return {
+      style: {
+        padding: "2px",
+      },
+    }
+  }
+
+  const slotPropGetter = () => {
+    return {
+      style: {
+        height: "auto",
+      },
+    }
+  }
+
+  const calendarComponents = {
+    event: EventComponent,
+    month: {
+      event: (props) => {
+        return <EventComponent {...props} />
+      },
+      header: ({ label }) => <span style={{ fontSize: "0.8rem", fontWeight: "bold" }}>{label}</span>,
+    },
   }
 
   return (
@@ -148,10 +177,7 @@ const Dashboard = ({ onSignOut }) => {
           <button className="dashboard-button" onClick={() => navigate("/general-user/reservations")}>
             <FaListAlt /> My Reservations
           </button>
-          <button
-            className="dashboard-button"
-            onClick={() => window.open("https://mail.google.com", "_blank")}
-          >
+          <button className="dashboard-button" onClick={() => window.open("https://mail.google.com", "_blank")}>
             <FaEnvelope /> Gmail
           </button>
           <div className="profile-dropdown">
@@ -159,7 +185,7 @@ const Dashboard = ({ onSignOut }) => {
               <FaUserCircle size={24} />
             </button>
             {/* MODIFICATION HERE: Apply the is-active class */}
-            <div className={`profile-menu ${showProfile ? 'is-active' : ''}`}>
+            <div className={`profile-menu ${showProfile ? "is-active" : ""}`}>
               <p>{userEmail || "user@dlsl.edu.ph"}</p>
               <button onClick={handleLogout}>Log Out</button>
             </div>
@@ -209,7 +235,21 @@ const Dashboard = ({ onSignOut }) => {
           toolbar={false}
           style={{ height: 500 }}
           onSelectEvent={handleEventClick}
-          components={{ event: EventComponent }}
+          components={calendarComponents}
+          dayPropGetter={dayPropGetter}
+          slotPropGetter={slotPropGetter}
+          eventPropGetter={(event) => {
+            const statusColor = {
+              Approved: "#C9E1B8",
+              Pending: "#FFB527",
+              Rejected: "#E78A8A",
+            }
+            return {
+              style: {
+                backgroundColor: statusColor[event.status] || "#9E9E9E",
+              },
+            }
+          }}
         />
       </div>
 
@@ -260,7 +300,9 @@ const Dashboard = ({ onSignOut }) => {
                   </div>
                   <div className="modal-content-item">
                     <span>Date</span>
-                    <p>{selectedEvent.raw.startDate} to {selectedEvent.raw.endDate}</p>
+                    <p>
+                      {selectedEvent.raw.startDate} to {selectedEvent.raw.endDate}
+                    </p>
                   </div>
                   <div className="modal-content-item">
                     <span>Venue</span>
@@ -268,7 +310,9 @@ const Dashboard = ({ onSignOut }) => {
                   </div>
                   <div className="modal-content-item">
                     <span>Time</span>
-                    <p>{selectedEvent.raw.time.start} - {selectedEvent.raw.time.end}</p>
+                    <p>
+                      {selectedEvent.raw.time.start} - {selectedEvent.raw.time.end}
+                    </p>
                   </div>
                 </>
               ) : (
