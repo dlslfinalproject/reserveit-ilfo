@@ -143,7 +143,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
   // Approve handler: update status via API, then navigate success page
   const handleApprove = async () => {
     if (!selectedEvent) return
-    await updateStatus(selectedEvent.reservationId, "Approved")
+    navigate("/admin/approval-success", { state: { reservation: selectedEvent.raw } })
   }
 
   // Reject handler: navigate to rejection form with reservation data
