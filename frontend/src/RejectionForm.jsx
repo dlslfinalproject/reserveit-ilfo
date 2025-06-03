@@ -1,61 +1,81 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './RejectionForm.css';
 
-const RejectionForm = ({ onCancel, onReject }) => {
-  const [reason, setReason] = useState('');
-  const [otherReason, setOtherReason] = useState('');
+const RejectionForm = () => {
+  const navigate = useNavigate();
+  const [showRejectConfirm, setShowRejectConfirm] = useState(false);
+  const [selectedReason, setSelectedReason] = useState('');
+  const [notes, setNotes] = useState('');
 
-  const handleReject = () => {
-    if (!reason) {
+  const handleRejectClick = () => {
+    if (!selectedReason) {
       alert("Please select a reason for rejection.");
       return;
     }
-    onReject(reason, otherReason);
+    setShowRejectConfirm(true);
+  };
+
+  const confirmRejection = () => {
+    // Placeholder: send data to backend
+    console.log("Rejection reason:", selectedReason);
+    console.log("Notes:", notes);
+
+    alert("Reservation has been rejected.");
+    setShowRejectConfirm(false);
+    navigate('/admin/dashboard');
+  };
+
+  const cancelRejection = () => {
+    setShowRejectConfirm(false);
   };
 
   return (
     <div className="approval-modal">
-      <div className="rejection-form-wrapper">
-        <div className="rejection-header">
-          <h3>Reservation Request (Rejected)</h3>
-        </div>
+      <div className="approval-form-wrapper">
+        <div className="approval-header">Reservation Request (Rejection)</div>
 
-        <div className="rejection-form">
+        <div className="approval-form">
           <div className="form-group">
-            <label htmlFor="reason">Reason</label>
+            <label>Reason for Rejection</label>
             <select
-              id="reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              value={selectedReason}
+              onChange={(e) => setSelectedReason(e.target.value)}
             >
-              <option value="">-- Select a reason --</option>
-              <option value="Not aligned with POA">Not aligned with POA</option>
-              <option value="Conflict with time/date/venue">Conflict with time/date/venue</option>
-              <option value="Invalid date/time">Invalid date/time</option>
-              <option value="Incomplete documents">Incomplete documents</option>
-              <option value="Unacceptable rationale">Unacceptable rationale</option>
-              <option value="Other">Other – Please specify below</option>
+              <option value="">-- Select Reason --</option>
+              {/* Options will be dynamically loaded */}
             </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="otherReason">Other Reasons (if any)</label>
+            <label>NOTES (optional)</label>
             <textarea
-              id="otherReason"
-              rows="4"
-              value={otherReason}
-              onChange={(e) => setOtherReason(e.target.value)}
               className="notes-box"
-              placeholder="Enter additional reason here..."
+              rows="5"
+              placeholder="Enter notes here..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
             />
           </div>
 
-          <div className="rejection-actions">
-            <button className="btn cancel" onClick={onCancel}>Cancel</button>
-            <button className="btn reject" onClick={handleReject}>Reject</button>
+          <div className="approval-actions">
+            <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
+            <button className="btn reject" onClick={handleRejectClick}>Reject</button>
           </div>
         </div>
       </div>
+
+      {showRejectConfirm && (
+        <div className="modal-backdrop">
+          <div className="modal-confirm">
+            <p>Are you sure you want to reject this reservation?</p>
+            <div className="modal-actions">
+              <button className="btn cancel" onClick={cancelRejection}>No</button>
+              <button className="btn reject" onClick={confirmRejection}>Yes</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

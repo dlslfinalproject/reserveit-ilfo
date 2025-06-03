@@ -25,6 +25,7 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All")
   const [activeStatusTab, setActiveStatusTab] = useState("details")
+  const [showRejectionForm, setShowRejectionForm] = useState(false)
   const navigate = useNavigate()
 
   const splitReservationIntoDays = (reservation) => {
@@ -293,7 +294,11 @@ const AdminDashboard = ({ session, onSignOut }) => {
             </div>
 
             <div className="status-actions">
-              <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
+             <button className="status-btn reject-btn" onClick={() =>
+                navigate("/admin/rejection-form", { state: { reservation: selectedEvent.raw }
+                  })
+                }
+              >
                 <FaTimes /> Reject
               </button>
               <button className="status-btn approve-btn" onClick={() => {

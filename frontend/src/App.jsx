@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+
 import LoginPage from './LoginPage';
 import AdminDashboard from './AdminDashboard';
 import Dashboard from './Dashboard';
@@ -12,6 +13,7 @@ import UserRecords from './UserRecords';
 import Settings from './Settings';
 import RequestForm from './RequestForm';
 import ApprovalSuccess from './ApprovalSuccess';
+import RejectionForm from './RejectionForm'; 
 
 const PHP_API_BASE_URL = 'http://localhost/reserveit-ilfo/backend/api';
 
@@ -143,7 +145,7 @@ function App() {
         <Route
           path="/general-user"
           element={
-            session && session.user.role == 'general_user' ? (
+            session && session.user.role === 'general_user' ? (
               <Dashboard onSignOut={signOut} />
             ) : (
               <Navigate to="/" />
@@ -194,15 +196,37 @@ function App() {
             )
           }
         />
-        
 
-        
-        <Route path="/user-records" element={session ? <UserRecords /> : <Navigate to="/" />} />
-        <Route path="/settings" element={session ? <Settings /> : <Navigate to="/" />} />
-        <Route path="/request-form" element={session ? <RequestForm /> : <Navigate to="/" />} />
-        <Route path="/admin/approval-success" element={<ApprovalSuccess />} />
+        <Route
+          path="/user-records"
+          element={session ? <UserRecords /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/settings"
+          element={session ? <Settings /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/request-form"
+          element={session ? <RequestForm /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/admin/approval-success"
+          element={<ApprovalSuccess />}
+        />
 
-        {/* Optional: Catch-all for unmatched routes */}
+        {/* ✅ Rejection Form Route */}
+        <Route
+          path="/admin/rejection-form"
+          element={
+            session?.user?.role === 'admin' ? (
+              <RejectionForm />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
+        {/* Catch-all for unmatched routes */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
