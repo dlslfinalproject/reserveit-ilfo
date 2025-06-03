@@ -6,12 +6,17 @@ import trashLogo from "../src/assets/trash-icon.png";
 const Settings = () => {
   const navigate = useNavigate();
   const [venues, setVenues] = useState([]);
+  const [deletedVenues, setDeletedVenues] = useState([]);
   const [newVenue, setNewVenue] = useState("");
   const [minCapacity, setMinCapacity] = useState("");
   const [maxCapacity, setMaxCapacity] = useState("");
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showDeletedVenues, setShowDeletedVenues] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [venueToDelete, setVenueToDelete] = useState(null);
 
   const apiUrl = "http://localhost/reserveit-ilfo/backend/api/venues.php";
@@ -33,7 +38,20 @@ const Settings = () => {
     }
   };
 
-  useEffect(() => {
+  // Show error modal instead of alert
+  const showError = (message) => {
+    setModalMessage(message);
+    setShowErrorModal(true);
+  };
+
+  // Show success modal instead of alert
+  const showSuccess = (message) => {
+    setModalMessage(message);
+    setShowSuccessModal(true);
+  };
+
+  // Fetch active venues
+  const fetchActiveVenues = () => {
     fetchWithDebug(apiUrl, { credentials: "include" })
       .then((data) => {
         if (data.status === "success") {
@@ -43,6 +61,24 @@ const Settings = () => {
         }
       })
       .catch((err) => console.error("❌ Error loading venues:", err));
+  };
+
+  // Fetch deleted venues
+  const fetchDeletedVenues = () => {
+    fetchWithDebug(apiUrl + "?show_deleted=1", { credentials: "include" })
+      .then((data) => {
+        if (data.status === "success") {
+          setDeletedVenues(data.data);
+        } else {
+          console.error("❌ Failed to fetch deleted venues:", data.message);
+        }
+      })
+      .catch((err) => console.error("❌ Error loading deleted venues:", err));
+  };
+
+  useEffect(() => {
+    fetchActiveVenues();
+    fetchDeletedVenues();
   }, []);
 
   const handleAddVenue = () => {
@@ -50,17 +86,17 @@ const Settings = () => {
     const max = parseInt(maxCapacity);
 
     if (newVenue.trim() === "" || isNaN(min) || isNaN(max)) {
-      alert("Please fill out all fields correctly.");
+      showError("Please fill out all fields correctly.");
       return;
     }
 
     if (min < 1) {
-      alert("Minimum capacity must be at least 1.");
+      showError("Minimum capacity must be at least 1.");
       return;
     }
 
     if (max < min) {
-      alert("Maximum capacity must be equal to or greater than minimum capacity.");
+      showError("Maximum capacity must be equal to or greater than minimum capacity.");
       return;
     }
 
@@ -80,8 +116,9 @@ const Settings = () => {
         setMinCapacity("");
         setMaxCapacity("");
         setShowAddPopup(false);
+        showSuccess("Venue added successfully!");
       } else {
-        alert("Failed to add venue: " + data.message);
+        showError("Failed to add venue: " + data.message);
       }
     });
   };
@@ -93,17 +130,17 @@ const Settings = () => {
         const max = parseInt(venue.max_capacity);
 
         if (venue.venue_name.trim() === "" || isNaN(min) || isNaN(max)) {
-          alert(`Please ensure all fields are filled for venue ID ${venue.venue_id}`);
+          showError(`Please ensure all fields are filled for venue ID ${venue.venue_id}`);
           return;
         }
 
         if (min < 1) {
-          alert(`Minimum capacity must be at least 1 for venue ID ${venue.venue_id}`);
+          showError(`Minimum capacity must be at least 1 for venue ID ${venue.venue_id}`);
           return;
         }
 
         if (max < min) {
-          alert(`Maximum capacity must be equal to or greater than minimum for venue ID ${venue.venue_id}`);
+          showError(`Maximum capacity must be equal to or greater than minimum for venue ID ${venue.venue_id}`);
           return;
         }
 
@@ -120,9 +157,9 @@ const Settings = () => {
         });
       }
       setShowSavePopup(false);
-      alert("Changes saved!");
+      showSuccess("Changes saved successfully!");
     } catch (err) {
-      alert("Error saving changes.");
+      showError("Error saving changes.");
     }
   };
 
@@ -137,11 +174,32 @@ const Settings = () => {
     }).then((data) => {
       if (data.status === "success") {
         setVenues(venues.filter((v) => v.venue_id !== venueToDelete.venue_id));
+        // Add to deleted venues list
+        setDeletedVenues([...deletedVenues, venueToDelete]);
+        showSuccess("Venue deleted successfully!");
       } else {
-        alert("Failed to delete venue: " + data.message);
+        showError("Failed to delete venue: " + data.message);
       }
       setShowDeletePopup(false);
       setVenueToDelete(null);
+    });
+  };
+
+  const handleReactivateVenue = (venue) => {
+    fetchWithDebug(apiUrl, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ venue_id: venue.venue_id }),
+    }).then((data) => {
+      if (data.status === "success") {
+        // Remove from deleted venues and add to active venues
+        setDeletedVenues(deletedVenues.filter((v) => v.venue_id !== venue.venue_id));
+        setVenues([...venues, data.data]);
+        showSuccess("Venue reactivated successfully!");
+      } else {
+        showError("Failed to reactivate venue: " + data.message);
+      }
     });
   };
 
@@ -152,88 +210,129 @@ const Settings = () => {
           <h2 className="settings-title">VENUE MANAGEMENT</h2>
         </div>
 
-        <h3 className="edit-venues-title">Edit Venues</h3>
+        <div className="settings-content">
+          <h3 className="edit-venues-title">Edit Venues</h3>
 
-        <div className="venue-list">
-          {venues.map((venue, index) => (
-            <div key={venue.venue_id || index} className="venue-item">
-              <input
-                type="text"
-                className="venue-input"
-                value={venue.venue_name}
-                onChange={(e) => {
-                  const updatedVenues = [...venues];
-                  updatedVenues[index].venue_name = e.target.value;
-                  setVenues(updatedVenues);
-                }}
-                placeholder="Enter venue name"
-              />
-              
-              <div className="capacity-group">
+          <div className="venue-list">
+            {venues.map((venue, index) => (
+              <div key={venue.venue_id || index} className="venue-item">
                 <input
-                  type="number"
-                  className="venue-capacity-input"
-                  value={venue.min_capacity}
+                  type="text"
+                  className="venue-input"
+                  value={venue.venue_name}
                   onChange={(e) => {
                     const updatedVenues = [...venues];
-                    updatedVenues[index].min_capacity = e.target.value;
+                    updatedVenues[index].venue_name = e.target.value;
                     setVenues(updatedVenues);
                   }}
-                  placeholder="Min"
-                  min={1}
-                  title="Minimum Capacity"
+                  placeholder="Enter venue name"
                 />
-                <span style={{ color: '#9ca3af', fontSize: '0.875rem', fontWeight: '500' }}>to</span>
-                <input
-                  type="number"
-                  className="venue-capacity-input"
-                  value={venue.max_capacity}
-                  onChange={(e) => {
-                    const updatedVenues = [...venues];
-                    updatedVenues[index].max_capacity = e.target.value;
-                    setVenues(updatedVenues);
+                
+                <div className="capacity-group">
+                  <input
+                    type="number"
+                    className="venue-capacity-input"
+                    value={venue.min_capacity}
+                    onChange={(e) => {
+                      const updatedVenues = [...venues];
+                      updatedVenues[index].min_capacity = e.target.value;
+                      setVenues(updatedVenues);
+                    }}
+                    placeholder="Min"
+                    min={1}
+                    title="Minimum Capacity"
+                  />
+                  <span className="capacity-separator">to</span>
+                  <input
+                    type="number"
+                    className="venue-capacity-input"
+                    value={venue.max_capacity}
+                    onChange={(e) => {
+                      const updatedVenues = [...venues];
+                      updatedVenues[index].max_capacity = e.target.value;
+                      setVenues(updatedVenues);
+                    }}
+                    placeholder="Max"
+                    min={1}
+                    title="Maximum Capacity"
+                  />
+                </div>
+
+                <button
+                  className="delete-venue-button"
+                  onClick={() => {
+                    setVenueToDelete(venue);
+                    setShowDeletePopup(true);
                   }}
-                  placeholder="Max"
-                  min={1}
-                  title="Maximum Capacity"
-                />
+                  title="Delete Venue"
+                >
+                  <img src={trashLogo} alt="Delete" className="trash-icon" />
+                </button>
               </div>
+            ))}
+            
+            {venues.length === 0 && (
+              <div className="no-venues-message">
+                No venues found. Add your first venue below.
+              </div>
+            )}
+          </div>
 
+          {/* Deleted Venues Section */}
+          {deletedVenues.length > 0 && (
+            <div className="deleted-venues-section">
               <button
-                className="delete-venue-button"
-                onClick={() => {
-                  setVenueToDelete(venue);
-                  setShowDeletePopup(true);
-                }}
-                title="Delete Venue"
+                className="toggle-deleted-button"
+                onClick={() => setShowDeletedVenues(!showDeletedVenues)}
               >
-                <img src={trashLogo} alt="Delete" className="trash-icon" />
+                <span className="toggle-icon">{showDeletedVenues ? '▼' : '▶'}</span>
+                {showDeletedVenues ? 'Hide' : 'Show'} Deleted Venues ({deletedVenues.length})
               </button>
-            </div>
-          ))}
-          
-          {venues.length === 0 && (
-            <div style={{ 
-              textAlign: 'center', 
-              padding: '40px', 
-              color: '#9ca3af',
-              fontSize: '1rem'
-            }}>
-              No venues found. Add your first venue below.
+              
+              {showDeletedVenues && (
+                <div className="deleted-venues-list">
+                  <div className="deleted-venues-header">
+                    <h4>Deleted Venues</h4>
+                    <p>Click on any venue below to reactivate it</p>
+                  </div>
+                  {deletedVenues.map((venue) => (
+                    <div 
+                      key={venue.venue_id} 
+                      className="deleted-venue-item"
+                      onClick={() => handleReactivateVenue(venue)}
+                      title="Click to reactivate this venue"
+                    >
+                      <div className="deleted-venue-info">
+                        <span className="venue-name">{venue.venue_name}</span>
+                        <span className="venue-capacity">({venue.min_capacity}-{venue.max_capacity} people)</span>
+                      </div>
+                      <button
+                        className="reactivate-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleReactivateVenue(venue);
+                        }}
+                      >
+                        Reactivate
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-        </div>
 
-        <div className="button-group">
-          <button className="back-button" onClick={() => navigate("/dashboard")}>
-            Back
-          </button>
-          <button className="add-button" onClick={() => setShowAddPopup(true)}>
-            Add Venue
-          </button>
-          <button className="save-button" onClick={() => setShowSavePopup(true)}>
-            Save Changes
-          </button>
+          <div className="button-group">
+            <button className="back-button" onClick={() => navigate("/dashboard")}>
+              Back
+            </button>
+            <button className="add-button" onClick={() => setShowAddPopup(true)}>
+              Add Venue
+            </button>
+            <button className="save-button" onClick={() => setShowSavePopup(true)}>
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
 
@@ -291,7 +390,7 @@ const Settings = () => {
         <div className="popup-overlay">
           <div className="popup-content">
             <h3>Save Changes</h3>
-            <p style={{ color: '#6b7280', marginBottom: '24px' }}>
+            <p className="popup-message">
               Do you want to save all venue changes?
             </p>
             <div className="popup-buttons">
@@ -311,8 +410,8 @@ const Settings = () => {
         <div className="popup-overlay">
           <div className="popup-content">
             <h3>Delete Venue</h3>
-            <p style={{ color: '#6b7280', marginBottom: '24px' }}>
-              Are you sure you want to delete "{venueToDelete?.venue_name}"? This action cannot be undone.
+            <p className="popup-message">
+              Are you sure you want to delete "<strong>{venueToDelete?.venue_name}</strong>"? This action cannot be undone.
             </p>
             <div className="popup-buttons">
               <button
@@ -324,8 +423,40 @@ const Settings = () => {
               >
                 Cancel
               </button>
-              <button className="confirm-add-button" onClick={handleDeleteVenueConfirmed}>
+              <button className="delete-confirm-button" onClick={handleDeleteVenueConfirmed}>
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Modal */}
+      {showErrorModal && (
+        <div className="popup-overlay">
+          <div className="popup-content error-modal">
+            <div className="modal-icon error-icon">⚠️</div>
+            <h3>Error</h3>
+            <p className="popup-message">{modalMessage}</p>
+            <div className="popup-buttons">
+              <button className="confirm-add-button" onClick={() => setShowErrorModal(false)}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="popup-overlay">
+          <div className="popup-content success-modal">
+            <div className="modal-icon success-icon">✅</div>
+            <h3>Success</h3>
+            <p className="popup-message">{modalMessage}</p>
+            <div className="popup-buttons">
+              <button className="confirm-add-button" onClick={() => setShowSuccessModal(false)}>
+                OK
               </button>
             </div>
           </div>

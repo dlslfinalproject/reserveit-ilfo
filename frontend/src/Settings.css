@@ -1,33 +1,37 @@
-/* Import Google Fonts for better typography */
+/* Import Google Fonts for consistency */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
-.settings-container {
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+/* Base styles */
+body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Settings Container */
+.settings-container {
+  max-width: 1000px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  animation: fadeInForm 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .settings-card {
-  background: #ffffff;
+  background: white;
   border-radius: 20px;
-  width: 90%;
-  max-width: 1000px;
-  height: 70%;
-  display: flex;
-  flex-direction: column;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
+/* Settings Header */
 .settings-header {
   background: linear-gradient(135deg, #8ba96d 0%, #a2ba82 100%);
   padding: 24px 32px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .settings-title {
@@ -35,163 +39,258 @@
   font-weight: 700;
   color: white;
   margin: 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Settings Content */
+.settings-content {
+  padding: 32px;
 }
 
 .edit-venues-title {
   font-size: 1.25rem;
   font-weight: 600;
-  margin: 0 0 20px 0;
   color: #374151;
-  padding: 0 32px;
-  margin-top: 20px;
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
 }
 
+/* Venue List */
 .venue-list {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 32px;
+  margin-bottom: 32px;
 }
 
-/* Updated venue item layout */
 .venue-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   padding: 16px;
-  background: #fafafa;
-  border-radius: 16px;
-  border: 2px solid #e5e7eb;
+  margin-bottom: 12px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .venue-item:hover {
-  border-color: #d1d5db;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: #f1f5f9;
+  border-color: #8ba96d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.2);
 }
 
 .venue-input {
   flex: 2;
-  font-size: 1rem;
   padding: 12px 16px;
-  border-radius: 12px;
-  border: 2px solid #e5e7eb;
-  box-sizing: border-box;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
   background: white;
-  font-family: "Inter", sans-serif;
-  margin: 0;
+  transition: all 0.2s ease;
 }
 
 .venue-input:focus {
-  border: 2px solid #8ba96d;
   outline: none;
+  border-color: #8ba96d;
   box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
 }
 
-.venue-input:hover {
-  border-color: #d1d5db;
+.capacity-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
-/* Capacity inputs styling */
 .venue-capacity-input {
-  flex: 0 0 100px;
-  font-size: 1rem;
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 2px solid #e5e7eb;
-  box-sizing: border-box;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background: white;
-  font-family: "Inter", sans-serif;
+  width: 70px;
+  padding: 12px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
   text-align: center;
-  margin: 0;
+  background: white;
+  transition: all 0.2s ease;
 }
 
 .venue-capacity-input:focus {
-  border: 2px solid #8ba96d;
   outline: none;
+  border-color: #8ba96d;
   box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
 }
 
-.venue-capacity-input:hover {
-  border-color: #d1d5db;
-}
-
-.venue-capacity-input::placeholder {
+.capacity-separator {
   color: #9ca3af;
   font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0 4px;
 }
 
-/* Delete button styling */
 .delete-venue-button {
-  flex: 0 0 40px;
-  height: 40px;
   background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  border: 2px solid #fca5a5;
-  border-radius: 12px;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 8px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
 }
 
 .delete-venue-button:hover {
   background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
-  border-color: #f87171;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgba(248, 113, 113, 0.2);
+  transform: scale(1.05);
 }
 
 .trash-icon {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
+  width: 16px;
+  height: 16px;
 }
 
-.delete-venue-button:hover .trash-icon {
-  opacity: 1;
+.no-venues-message {
+  text-align: center;
+  padding: 48px 24px;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 500;
+  background: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
 }
 
+/* Deleted Venues Section */
+.deleted-venues-section {
+  margin: 32px 0;
+  padding: 24px;
+  background: #fefefe;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.toggle-deleted-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 1px solid #d1d5db;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.toggle-deleted-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+}
+
+.toggle-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.deleted-venues-list {
+  margin-top: 16px;
+}
+
+.deleted-venues-header {
+  margin-bottom: 16px;
+}
+
+.deleted-venues-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+}
+
+.deleted-venues-header p {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.deleted-venue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleted-venue-item:hover {
+  background: #f3f4f6;
+  border-color: #10b981;
+  transform: translateX(4px);
+}
+
+.deleted-venue-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.venue-name {
+  font-weight: 500;
+  color: #374151;
+}
+
+.venue-capacity {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.reactivate-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.reactivate-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: scale(1.05);
+}
+
+/* Button Group */
 .button-group {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: auto;
-  padding: 20px 32px;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 24px;
   border-top: 1px solid #e5e7eb;
-}
-
-.back-button,
-.add-button,
-.save-button {
-  padding: 12px 24px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: "Inter", sans-serif;
-  letter-spacing: 0.025em;
-  min-width: 120px;
-  text-transform: uppercase;
 }
 
 .back-button {
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   color: #374151;
+  padding: 12px 24px;
   border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
 }
 
 .back-button:hover {
@@ -201,27 +300,43 @@
 }
 
 .add-button {
-  background: linear-gradient(135deg, #d1a05f 0%, #c4914d 100%);
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(209, 160, 95, 0.3);
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.3);
 }
 
 .add-button:hover {
-  background: linear-gradient(135deg, #c4914d 0%, #b78240 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 12px -2px rgba(209, 160, 95, 0.4);
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
 }
 
 .save-button {
-  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(69, 97, 47, 0.3);
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
 }
 
 .save-button:hover {
-  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 12px -2px rgba(69, 97, 47, 0.4);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(59, 130, 246, 0.4);
 }
 
 /* Popup Styles */
@@ -229,208 +344,75 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(31, 41, 55, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .popup-content {
   background: white;
   padding: 32px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  max-width: 400px;
+  border-radius: 16px;
+  max-width: 500px;
   width: 90%;
-  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(139, 169, 109, 0.2);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideUp 0.3s ease-in-out;
 }
 
 .popup-content h3 {
   font-size: 1.25rem;
-  color: #374151;
-  margin-bottom: 24px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 20px 0;
+  text-align: center;
 }
 
 .popup-input {
   width: 100%;
   padding: 12px 16px;
-  font-size: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  box-sizing: border-box;
   margin-bottom: 16px;
-  font-family: "Inter", sans-serif;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .popup-input:focus {
-  border: 2px solid #8ba96d;
   outline: none;
+  border-color: #8ba96d;
   box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
 }
 
-.popup-input:last-of-type {
+.popup-message {
+  color: #6b7280;
   margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.6;
 }
 
 .popup-buttons {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.cancel-button,
-.confirm-add-button {
-  padding: 12px 24px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: "Inter", sans-serif;
-  min-width: 100px;
-  text-transform: uppercase;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
 .cancel-button {
-  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .cancel-button:hover {
-  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgba(227, 93, 91, 0.3);
-}
-
-.confirm-add-button {
-  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
-  color: white;
-  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.3);
-}
-
-.confirm-add-button:hover {
-  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .settings-card {
-    width: 95%;
-    height: 80%;
-  }
-
-  .settings-header {
-    padding: 20px 24px;
-  }
-
-  .settings-title {
-    font-size: 1.5rem;
-  }
-
-  .edit-venues-title {
-    padding: 0 24px;
-  }
-
-  .venue-list {
-    padding: 0 24px;
-  }
-
-  .venue-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .venue-input {
-    flex: none;
-  }
-
-  .venue-capacity-input {
-    flex: 1;
-  }
-
-  .venue-item .delete-venue-button {
-    align-self: center;
-    flex: 0 0 40px;
-  }
-
-  .button-group {
-    padding: 16px 24px;
-    flex-wrap: wrap;
-  }
-
-  .back-button,
-  .add-button,
-  .save-button {
-    padding: 10px 16px;
-    min-width: 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  .settings-card {
-    height: 90%;
-  }
-
-  .button-group {
-    justify-content: center;
-  }
-
-  .venue-capacity-input {
-    flex: 0 0 80px;
-  }
-}
-
-.input-error {
-  border: 2px solid #ef4444 !important;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
-}
-
-/* Add capacity labels for better UX */
-.capacity-group {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.capacity-label {
-  font-size: 0.75rem;
-  color: #6b7280;
-  font-weight: 500;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  background: linear-gradient(135deg)
 }

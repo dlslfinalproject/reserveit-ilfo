@@ -50,10 +50,21 @@ $input = json_decode(file_get_contents("php://input"), true);
 
 switch ($method) {
     case 'GET':
-        $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE is_active = 1 ORDER BY venue_name ASC");
+        // Check if we want to show deleted venues
+        $showDeleted = isset($_GET['show_deleted']) && $_GET['show_deleted'] == '1';
+        
+        if ($showDeleted) {
+            requireAdmin(); // Only admins can see deleted venues
+            $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE is_active = 0 ORDER BY venue_name ASC");
+        } else {
+            $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE is_active = 1 ORDER BY venue_name ASC");
+        }
+        
         $stmt->execute();
         $venues = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        jsonResponse('success', 'Fetched venues successfully', $venues);
+        
+        $message = $showDeleted ? 'Fetched deleted venues successfully' : 'Fetched venues successfully';
+        jsonResponse('success', $message, $venues);
         break;
 
     case 'POST':
@@ -122,6 +133,7 @@ switch ($method) {
             jsonResponse('error', 'Venue ID required');
         }
 
+        // Soft delete - mark as inactive
         $stmt = $conn->prepare("UPDATE tblvenues SET is_active = 0, updated_by = ? WHERE venue_id = ?");
         $stmt->execute([
             $_SESSION['user_id'] ?? null,
@@ -139,12 +151,14 @@ switch ($method) {
             jsonResponse('error', 'Venue ID required for reactivation');
         }
 
+        // Reactivate venue
         $stmt = $conn->prepare("UPDATE tblvenues SET is_active = 1, updated_by = ? WHERE venue_id = ?");
         $stmt->execute([
             $_SESSION['user_id'] ?? null,
             $input['venue_id']
         ]);
 
+        // Fetch the reactivated venue
         $stmt = $conn->prepare("SELECT * FROM tblvenues WHERE venue_id = ?");
         $stmt->execute([$input['venue_id']]);
         $reactivatedVenue = $stmt->fetch(PDO::FETCH_ASSOC);

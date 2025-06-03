@@ -31,6 +31,40 @@ function ReservationRecords() {
     fetchReservations();
   }, []);
 
+  const updateStatus = async (id, newStatus) => {
+    if (!window.confirm(`Are you sure you want to mark this reservation as ${newStatus}?`)) return;
+
+    try {
+      const response = await fetch("http://localhost/reserveit-ilfo/backend/api/update_reservation_status.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ id, status: newStatus }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Reservation ${newStatus} successfully.`);
+        setReservations((prev) =>
+          prev.map((r) =>
+            r.reservation_id === id ? { ...r, status: newStatus } : r
+          )
+        );
+        setSelectedReservation((prev) =>
+          prev ? { ...prev, status: newStatus } : null
+        );
+      } else {
+        alert("Failed to update reservation status: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("An error occurred while updating status.");
+    }
+  };
+
   const generateSummaryReport = () => {
     const printWindow = window.open("", "_blank");
     const date = new Date().toLocaleDateString();
@@ -322,11 +356,12 @@ function ReservationRecords() {
                   </div>
                 )}
               </div>
+
               <div className="status-actions">
-                <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
+                <button className="status-btn reject-btn" onClick={() => updateStatus(selectedReservation.reservation_id, "Rejected")}>
                   <FaTimes /> Reject
                 </button>
-                <button className="status-btn approve-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}>
+                <button className="status-btn approve-btn" onClick={() => updateStatus(selectedReservation.reservation_id, "Approved")}>
                   <FaCheck /> Approve
                 </button>
               </div>
@@ -348,4 +383,4 @@ function ReservationRecords() {
   );
 }
 
-export default ReservationRecords
+export default ReservationRecords;
