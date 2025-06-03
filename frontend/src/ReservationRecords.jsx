@@ -370,13 +370,14 @@ function ReservationRecords() {
         )}
 
         <div className="records-actions">
-          <button className="print-summary-btn" onClick={generateSummaryReport}>
-            <FaPrint style={{ marginRight: "8px" }} />
-            Print Summary
-          </button>
           <button className="back-dashboard-btn" onClick={() => navigate("/admin-dashboard")}>
             Back to Dashboard
           </button>
+          <button className="print-summary-btn" onClick={generateSummaryReport}>
+            <FaPrint style={{ marginRight: "8px" }} />
+            PRINT SUMMARY
+          </button>
+          
         </div>
       </div>
     </div>
