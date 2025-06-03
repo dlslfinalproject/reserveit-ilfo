@@ -156,6 +156,9 @@ const AdminDashboard = ({ session, onSignOut }) => {
     ? events
     : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
 
+  // Check if the selected event has pending status
+  const isPendingStatus = selectedEvent?.status?.toLowerCase() === "pending"
+
   // MODIFIED EventComponent to only display event.title
   const EventComponent = ({ event }) => {
     const statusColor = {
@@ -281,7 +284,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
       {selectedEvent && (
         <div className="status-update-panel">
           <div className="status-panel-header">
-            <h3>Update Status for: {selectedEvent.raw.nameOfProgram}</h3>
+            <h3>
+              {isPendingStatus ? "Update Status for: " : "View Details for: "}
+              {selectedEvent.raw.nameOfProgram}
+            </h3>
             <button className="close-panel-btn" onClick={() => setSelectedEvent(null)}>
               <FaTimes />
             </button>
@@ -328,14 +334,34 @@ const AdminDashboard = ({ session, onSignOut }) => {
               )}
             </div>
 
-            <div className="status-actions">
-              <button className="status-btn reject-btn" onClick={handleReject}>
-                <FaTimes /> REJECT
-              </button>
-              <button className="status-btn approve-btn" onClick={handleApprove}>
-                <FaCheck /> APPROVE
-              </button>
-            </div>
+            {/* Only show action buttons for pending reservations */}
+            {isPendingStatus && (
+              <div className="status-actions">
+                <button className="status-btn reject-btn" onClick={handleReject}>
+                  <FaTimes /> REJECT
+                </button>
+                <button className="status-btn approve-btn" onClick={handleApprove}>
+                  <FaCheck /> APPROVE
+                </button>
+              </div>
+            )}
+
+            {/* Show message for already processed reservations */}
+            {!isPendingStatus && (
+              <div className="status-message">
+                <p style={{ 
+                  textAlign: "center", 
+                  color: "#666", 
+                  fontStyle: "italic",
+                  padding: "10px",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "4px",
+                  margin: "10px 0"
+                }}>
+                  This reservation has already been {selectedEvent.status.toLowerCase()}.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
