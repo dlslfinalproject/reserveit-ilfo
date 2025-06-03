@@ -60,7 +60,7 @@ const RejectionForm = () => {
 
           <div className="approval-actions">
             <button className="btn cancel" onClick={() => navigate('/admin/dashboard')}>Cancel</button>
-            <button className="btn reject" onClick={handleRejectClick}>Reject</button>
+            <button className="btn reject" onClick={handleRejectClick}>REJECT</button>
           </div>
         </div>
       </div>
