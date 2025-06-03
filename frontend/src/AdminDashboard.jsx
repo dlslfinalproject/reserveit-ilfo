@@ -2,7 +2,17 @@ import { useState, useEffect } from "react"
 import "./AdminDashboard.css"
 import { Calendar, momentLocalizer, Views } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import { FaPlus, FaListAlt, FaEnvelope, FaUserCircle, FaChevronLeft, FaChevronRight, FaCog, FaCheck, FaTimes } from "react-icons/fa"
+import {
+  FaPlus,
+  FaListAlt,
+  FaEnvelope,
+  FaUserCircle,
+  FaChevronLeft,
+  FaChevronRight,
+  FaCog,
+  FaCheck,
+  FaTimes
+} from "react-icons/fa"
 import moment from "moment"
 import { useNavigate } from "react-router-dom"
 
@@ -14,10 +24,9 @@ const AdminDashboard = ({ session, onSignOut }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All")
-  const [activeStatusTab, setActiveStatusTab] = useState("details");
+  const [activeStatusTab, setActiveStatusTab] = useState("details")
   const navigate = useNavigate()
 
-  // Split multi-day reservations into daily events
   const splitReservationIntoDays = (reservation) => {
     const start = moment(reservation.startDate)
     const end = moment(reservation.endDate)
@@ -69,14 +78,10 @@ const AdminDashboard = ({ session, onSignOut }) => {
       })
       const data = await response.json()
       if (response.ok && data.success) {
-        if (onSignOut) onSignOut()
-        setShowProfile(false)
-        navigate("/login")
-      } else {
-        console.error("Logout failed:", data.message || "Unknown error")
+        onSignOut()
       }
     } catch (error) {
-      console.error("Error during sign out:", error)
+      alert("Logout failed: " + error.message)
     }
   }
 
@@ -102,8 +107,11 @@ const AdminDashboard = ({ session, onSignOut }) => {
               : ev
           )
         )
-        alert("Status updated successfully")
         setSelectedEvent(null)
+
+        if (newStatus === "Approved") {
+          navigate("/admin/approval-success")
+        }
       } else {
         alert("Failed to update status: " + (data.message || "Unknown error"))
       }
@@ -116,7 +124,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
     ? events
     : events.filter((e) => e.status.toLowerCase() === filterStatus.toLowerCase())
 
-  // ✅ Google Calendar-like Event Display
   const EventComponent = ({ event }) => {
     const statusColor = {
       Approved: "#d1dfbb",
@@ -251,7 +258,6 @@ const AdminDashboard = ({ session, onSignOut }) => {
               </span>
             </div>
 
-            {/* TABS */}
             <div className="tab-container">
               <div
                 className={`tab ${activeStatusTab === "details" ? "active" : ""}`}
@@ -267,34 +273,15 @@ const AdminDashboard = ({ session, onSignOut }) => {
               </div>
             </div>
 
-            {/* TAB CONTENT */}
             <div className="modal-body">
               {activeStatusTab === "details" ? (
                 <>
-                  <div className="modal-content-item">
-                    <span>Event Name</span>
-                    <p>{selectedEvent.raw.nameOfProgram}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Participants</span>
-                    <p>{selectedEvent.raw.numberOfParticipants}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Nature of Activity</span>
-                    <p>{selectedEvent.raw.natureOfActivity}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Date</span>
-                    <p>{selectedEvent.raw.startDate} to {selectedEvent.raw.endDate}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Venue</span>
-                    <p>{selectedEvent.raw.venue}</p>
-                  </div>
-                  <div className="modal-content-item">
-                    <span>Time</span>
-                    <p>{selectedEvent.raw.time.start} - {selectedEvent.raw.time.end}</p>
-                  </div>
+                  <div className="modal-content-item"><span>Event Name</span><p>{selectedEvent.raw.nameOfProgram}</p></div>
+                  <div className="modal-content-item"><span>Participants</span><p>{selectedEvent.raw.numberOfParticipants}</p></div>
+                  <div className="modal-content-item"><span>Nature of Activity</span><p>{selectedEvent.raw.natureOfActivity}</p></div>
+                  <div className="modal-content-item"><span>Date</span><p>{selectedEvent.raw.startDate} to {selectedEvent.raw.endDate}</p></div>
+                  <div className="modal-content-item"><span>Venue</span><p>{selectedEvent.raw.venue}</p></div>
+                  <div className="modal-content-item"><span>Time</span><p>{selectedEvent.raw.time.start} - {selectedEvent.raw.time.end}</p></div>
                 </>
               ) : (
                 <div className="modal-content-item">
@@ -304,12 +291,14 @@ const AdminDashboard = ({ session, onSignOut }) => {
               )}
             </div>
 
-            {/* ACTION BUTTONS */}
             <div className="status-actions">
               <button className="status-btn reject-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Rejected")}>
                 <FaTimes /> Reject
               </button>
-              <button className="status-btn approve-btn" onClick={() => updateStatus(selectedEvent.reservationId, "Approved")}>
+              <button className="status-btn approve-btn" onClick={() => {
+                  navigate("/admin/approval-success", { state: { reservation: selectedEvent.raw } })
+                }}
+              >
                 <FaCheck /> Approve
               </button>
             </div>
