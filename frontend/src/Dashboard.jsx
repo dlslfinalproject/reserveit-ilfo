@@ -158,12 +158,11 @@ const Dashboard = ({ onSignOut }) => {
             <button onClick={() => setShowProfile(!showProfile)}>
               <FaUserCircle size={24} />
             </button>
-            {showProfile && (
-              <div className="profile-menu">
-                <p>{userEmail || "user@dlsl.edu.ph"}</p>
-                <button onClick={handleLogout}>Log Out</button>
-              </div>
-            )}
+            {/* MODIFICATION HERE: Apply the is-active class */}
+            <div className={`profile-menu ${showProfile ? 'is-active' : ''}`}>
+              <p>{userEmail || "user@dlsl.edu.ph"}</p>
+              <button onClick={handleLogout}>Log Out</button>
+            </div>
           </div>
         </div>
       </div>
