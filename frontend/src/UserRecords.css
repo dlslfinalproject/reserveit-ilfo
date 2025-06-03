@@ -1,0 +1,104 @@
+.records-wrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  margin: 50px auto; /* Centered with smaller side margins */
+  padding: 0px;
+  background: #fff;
+  border: 1px solid #4d4d4d;
+  max-width: 1500px; 
+}
+
+.records-wrapper .records-title {
+  background-color: #D1DFBB;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  padding: 35px;
+  margin: 0;
+  border-bottom: 1px solid #4d4d4d;
+}
+
+.table-container {
+  padding: 0 30px 20px;
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.records-table th {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
+.records-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.status-pill.Approved {
+  background-color: #3A5B22;
+  color: white;
+}
+
+.status-pill.Rejected {
+  background-color: #B7410E;
+  color: white;
+}
+
+.status-pill.Pending {
+  background-color: #D69E5E;
+  color: white;
+}
+
+.view-details-btn {
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.file-icon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.bottom-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  gap: 12px;
+  padding: 20px;
+}
+
+.print-summary-btn,
+.back-dashboard-btn {
+  border-radius: 9999px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.print-summary-btn {
+  background-color: #D1DFBB;
+  color: #111827;
+}
+
+.back-dashboard-btn {
+  background-color: #E5E5E5;
+  color: #111827;
+}

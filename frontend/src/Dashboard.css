@@ -1,0 +1,848 @@
+/* Import Google Fonts for consistency */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* Dashboard */
+.dashboard-container {
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(139, 169, 109, 0.2);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dashboard-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.3);
+  position: relative;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.025em;
+}
+
+.dashboard-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.dashboard-button:hover::before {
+  left: 100%;
+}
+
+.dashboard-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+}
+
+.dashboard-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.3);
+}
+
+.dashboard-button:focus {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
+/* Header left container */
+.dashboard-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(139, 169, 109, 0.3);
+}
+
+/* Logo container with enhanced visibility */
+.logo-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-container::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(135deg, rgba(139, 169, 109, 0.1) 0%, rgba(210, 105, 30, 0.1) 100%);
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.logo-container:hover::before {
+  opacity: 1;
+}
+
+/* Enhanced brand colors for better visibility */
+.dashboard-logo.enhanced {
+  height: 50px;
+  width: auto;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2)) contrast(1.4) saturate(1.5) brightness(1.15);
+  background: rgba(139, 169, 109, 0.3);
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 2px solid rgba(139, 169, 109, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(139, 169, 109, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-logo.enhanced:hover {
+  transform: scale(1.1) translateY(-1px);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25)) contrast(1.5) saturate(1.6) brightness(1.25);
+  border-color: rgba(139, 169, 109, 0.5);
+  box-shadow: 0 8px 16px rgba(139, 169, 109, 0.2), inset 0 1px 0 rgba(139, 169, 109, 0.3);
+}
+
+/* Profile Section */
+.profile-menu {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  min-width: 200px;
+  z-index: 1020;
+  /* Make this higher than its parent dropdown and any potential overlays */
+  padding: 8px;
+  animation: slideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+
+.profile-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  /* Add a z-index here to ensure it's above other elements if needed */
+  z-index: 1010;
+  /* A value higher than the status-update-panel (1000) */
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  color: #475569;
+}
+
+.profile-dropdown button:hover {
+  background-color: rgba(148, 163, 184, 0.1);
+  transform: scale(1.05);
+}
+
+.profile-dropdown button:focus {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
+.profile-menu p {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: #64748b;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+}
+
+.profile-menu button {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  border-radius: 8px;
+  margin: 2px 0;
+  transition: all 0.15s ease;
+}
+
+.profile-menu button:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  transform: translateX(4px);
+}
+
+/* Filter Section */
+.filter-container {
+  margin: 20px 32px;
+  padding: 16px 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+.filter-select {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+  font-family: "Inter", sans-serif;
+}
+
+.filter-select:focus {
+  border-color: #8ba96d;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
+  background: white;
+}
+
+.filter-select:hover {
+  border-color: #d1d5db;
+  background: white;
+}
+
+/* Calendar Navigation with integrated filter */
+.calendar-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 16px 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin: 0 32px 24px;
+}
+
+.calendar-nav-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+.filter-select {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 12px;
+  padding-right: 32px;
+  font-family: "Inter", sans-serif;
+  min-width: 120px;
+}
+
+.filter-select:focus {
+  border-color: #8ba96d;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 169, 109, 0.1);
+  background: white;
+}
+
+.filter-select:hover {
+  border-color: #9ca3af;
+  background: white;
+}
+
+.calendar-nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.calendar-nav-button:hover {
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  color: #1e293b;
+}
+
+.calendar-nav-button:focus {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
+.calendar-nav-month {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.025em;
+  text-align: center;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .calendar-nav-container {
+    gap: 16px;
+    margin: 0 20px 20px;
+    padding: 12px 16px;
+  }
+
+  .calendar-nav-center {
+    gap: 8px;
+  }
+
+  .filter-section {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .filter-label {
+    font-size: 0.8rem;
+  }
+
+  .filter-select {
+    min-width: 100px;
+    font-size: 0.8rem;
+  }
+
+  .calendar-nav-month {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-nav-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .calendar-nav-center {
+    order: -1;
+    width: 100%;
+  }
+
+  .filter-section {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .calendar-nav-month {
+    font-size: 1.1rem;
+  }
+}
+
+/* Calendar Wrapper */
+.calendar-wrapper {
+  margin: 0 32px 32px;
+  border-radius: 16px;
+  overflow: visible; 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Calendar Styling - Consolidated and Cleaned */
+
+/* Base Calendar Container Styles */
+.rbc-calendar {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin: 0 !important;
+  padding-bottom: 10px;
+}
+
+/* Month View Expansion */
+.rbc-calendar.rbc-month-view {
+  height: auto !important; /* Allows full vertical expansion */
+  max-height: none !important; /* Prevents any maximum height from clipping */
+}
+
+/* Header (Weekdays) Styles */
+.rbc-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-bottom: 2px solid #e2e8f0;
+  padding: 16px 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Month Row and Content Expansion */
+.rbc-month-view .rbc-month-row {
+  overflow: visible !important; /* ESSENTIAL: Content will not be clipped */
+  height: auto !important; /* Row height adjusts dynamically */
+  display: flex !important;
+  flex-direction: column !important; /* Makes day cells stack vertically */
+  align-items: stretch !important; /* Ensures day cells stretch horizontally */
+  flex: 1 0 auto !important; /* Allows the row to grow/shrink */
+}
+
+.rbc-month-row .rbc-row-content {
+  overflow: visible !important; /* Prevents clipping within row content */
+  display: flex !important;
+  flex-direction: column !important; /* Stacks the content of each day cell vertically */
+  height: auto !important; /* Content dictates height */
+}
+
+/* Individual Day Cell Styles */
+.rbc-date-cell {
+  padding: 8px; /* Default padding for borders */
+  border-right: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+
+  /* For placing events under the date number: */
+  padding-top: 0 !important; /* Remove top padding to keep date at very top */
+  padding-bottom: 5px; /* Optional: Padding at the bottom of the cell */
+
+  /* CRITICAL for content stacking and expansion */
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 0 auto !important; /* Allows cells to grow and shrink */
+}
+
+/* Shared Styles for Day Background and Date Cells */
+.rbc-month-view .rbc-day-bg,
+.rbc-month-view .rbc-date-cell {
+  height: auto !important; /* Allows day cells to grow with content */
+  /* IMPORTANT: min-height might be too small at 5px. */
+  /* If content isn't showing, try increasing this to 80px or 100px again. */
+  min-height: 5px; /* Provides a base height for cells */
+}
+
+/* Day Cell Hover Effect */
+.rbc-date-cell:hover {
+  background-color: #f8fafc;
+}
+
+/* Off-Range Day Styles (Days outside the current month) */
+.rbc-off-range-bg {
+  background-color: #f8fafc;
+  color: #94a3b8;
+}
+
+.rbc-off-range button {
+  color: #94a3b8;
+}
+
+/* Today's Date Styles */
+.rbc-today {
+  background-color: rgba(139, 169, 109, 0.1);
+  border: 2px solid #8ba96d;
+}
+
+/* Date Number Styling (button element) */
+.rbc-date-cell button {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+/* Specific Date Number (rbc-button-link) Styling */
+.rbc-date-cell .rbc-button-link {
+  /* IMPORTANT: Revisit align-self for date number position */
+  /* flex-end will put the date at the BOTTOM. If you want it at the TOP, use flex-start. */
+  align-self: flex-end; /* Aligns the date number to the bottom-left of the cell */
+  padding: 5px 8px !important; /* Padding around the date number */
+  font-size: 0.85em; /* Adjust font size if necessary */
+  line-height: 1; /* Adjust if date number looks cramped vertically */
+}
+
+/* Event Container within Day Cell */
+.rbc-events-container {
+  display: flex !important;
+  flex-direction: column !important; /* Stacks events vertically */
+  gap: 1px; /* Spacing between events */
+
+  flex-grow: 1 !important; /* Allows this container to take up remaining vertical space */
+  overflow: visible !important; /* ESSENTIAL: Ensures events within don't clip */
+  margin-top: 5px; /* CRITICAL: Creates space between the date number and the first event */
+  height: auto !important; /* Allows the events container to expand vertically */
+}
+
+/* Individual Event Bar Styles */
+.rbc-event {
+  padding: 0;
+  margin: 0;
+  background: transparent; /* Assuming events have their own background */
+  border: none;
+
+  position: relative !important; /* Overrides default absolute positioning if any, crucial for flow */
+  margin-bottom: 2px; /* Small vertical spacing between events */
+  height: auto !important; /* Event height determined by its content */
+  min-height: 20px; /* Minimum height for an event bar */
+  display: block !important; /* Ensures it takes up full width and stacks */
+  width: 100% !important; /* Ensures it fills available width within its container */
+}
+
+.rbc-event-content {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+  font-size: 0.7rem;
+}
+
+.rbc-row-segment {
+  padding: 0 1px;
+}
+
+.rbc-row-segment .rbc-event-content {
+  width: 100%;
+  text-align: left;
+}
+
+.rbc-show-more {
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 4;
+    font-weight: bold;
+    font-size: 70%;
+    height: auto;
+    line-height: normal;
+    color: darkgreen;
+}
+
+/* Background enhancement - assuming this is separate from calendar specific styling */
+.dashboard-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(139, 169, 109, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Smooth scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .dashboard-header {
+    padding: 20px 24px;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .dashboard-header-left {
+    gap: 12px;
+    padding: 6px 12px;
+    justify-content: center;
+  }
+
+  .dashboard-logo.enhanced {
+    height: 40px;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .dashboard-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .dashboard-button {
+    padding: 10px 16px;
+    font-size: 0.8rem;
+  }
+
+  .filter-container {
+    margin: 16px 20px;
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filter-label {
+    text-align: center;
+  }
+
+  .calendar-nav-container {
+    gap: 16px;
+    margin: 0 20px 20px;
+  }
+
+  .calendar-nav-month {
+    font-size: 1.25rem;
+    min-width: 150px;
+  }
+
+  .calendar-wrapper {
+    margin: 0 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header-left {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+  }
+
+  .dashboard-logo.enhanced {
+    height: 36px;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* High contrast mode for accessibility */
+@media (prefers-contrast: high) {
+  .dashboard-logo {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) contrast(2) saturate(2);
+    background: white;
+    border: 3px solid #000;
+  }
+
+  .dashboard-header-left {
+    background: white;
+    border: 2px solid #8ba96d;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Status Update Panel Styles */
+.status-update-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  min-width: 400px;
+  max-width: 900px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.status-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.status-panel-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.close-panel-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.close-panel-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.status-panel-content {
+  padding: 24px;
+}
+
+.current-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.status-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-badge.approved {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.status-badge.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.status-badge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.reservation-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reservation-info p {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.reservation-info p:last-child {
+  border-bottom: none;
+}
+
+.reservation-info strong {
+  color: #1e293b;
+  font-weight: 600;
+}
