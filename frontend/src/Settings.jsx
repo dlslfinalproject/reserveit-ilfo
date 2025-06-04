@@ -67,10 +67,10 @@ const Settings = () => {
         if (data.status === "success") {
           setDeletedVenues(data.data);
         } else {
-          console.error("Failed to fetch deleted venues:", data.message);
+          console.error("Failed to fetch removed venues:", data.message);
         }
       })
-      .catch((err) => console.error("Error loading deleted venues:", err));
+      .catch((err) => console.error("Error loading removed venues:", err));
   };
 
   useEffect(() => {
@@ -283,13 +283,13 @@ const Settings = () => {
                 onClick={() => setShowDeletedVenues(!showDeletedVenues)}
               >
                 <span className="toggle-icon">{showDeletedVenues ? '▼' : '▶'}</span>
-                {showDeletedVenues ? 'Hide' : 'Show'} Deleted Venues ({deletedVenues.length})
+                {showDeletedVenues ? 'Hide' : 'Show'} Removed Venues ({deletedVenues.length})
               </button>
               
               {showDeletedVenues && (
                 <div className="deleted-venues-list">
                   <div className="deleted-venues-header">
-                    <h4>Deleted Venues</h4>
+                    <h4>Removed Venues</h4>
                     <p>Click on any venue below to reactivate it</p>
                   </div>
                   {deletedVenues.map((venue) => (
