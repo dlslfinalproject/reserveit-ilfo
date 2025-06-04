@@ -1,0 +1,464 @@
+/* Import Google Fonts for consistency */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* Base styles */
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Settings Container */
+.settings-container {
+  max-width: 1000px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  animation: fadeInForm 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Settings Header */
+.settings-header {
+  background: linear-gradient(135deg, #8ba96d 0%, #a2ba82 100%);
+  padding: 24px 32px;
+  text-align: left;
+}
+
+.settings-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Settings Content */
+.settings-content {
+  padding: 32px;
+}
+
+.edit-venues-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Venue List */
+.venue-list {
+  margin-bottom: 32px;
+}
+
+.venue-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.venue-item:hover {
+  background: #f1f5f9;
+  border-color: #8ba96d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.2);
+}
+
+.venue-input {
+  flex: 2;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.venue-input:focus {
+  outline: none;
+  border-color: #8ba96d;
+  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
+}
+
+.capacity-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.venue-capacity-input {
+  width: 70px;
+  padding: 12px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  text-align: center;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.venue-capacity-input:focus {
+  outline: none;
+  border-color: #8ba96d;
+  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
+}
+
+.capacity-separator {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0 4px;
+}
+
+.delete-venue-button {
+ background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 0.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-venue-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.trash-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.no-venues-message {
+  text-align: center;
+  padding: 48px 24px;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 500;
+  background: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+}
+
+/* Deleted Venues Section */
+.deleted-venues-section {
+  margin: 32px 0;
+  padding: 24px;
+  background: #fefefe;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.toggle-deleted-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 1px solid #d1d5db;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.toggle-deleted-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+}
+
+.toggle-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.deleted-venues-list {
+  margin-top: 16px;
+}
+
+.deleted-venues-header {
+  margin-bottom: 16px;
+}
+
+.deleted-venues-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+}
+
+.deleted-venues-header p {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.deleted-venue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleted-venue-item:hover {
+  background: #f3f4f6;
+  border-color: #10b981;
+  transform: translateX(4px);
+}
+
+.deleted-venue-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.venue-name {
+  font-weight: 500;
+  color: #374151;
+}
+
+.venue-capacity {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.reactivate-btn {
+ background: linear-gradient(135deg, #add287 0%, #81ac2b 100%);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.reactivate-btn:hover {
+  background: linear-gradient(135deg, #8aae6e 0%, #86b62d 100%);
+  transform: translateY(-1px);
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  padding: 12px 24px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.add-button {
+  background: linear-gradient(135deg, #d2995e 0%, #c57927 100%);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(139, 169, 109, 0.3);
+}
+
+.add-button:hover {
+  background: linear-gradient(135deg, #c78e52 0%, #ac6a24 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(169, 141, 109, 0.4);
+}
+
+.save-button {
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(31, 41, 55, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-content {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideUp 0.3s ease-in-out;
+}
+
+.popup-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.popup-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.popup-input:focus {
+  outline: none;
+  border-color: #8ba96d;
+  box-shadow: 0 0 0 3px rgba(139, 169, 109, 0.1);
+}
+
+.popup-message {
+  color: #6b7280;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: space-around;
+}
+
+.confirm-add-button {
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px; /* This fixes the narrow width */
+}
+
+.confirm-add-button:hover {
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  transform: translateY(-1px);
+}
+
+.cancel-button {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  padding: 10px 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.add-venue-popup-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.delete-confirm-button {
+  background: linear-gradient(135deg, #e35d5b 0%, #c62828 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px; /* This fixes the narrow width */
+}
+
+.delete-confirm-button:hover {
+  background: linear-gradient(135deg, #d14d4b 0%, #b51c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(220, 38, 38, 0.4);
+}
