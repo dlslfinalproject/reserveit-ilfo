@@ -460,3 +460,135 @@ select {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Add these styles to your existing ReservationForm.css file */
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(31, 41, 55, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-content {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideUp 0.3s ease-in-out;
+  text-align: center;
+}
+
+.popup-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.modal-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+  font-weight: bold;
+}
+
+.success-icon {
+  color: #10b981;
+}
+
+.error-icon {
+  color: #ef4444;
+}
+
+.popup-message {
+  color: #6b7280;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-add-button {
+  background: linear-gradient(135deg, #8ba96d 0%, #6b8e23 100%);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  min-width: 80px;
+}
+
+.confirm-add-button:hover {
+  background: linear-gradient(135deg, #7a9960 0%, #5a7a1f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(139, 169, 109, 0.4);
+}
+
+.confirm-add-button:focus {
+  outline: 2px solid #8ba96d;
+  outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsiveness for Modals */
+@media (max-width: 480px) {
+  .popup-content {
+    padding: 24px;
+    margin: 20px;
+  }
+  
+  .modal-icon {
+    font-size: 2.5rem;
+  }
+  
+  .popup-content h3 {
+    font-size: 1.125rem;
+  }
+  
+  .popup-message {
+    font-size: 0.875rem;
+  }
+}

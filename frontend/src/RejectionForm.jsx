@@ -6,7 +6,6 @@ const SuccessModal = ({ message, onClose }) => {
   return (
     <div className="success-modal-backdrop">
       <div className="success-modal">
-        <h3>Success</h3>
         <p>{message}</p>
         <button className="success-button" onClick={onClose}>OK</button>
       </div>
@@ -166,7 +165,7 @@ const RejectionForm = () => {
           message="Reservation has been rejected."
           onClose={() => {
             setShowSuccess(false);
-            navigate('/admin/reservation-records');
+            navigate('/admin');
           }}
         />
       )}

@@ -29,38 +29,35 @@ const Settings = () => {
         const json = JSON.parse(text);
         return json;
       } catch (err) {
-        console.error("❌ Failed to parse JSON. Raw response:", text);
+        console.error("Failed to parse JSON. Raw response:", text);
         throw new Error("Invalid JSON response");
       }
     } catch (err) {
-      console.error("❌ Fetch error:", err);
+      console.error("Fetch error:", err);
       throw err;
     }
   };
 
-  // Show error modal instead of alert
   const showError = (message) => {
     setModalMessage(message);
     setShowErrorModal(true);
   };
 
-  // Show success modal instead of alert
   const showSuccess = (message) => {
     setModalMessage(message);
     setShowSuccessModal(true);
   };
 
-  // Fetch active venues
   const fetchActiveVenues = () => {
     fetchWithDebug(apiUrl, { credentials: "include" })
       .then((data) => {
         if (data.status === "success") {
           setVenues(data.data);
         } else {
-          console.error("❌ Failed to fetch venues:", data.message);
+          console.error(" Failed to fetch venues:", data.message);
         }
       })
-      .catch((err) => console.error("❌ Error loading venues:", err));
+      .catch((err) => console.error("Error loading venues:", err));
   };
 
   // Fetch deleted venues
@@ -70,10 +67,10 @@ const Settings = () => {
         if (data.status === "success") {
           setDeletedVenues(data.data);
         } else {
-          console.error("❌ Failed to fetch deleted venues:", data.message);
+          console.error("Failed to fetch deleted venues:", data.message);
         }
       })
-      .catch((err) => console.error("❌ Error loading deleted venues:", err));
+      .catch((err) => console.error("Error loading deleted venues:", err));
   };
 
   useEffect(() => {
@@ -389,7 +386,6 @@ const Settings = () => {
       {showSavePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Save Changes</h3>
             <p className="popup-message">
               Do you want to save all venue changes?
             </p>
@@ -409,9 +405,8 @@ const Settings = () => {
       {showDeletePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>Delete Venue</h3>
             <p className="popup-message">
-              Are you sure you want to delete <strong>{venueToDelete?.venue_name}</strong>?
+              Are you sure you want to remove <strong>{venueToDelete?.venue_name}</strong>?
             </p>
             <div className="popup-buttons">
               <button
@@ -424,7 +419,7 @@ const Settings = () => {
                 Cancel
               </button>
               <button className="delete-confirm-button" onClick={handleDeleteVenueConfirmed}>
-                DELETE
+                REMOVE
               </button>
             </div>
           </div>
@@ -446,13 +441,10 @@ const Settings = () => {
           </div>
         </div>
       )}
-
-      {/* Success Modal */}
       {showSuccessModal && (
         <div className="popup-overlay">
           <div className="popup-content success-modal">
             <div className="modal-icon success-icon"></div>
-            <h3>Success</h3>
             <p className="popup-message">{modalMessage}</p>
             <div className="popup-buttons">
               <button className="confirm-add-button" onClick={() => setShowSuccessModal(false)}>
