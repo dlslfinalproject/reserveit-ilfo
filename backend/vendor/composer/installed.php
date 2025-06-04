@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'janeallyson/backend',
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'reference' => '9b627db7c4329b9275b3653c9fe8a0d9cae606f0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '97539f06aff7ce1c61da136d1ee1426b6a28dc3e',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -83,9 +83,9 @@
             'dev_requirement' => false,
         ),
         'janeallyson/backend' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'reference' => '9b627db7c4329b9275b3653c9fe8a0d9cae606f0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '97539f06aff7ce1c61da136d1ee1426b6a28dc3e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
